@@ -5,6 +5,8 @@
 package uit.tkorg.and.main;
 
 import uit.tkorg.and.core.similarity.JaccardSimilarity;
+import uit.tkorg.and.core.similarity.Levenshtein;
+import uit.tkorg.and.core.similarity.NeedlemanWunch;
 
 /**
  *
@@ -17,11 +19,6 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
-        String a ="hoang kiem";
-        String b ="kiem H";
-        JaccardSimilarity test = new JaccardSimilarity();
-        float result= test.getSimilarity(a, b);
-        System.out.println("JaccardSimilarity "+result);
+   
     }
 }

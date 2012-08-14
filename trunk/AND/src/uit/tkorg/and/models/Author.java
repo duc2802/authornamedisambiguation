@@ -18,6 +18,9 @@ public class Author {
     int authorResult=0;
     String interest;
 
+    public Author() {
+    }
+    
     public Author(String authorName, String authorAfflication, String authorEmail, int authorOrder, String authorInterests) {
         this.authorName = authorName;
         this.authorAfflication = authorAfflication;

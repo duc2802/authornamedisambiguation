@@ -18,12 +18,15 @@ public class Publication {
     String pubAbstract;
     String pubYearPublish;
     String publisher;
-
+    String conference;
     String journal;
     Author mainAuthor;
     List <Author> coAuthor;
 
-    public Publication(String digitalName, String nameSeach, String pubTitle, String pubKeywords, String pubAbstract, String pubYearPublish, String publisher, String journal, Author mainAuthor, List<Author> coAuthor) {
+    public Publication() {
+    }
+
+    public Publication(String digitalName, String nameSeach, String pubTitle, String pubKeywords, String pubAbstract, String pubYearPublish, String publisher, String conference, String journal, Author mainAuthor, List<Author> coAuthor) {
         this.digitalName = digitalName;
         this.nameSeach = nameSeach;
         this.pubTitle = pubTitle;
@@ -31,11 +34,11 @@ public class Publication {
         this.pubAbstract = pubAbstract;
         this.pubYearPublish = pubYearPublish;
         this.publisher = publisher;
+        this.conference = conference;
         this.journal = journal;
         this.mainAuthor = mainAuthor;
         this.coAuthor = coAuthor;
     }
-
     public void setDigitalName(String digitalName) {
         this.digitalName = digitalName;
     }
@@ -67,6 +70,14 @@ public class Publication {
         return pubAbstract;
     }
 
+    public String getConference() {
+        return conference;
+    }
+
+    public void setConference(String conference) {
+        this.conference = conference;
+    }
+    
     public String getPubKeywords() {
         return pubKeywords;
     }
