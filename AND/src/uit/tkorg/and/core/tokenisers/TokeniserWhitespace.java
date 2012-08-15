@@ -144,4 +144,22 @@ public final class TokeniserWhitespace implements InterfaceTokeniser, Serializab
         returnSet.addAll(tokenizeToArrayList(input));
         return returnSet;
     }
+    
+    /**
+     * Duc Huynh
+     * Find intersection of 2 list tokens.
+     * @param token1
+     * @param token2
+     * @return 
+     */
+    public ArrayList<String> findIntersection(ArrayList<String> token1, ArrayList<String> token2)
+    {
+        ArrayList<String> intersectionTokens = new ArrayList<String>();
+        for (String string : token1) {
+            for (String string1 : token2) {
+                if(string.endsWith(string1)) intersectionTokens.add(string);
+            }
+        }
+        return intersectionTokens;
+    }
 }
