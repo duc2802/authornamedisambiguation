@@ -26,7 +26,7 @@ public class Author {
         this.authorAfflication = authorAfflication;
         this.authorEmail = authorEmail;
         this.authorOrder = authorOrder;
-        this.authorInterests = authorInterests;
+        this.authorInterests = authorInterests;        
     }
 
     public void setInterest(String interest) {

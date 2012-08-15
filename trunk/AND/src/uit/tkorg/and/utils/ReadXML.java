@@ -34,7 +34,7 @@ public class ReadXML {
 
         try {
 
-            File fXmlFile = new File("c:\\" + fileName + ".xml");
+            File fXmlFile = new File("c:\\DataTest\\" + fileName + ".xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
