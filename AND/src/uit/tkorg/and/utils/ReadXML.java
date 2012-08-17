@@ -22,19 +22,25 @@ import uit.tkorg.and.models.Publication;
  * @author tiendv
  */
 public class ReadXML {
-
+    String pathSourceFile;
     /**
      * @param fileName
      * @return publicaiton from xml file
      */
-    public static Publication importPubFromXML(String fileName) {
+    
+    public ReadXML(String path)
+    {
+        this.pathSourceFile = path;
+    }
+    
+    public Publication importPubFromXML(String fileName) {
         Publication result = null;
         List<Author> coauthor = null;
         Author mainAuthor = null;
 
         try {
 
-            File fXmlFile = new File("c:\\DataTest\\" + fileName + ".xml");
+            File fXmlFile = new File("c:\\"+ this.pathSourceFile +"\\" + fileName + ".xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -89,14 +95,13 @@ public class ReadXML {
         return result;
     }
 
-    private static String getTagValue(String sTag, Element eElement) {
+    private String getTagValue(String sTag, Element eElement) {
         NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
-
         Node nValue = (Node) nlList.item(0);
         if (nValue != null) {
             return nValue.getNodeValue();
         } else {
-            return null;
+            return "";
         }
     }
 //      public static void main(String[] args) {
