@@ -4,14 +4,12 @@
  */
 package uit.tkorg.and.main;
 
-import java.util.ArrayList;
-import uit.tkorg.and.core.features.AffiliationSimilarity;
-import uit.tkorg.and.core.features.AuthorSimilarity;
-import uit.tkorg.and.core.features.CoAuthorSimilarity;
-import uit.tkorg.and.core.features.KeywordSimilarity;
-import uit.tkorg.and.models.Publication;
-import uit.tkorg.and.utils.ReadXML;
+import uit.tkorg.and.models.Vector;
+import weka.classifiers.Classifier;
 import weka.classifiers.trees.RandomForest;
+import weka.classifiers.Evaluation;
+import weka.core.Instances;
+import weka.core.Utils;
 
 /**
  *
@@ -22,33 +20,43 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        int NUMBER_OF_XML = 10;
-        Publication[] data = new Publication[NUMBER_OF_XML];
-        for(int i = 0; i < NUMBER_OF_XML; i++){
-            System.out.println(i);
-            Publication publication = ReadXML.importPubFromXML(""+ (i + 1) +"");    
-            data[i] = publication;
-        }
-          
-        AuthorSimilarity authorSimilarity = new AuthorSimilarity();
-        AffiliationSimilarity affiliationSimilarity = new AffiliationSimilarity();
-        CoAuthorSimilarity coAuthorSimilarity = new CoAuthorSimilarity();
-        KeywordSimilarity keywordSimilarity = new KeywordSimilarity();
+    public static void main(String[] args) throws Exception {
         
-        for(int i = 0; i < NUMBER_OF_XML - 1; i++){
-            for(int j = i + 1; j < NUMBER_OF_XML; j++)
-            {                
-                System.out.print(authorSimilarity.makeJaccardSimilarity(data[i], data[j]));
-                System.out.print("\t");
-                System.out.print(affiliationSimilarity.makeJaccardSimilarity(data[i], data[j]));
-                System.out.print("\t");
-                System.out.print(coAuthorSimilarity.makeJaccardSimilarity(data[i], data[j]));
-                System.out.print("\t");
-                System.out.print(keywordSimilarity.makeJaccardSimilarity(data[i], data[j]));
-                System.out.print("\t");                
-                System.out.println();
-            }            
+        String pathTrain = "DataTrain";
+        String pathTest = "DataTest";
+        
+        Instances train = Vector.buildDataVetor(pathTrain, "same");
+        Instances test = Vector.buildDataVetor(pathTest, "same"); 
+        
+        Classifier cModel = (Classifier)new RandomForest();  
+        cModel.buildClassifier(train);        
+        
+        // Test the model
+        Evaluation eTest = new Evaluation(test);
+        eTest.evaluateModel(cModel, test);
+        
+        System.out.println("# \t actual \t predicted \t error \t distribution");
+        for (int i = 0; i < test.numInstances(); i++) {
+            double pred = cModel.classifyInstance(test.instance(i));
+            double actual = test.instance(i).classValue();
+            double[] dist = cModel.distributionForInstance(test.instance(i));
+            System.out.print((i + 1));
+            System.out.print(" \t ");
+            System.out.print(test.instance(i).toString(test.classIndex()));
+            System.out.print(" \t ");
+            System.out.print(test.classAttribute().value((int) pred));
+            System.out.print(" \t ");
+            if (pred != test.instance(i).classValue()) {
+                System.out.print("false");
+            } else {
+                System.out.print("correct");
+            }
+            System.out.print(" \t ");
+            System.out.print(Utils.arrayToString(dist));
+            System.out.println();
         }
+        System.out.println(eTest.toSummaryString());
+        System.out.println(eTest.toClassDetailsString());
+        System.out.println(eTest.toMatrixString());
     }
 }
