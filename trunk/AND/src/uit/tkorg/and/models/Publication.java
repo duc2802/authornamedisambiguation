@@ -39,6 +39,15 @@ public class Publication {
         this.mainAuthor = mainAuthor;
         this.coAuthor = coAuthor;
     }
+    
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();        
+        stringBuilder.append(mainAuthor.getAuthorName());
+        //stringBuilder.append("\n");               
+        return stringBuilder.toString();
+    }
+    
     public void setDigitalName(String digitalName) {
         this.digitalName = digitalName;
     }
