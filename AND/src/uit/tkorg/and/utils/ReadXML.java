@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import uit.tkorg.and.models.Author;
 import uit.tkorg.and.models.Publication;
@@ -33,6 +34,44 @@ public class ReadXML {
         this.pathSourceFile = path;
     }
     
+    public ReadXML()
+    {
+       
+    }
+    
+    public static void getListFolder(String rootDirectory)
+    {
+        System.out.println("Root: -" + rootDirectory);
+        File root = new File(rootDirectory);
+        File[] listChild = root.listFiles();
+        for (int i = 0; i < listChild.length; i++) {
+            File child = listChild[i];
+            if(child.isDirectory())
+            {
+                System.out.println("\t-" + child.getName());
+                File[] listSubFolder = child.listFiles();
+                int length = 0;                
+                while(length < listSubFolder.length)
+                {
+                    System.out.println("\t \t-" + listSubFolder[length].getName());
+                    File[] listFiles = listSubFolder[length].listFiles();
+                    int lengthListFile = 0;
+                    while(lengthListFile < listFiles.length)
+                    {
+                        File file = listFiles[length];
+                        if(file.isFile())
+                        {
+                            //Publication publication = importPubFromXML(file.getAbsolutePath());
+                            //System.out.println("\t \t \t-" + publication.toString());
+                        }
+                        lengthListFile++;
+                    } 
+                    length++;
+                }                
+            }            
+        }
+    }
+    
     public Publication importPubFromXML(String fileName) {
         Publication result = null;
         List<Author> coauthor = null;
@@ -40,7 +79,7 @@ public class ReadXML {
 
         try {
 
-            File fXmlFile = new File("c:\\"+ this.pathSourceFile +"\\" + fileName + ".xml");
+            File fXmlFile = new File(fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
@@ -99,7 +138,7 @@ public class ReadXML {
         NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
         Node nValue = (Node) nlList.item(0);
         if (nValue != null) {
-            return nValue.getNodeValue();
+            return nValue.getNodeValue().trim();
         } else {
             return "";
         }

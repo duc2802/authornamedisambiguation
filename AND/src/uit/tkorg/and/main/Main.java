@@ -5,8 +5,10 @@
 package uit.tkorg.and.main;
 
 import uit.tkorg.and.models.Vector;
+import uit.tkorg.and.utils.ReadXML;
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.RandomForest;
+import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
 import weka.core.Utils;
@@ -20,16 +22,16 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {  
+        String pathForTrain = "C:\\DataTrain";
+        String pathForTest = "C:\\DataTest";
         
-        String pathTrain = "DataTrain";
-        String pathTest = "DataTest";
+        Instances test = Vector.buildVectorsFromFolder(pathForTest);
+        Instances train = Vector.buildVectorsFromFolder(pathForTrain);
         
-        Instances train = Vector.buildDataVetor(pathTrain, "same");
-        Instances test = Vector.buildDataVetor(pathTest, "same"); 
-        
-        Classifier cModel = (Classifier)new RandomForest();  
-        cModel.buildClassifier(train);        
+        //Classifier cModel = (Classifier)new RandomForest();  
+        Classifier cModel = (Classifier)new NaiveBayes();  
+        cModel.buildClassifier(train);      
         
         // Test the model
         Evaluation eTest = new Evaluation(test);
@@ -39,7 +41,7 @@ public class Main {
         for (int i = 0; i < test.numInstances(); i++) {
             double pred = cModel.classifyInstance(test.instance(i));
             double actual = test.instance(i).classValue();
-            double[] dist = cModel.distributionForInstance(test.instance(i));
+            double[] dist = test.instance(i).toDoubleArray();
             System.out.print((i + 1));
             System.out.print(" \t ");
             System.out.print(test.instance(i).toString(test.classIndex()));
@@ -57,6 +59,6 @@ public class Main {
         }
         System.out.println(eTest.toSummaryString());
         System.out.println(eTest.toClassDetailsString());
-        System.out.println(eTest.toMatrixString());
+        System.out.println(eTest.toMatrixString());        
     }
 }
