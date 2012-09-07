@@ -12,4 +12,5 @@ import uit.tkorg.and.models.Publication;
  */
 public interface FeaturesBase {    
     public float makeJaccardSimilarity(Publication publicationA, Publication publicationB);
+    public float makeLevenshteinSimilarity (Publication publicationA, Publication publicationB);
 }

@@ -19,5 +19,10 @@ public class InterestKeywordSimilarity implements FeaturesBase{
         return jaccardSimilarity.getSimilarity(publicationA.getMainAuthor().getInterest(), 
                                                 publicationB.getMainAuthor().getInterest());
     }
+
+    @Override
+    public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

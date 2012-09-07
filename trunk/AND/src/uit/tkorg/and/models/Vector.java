@@ -167,4 +167,166 @@ public class Vector {
        return instancesData;
     }
     
+    
+    /**
+     * 
+     * tiendv
+     * @param dimension : 
+     * @param numberVector
+     * @param selectFeature : Cac feature duoc chon de chay
+     * @return 
+     */
+    
+    public static Instances buildVectorWithFeatures (int numberVector, Feature selectFeature)
+    {
+        Instances instances;
+        // Value feature 
+        FastVector vectorFeature = new FastVector(selectFeature.getNumberSelectFeature());
+        FastVector vector = new FastVector(selectFeature.getNumberSelectFeature()+1);
+        
+        // JaccardAuthorName
+        if(selectFeature.getJcAuthorName()==true)
+        {
+            Attribute attAuthorSimilarity = new Attribute("AuthorSimilarity");
+            vector.addElement(attAuthorSimilarity);
+        }
+        // JaccardAffiliation
+        if(selectFeature.getJcAffiliation()==true)
+        {
+           Attribute attAffiliationSimilarity = new Attribute("AffiliationSimilarity");
+           vector.addElement(attAffiliationSimilarity);    
+        }
+        // Jaccard Coauthor name
+        if(selectFeature.getJcCoAuthor()==true)
+        {
+           Attribute attCoauthorSimilarity = new Attribute("CoauthorSimilarity");
+           vector.addElement(attCoauthorSimilarity);    
+        }
+        // Jaccard KeywordS 
+        if(selectFeature.getJcKeyword()==true)
+        {
+           Attribute attKeywordSimilarity = new Attribute("KeywordSimilarity");
+           vector.addElement(attKeywordSimilarity);    
+        }
+        // Jaccard KeywordS 
+        if(selectFeature.getJcInterestingKeyword()==true)
+        {
+           Attribute attInterestSimilarity = new Attribute("InterestSimilarity");
+           vector.addElement(attInterestSimilarity);    
+        }
+        
+        // add more feature here
+        
+        // Declare the class attribute along with its values
+        FastVector classValue = new FastVector(2);
+        classValue.addElement("same");
+        classValue.addElement("diff");
+        Attribute classAttribute = new Attribute("Class", classValue);
+        vector.addElement(classAttribute);
+        
+        instances = new Instances("AuthorName", vector, numberVector);
+        instances.setClassIndex(selectFeature.getNumberSelectFeature()); // cai nay xem co dung khong
+        return instances;
+    }
+    /**
+     * tiendv
+     * @param instancesData
+     * @param pubA
+     * @param pubB
+     * @param Feature : select features
+     * @param label
+     * @return 
+     */
+    public static Instance calculateVectorWithSelectFeatures(Instances instancesData, Publication pubA, Publication pubB, Feature selectFeature, String label)
+    {                
+        AuthorSimilarity authorSimilarity = new AuthorSimilarity();
+        AffiliationSimilarity affiliationSimilarity = new AffiliationSimilarity();
+        CoAuthorSimilarity coAuthorSimilarity = new CoAuthorSimilarity();
+        KeywordSimilarity keywordSimilarity = new KeywordSimilarity();
+        InterestKeywordSimilarity interestKeywordSimilarity = new InterestKeywordSimilarity();
+        int dimension = selectFeature.getNumberSelectFeature()+1;
+        Instance simple = new SparseInstance(dimension);
+        
+        if(selectFeature.getJcAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute("JCAuthorName"), authorSimilarity.makeJaccardSimilarity(pubA, pubB));
+        
+        if(selectFeature.getJcAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute("JCAffiliation"), affiliationSimilarity.makeJaccardSimilarity(pubA, pubB));
+        
+        if(selectFeature.getJcCoAuthor()==true)
+        simple.setValue((Attribute) instancesData.attribute("JCCoAuthor"), coAuthorSimilarity.makeJaccardSimilarity(pubA, pubB));
+        
+        if(selectFeature.getJcKeyword()==true)
+        simple.setValue((Attribute) instancesData.attribute("JCKeyWord"), keywordSimilarity.makeJaccardSimilarity(pubA, pubB));
+        
+        if(selectFeature.getJcInterestingKeyword()==true)
+        simple.setValue((Attribute) instancesData.attribute("JCInterestingKeyWord"), interestKeywordSimilarity.makeJaccardSimilarity(pubA, pubB));        
+        
+        if(selectFeature.getLevenshteinAuthorname()==true)
+        simple.setValue((Attribute) instancesData.attribute("LevenshteinAuthorname"), authorSimilarity.makeLevenshteinSimilarity(pubA, pubB));        
+        
+        if(selectFeature.getLevenshteinAffiliaiton()==true)
+        simple.setValue((Attribute) instancesData.attribute("LevenshteinAffiliation"), affiliationSimilarity.makeLevenshteinSimilarity(pubA, pubB));        
+    
+        // Add more feature here
+        
+        simple.setValue((Attribute) instancesData.attribute("Label"), label);       
+        return simple;
+    }
+    /**
+     * tiendv
+     * @param rootDirectory
+     * @param selectFeatures
+     * @return 
+     */
+     public static Instances buildVectorsFromFolderWithSelectFeatures(String rootDirectory, Feature selectFeatures)
+    {
+        int dimension = selectFeatures.getNumberSelectFeature()+1;
+        Instances instancesData = buildVector(dimension, 1000);
+        
+        ReadXML reader = new ReadXML();
+        System.out.println("Root: -" + rootDirectory);
+        File root = new File(rootDirectory);
+        File[] listChild = root.listFiles();
+        for (int i = 0; i < listChild.length; i++) {
+            File child = listChild[i];
+            if(child.isDirectory())
+            {
+                System.out.println("\t-" + child.getName());
+                File[] listSubFolder = child.listFiles();
+                int length = 0;                
+                while(length < listSubFolder.length)
+                {
+                    System.out.println("\t \t-" + listSubFolder[length].getName());
+                    File[] listFiles = listSubFolder[length].listFiles();
+                    int lengthListFile = 0;
+                    Publication[] data = new Publication[listFiles.length];
+                    while(lengthListFile < listFiles.length)
+                    {
+                        File file = listFiles[lengthListFile];
+                        if(file.isFile())
+                        {                            
+                            Publication publication = reader.importPubFromXML(file.getAbsolutePath());
+                            data[lengthListFile] = publication;                            
+                        }
+                        lengthListFile++;
+                    } 
+                    int count = 0;
+                    for (int index = 0; index < listFiles.length - 1; index++) {
+                        for (int index2 = index + 1; index2 < listFiles.length; index2++) {
+                             count++;
+                             Instance simple = calculateVectorWithSelectFeatures(instancesData, data[index], data[index2], selectFeatures, child.getName());
+                                instancesData.add(simple);
+                             System.out.println("\t\t\t-" + data[index].toString() + 
+                                " vs " + data[index2].toString() + 
+                                " label: " + child.getName());
+                        }
+                    }
+                    length++;
+                }                
+            }            
+        }
+        return instancesData;
+    }
+    
 }

@@ -5,6 +5,7 @@
 package uit.tkorg.and.core.features;
 
 import uit.tkorg.and.core.similarity.JaccardSimilarity;
+import uit.tkorg.and.core.similarity.Levenshtein;
 import uit.tkorg.and.models.Publication;
 
 /**
@@ -20,4 +21,11 @@ public class AuthorSimilarity implements FeaturesBase {
         return jaccardSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorName(), 
                 publicationB.getMainAuthor().getAuthorName());
     }
+
+    @Override
+    public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
+        Levenshtein levenshteinSimilarity = new Levenshtein();
+        return levenshteinSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorName(), publicationB.getMainAuthor().getAuthorName());
+    }
+    
 }

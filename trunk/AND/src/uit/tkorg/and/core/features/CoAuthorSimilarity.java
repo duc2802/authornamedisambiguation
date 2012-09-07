@@ -54,5 +54,10 @@ public class CoAuthorSimilarity implements FeaturesBase{
         
         JaccardSimilarity jaccardSimilarity = new JaccardSimilarity();
         return jaccardSimilarity.getSimilarity(affCoauthorAString.toString(), affCoauthorBString.toString());  
-    }    
+    }
+
+    @Override
+    public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
