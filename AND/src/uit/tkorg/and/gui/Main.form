@@ -65,8 +65,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jPanel3" min="-2" pref="53" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btRun" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
@@ -145,11 +145,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Open"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btTrainingDataParthActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btTestDataParth">
           <Properties>
             <Property name="text" type="java.lang.String" value="Open"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btTestDataParthActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -226,13 +232,12 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="rbRF" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbSVM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbBayes" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -268,6 +273,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="RUN"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btRunActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
