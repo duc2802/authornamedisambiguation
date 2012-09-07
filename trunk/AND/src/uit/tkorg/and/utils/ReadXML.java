@@ -15,6 +15,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import uit.tkorg.and.gui.Main;
 import uit.tkorg.and.models.Author;
 import uit.tkorg.and.models.Publication;
 
@@ -39,46 +40,12 @@ public class ReadXML {
        
     }
     
-    public static void getListFolder(String rootDirectory)
-    {
-        System.out.println("Root: -" + rootDirectory);
-        File root = new File(rootDirectory);
-        File[] listChild = root.listFiles();
-        for (int i = 0; i < listChild.length; i++) {
-            File child = listChild[i];
-            if(child.isDirectory())
-            {
-                System.out.println("\t-" + child.getName());
-                File[] listSubFolder = child.listFiles();
-                int length = 0;                
-                while(length < listSubFolder.length)
-                {
-                    System.out.println("\t \t-" + listSubFolder[length].getName());
-                    File[] listFiles = listSubFolder[length].listFiles();
-                    int lengthListFile = 0;
-                    while(lengthListFile < listFiles.length)
-                    {
-                        File file = listFiles[length];
-                        if(file.isFile())
-                        {
-                            //Publication publication = importPubFromXML(file.getAbsolutePath());
-                            //System.out.println("\t \t \t-" + publication.toString());
-                        }
-                        lengthListFile++;
-                    } 
-                    length++;
-                }                
-            }            
-        }
-    }
-    
     public Publication importPubFromXML(String fileName) {
         Publication result = null;
         List<Author> coauthor = null;
         Author mainAuthor = null;
 
         try {
-
             File fXmlFile = new File(fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -96,6 +63,11 @@ public class ReadXML {
             result.setPubYearPublish(getTagValue("year", rootElement));
             result.setPublisher(getTagValue("publisher", rootElement));
             result.setConference(getTagValue("conference", rootElement));
+            int test = 0;
+            if(!"".equals(getTagValue("result", rootElement)))
+            {
+               test = Integer.parseInt(getTagValue("result", rootElement));
+            }            
             // Read author info
 
             coauthor = new ArrayList<Author>();
@@ -106,20 +78,25 @@ public class ReadXML {
                 if (!getTagValue("name", eElement).equals("")) {
                     mainAuthor = new Author();
                     mainAuthor.setAuthorName(getTagValue("name", eElement));
-                    mainAuthor.setAuthorAfflication(getTagValue("afflication", eElement));
+                    mainAuthor.setAuthorAfflication(getTagValue("afflication", eElement)); 
+                                  
+                    //if("main".equals(eElement.getParentNode().getNodeName())){
+                        //System.out.print("");
+                   //      mainAuthor.setAuthorResult(Integer.parseInt(getTagValue("result", eElement)));
+                    //}
                     if (eElement.hasAttribute("email")) {
                         mainAuthor.setAuthorEmail(getTagValue("email", eElement));
                     }
                     if (eElement.hasAttribute("order") && getTagValue("order", eElement) != null) {
                         mainAuthor.setAuthorOrder(Integer.parseInt(getTagValue("order", eElement)));
                     }
-
                     if (eElement.hasAttribute("result") && getTagValue("result", eElement) != null) {
                         mainAuthor.setAuthorResult(Integer.parseInt(getTagValue("result", eElement)));
                     }
 
                     mainAuthor.setInterest(getTagValue("interests", eElement));
                     if (nNode.getParentNode().getNodeName().equals("main")) {
+                        mainAuthor.setAuthorResult(test);
                         result.setMainAuthor(mainAuthor);
                     } else {
                         coauthor.add(mainAuthor);
@@ -130,6 +107,7 @@ public class ReadXML {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Main.taLog.append(e.getMessage());
         }
         return result;
     }
@@ -146,7 +124,6 @@ public class ReadXML {
 //      public static void main(String[] args) {
 //        // TODO code application logic here
 //       Publication test;
-//       test= importPubFromXML("1");
-//       
+//       test= importPubFromXML("1");       
 //    }
 }
