@@ -17,5 +17,10 @@ public class KeywordSimilarity implements FeaturesBase
     public float makeJaccardSimilarity(Publication publicationA, Publication publicationB) {
         JaccardSimilarity jaccardSimilarity = new JaccardSimilarity();
         return jaccardSimilarity.getSimilarity(publicationA.getPubKeywords(), publicationB.getPubKeywords());
-    }    
+    }
+
+    @Override
+    public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

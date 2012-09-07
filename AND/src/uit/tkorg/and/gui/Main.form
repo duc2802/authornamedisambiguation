@@ -173,9 +173,24 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                  <Component id="cbJaccardName" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="cbLevenshteinAuthorName" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="cbLevenshteinAfflicaiton" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="cbJaccardAuthorName" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cbJaccardAfiliation" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cbJaccardCoAuthor" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cbJaccardKeyword" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="cbJaccardKeyInteresting" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -185,23 +200,57 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbJaccardName" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaccardAuthorName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaccardAfiliation" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaccardCoAuthor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaccardKeyword" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaccardKeyInteresting" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="216" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbLevenshteinAuthorName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbLevenshteinAfflicaiton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="175" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JCheckBox" name="cbJaccardName">
+        <Component class="javax.swing.JCheckBox" name="cbJaccardAuthorName">
           <Properties>
-            <Property name="text" type="java.lang.String" value="JCName"/>
+            <Property name="text" type="java.lang.String" value="JCAuthorName"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+        <Component class="javax.swing.JCheckBox" name="cbJaccardAfiliation">
           <Properties>
             <Property name="text" type="java.lang.String" value="JCAffiliation "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJaccardCoAuthor">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JCCoAuthor"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJaccardKeyword">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JCKeyWord"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJaccardKeyInteresting">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JCKeyInteresting"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbLevenshteinAuthorName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="LevenshteinAuthor"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbLevenshteinAfflicaiton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="LvAffiliation"/>
           </Properties>
         </Component>
       </SubComponents>

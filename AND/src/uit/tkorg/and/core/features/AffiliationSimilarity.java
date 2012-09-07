@@ -6,6 +6,7 @@ package uit.tkorg.and.core.features;
 
 import java.util.ArrayList;
 import uit.tkorg.and.core.similarity.JaccardSimilarity;
+import uit.tkorg.and.core.similarity.Levenshtein;
 import uit.tkorg.and.core.tokenisers.TokeniserWhitespace;
 import uit.tkorg.and.models.Author;
 import uit.tkorg.and.models.Publication;
@@ -37,5 +38,12 @@ public class AffiliationSimilarity implements FeaturesBase{
         ArrayList<String> intersectionTokens = tokeniserWhitespace.findIntersection(affATokens, affBTokens);
         //calculate TFIDF for each of term in intersectionTokens.
         return 0;
+    }
+
+    @Override
+    public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
+        Levenshtein levenshteinSimilarity = new Levenshtein();
+        return levenshteinSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
+                publicationB.getMainAuthor().getAuthorAfflication());
     }
 }

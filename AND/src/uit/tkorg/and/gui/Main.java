@@ -5,7 +5,11 @@
 package uit.tkorg.and.gui;
 
 import java.io.File;
+import java.util.Enumeration;
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
+import javax.swing.JRadioButton;
+import uit.tkorg.and.models.Feature;
 
 /**
  *
@@ -39,8 +43,13 @@ public class Main extends javax.swing.JFrame {
         btTrainingDataParth = new javax.swing.JButton();
         btTestDataParth = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        cbJaccardName = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        cbJaccardAuthorName = new javax.swing.JCheckBox();
+        cbJaccardAfiliation = new javax.swing.JCheckBox();
+        cbJaccardCoAuthor = new javax.swing.JCheckBox();
+        cbJaccardKeyword = new javax.swing.JCheckBox();
+        cbJaccardKeyInteresting = new javax.swing.JCheckBox();
+        cbLevenshteinAuthorName = new javax.swing.JCheckBox();
+        cbLevenshteinAfflicaiton = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         rbRF = new javax.swing.JRadioButton();
         rbSVM = new javax.swing.JRadioButton();
@@ -109,9 +118,20 @@ public class Main extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Features"));
 
-        cbJaccardName.setText("JCName");
+        cbJaccardAuthorName.setText("JCAuthorName");
 
-        jCheckBox1.setText("JCAffiliation ");
+        cbJaccardAfiliation.setText("JCAffiliation ");
+
+        cbJaccardCoAuthor.setText("JCCoAuthor");
+
+        cbJaccardKeyword.setText("JCKeyWord");
+
+        cbJaccardKeyInteresting.setText("JCKeyInteresting");
+
+        cbLevenshteinAuthorName.setText("LevenshteinAuthor");
+        cbLevenshteinAuthorName.setToolTipText("");
+
+        cbLevenshteinAfflicaiton.setText("LvAffiliation");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -119,9 +139,21 @@ public class Main extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(cbJaccardName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(cbLevenshteinAuthorName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbLevenshteinAfflicaiton))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(cbJaccardAuthorName)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbJaccardAfiliation)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbJaccardCoAuthor)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbJaccardKeyword)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbJaccardKeyInteresting)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -129,9 +161,16 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbJaccardName)
-                    .addComponent(jCheckBox1))
-                .addContainerGap(216, Short.MAX_VALUE))
+                    .addComponent(cbJaccardAuthorName)
+                    .addComponent(cbJaccardAfiliation)
+                    .addComponent(cbJaccardCoAuthor)
+                    .addComponent(cbJaccardKeyword)
+                    .addComponent(cbJaccardKeyInteresting))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbLevenshteinAuthorName)
+                    .addComponent(cbLevenshteinAfflicaiton))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Classifiers"));
@@ -236,17 +275,73 @@ public class Main extends javax.swing.JFrame {
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         // TODO add your handling code here:
+        
         // Get path data
         String pathForTrain = tfTrainingDataParth.getText();
         String pathForTest = tfTestDataParth.getText();
         
         //Get Feature
-        Boolean ftJCAuthorName = false;
         
-        // Get classìier
+        Feature selectFeatures = new Feature();
+        int dimension =0;
         
+        // Jaccard Authorname
+        if(cbJaccardAuthorName.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setJcAuthorName(true);
+        }
+        // Jaccard Coauthor 
+        if(cbJaccardCoAuthor.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setJcCoAuthor(true);
+        }
+          // Jaccard Afiliation
+        if(cbJaccardAfiliation.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setJcAffiliation(true);
+        }
+          // Jaccard keword
+        if(cbJaccardKeyword.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setJcKeyword(true);
+        }
+          // Jaccard Interesting
+        if(cbJaccardKeyInteresting.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setJcInterestingKeyword(true);
+        }
         
+          // Levenshtein Author name
+        if(cbLevenshteinAuthorName.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setLevenshteinAuthorname(true);
+        }
+          // Levenshtein Affilication
+        if(cbLevenshteinAfflicaiton.isSelected())
+        {
+            dimension ++;
+            selectFeatures.setNumberSelectFeature(dimension);
+            selectFeatures.setLevenshteinAffiliaiton(true);
+        }
         
+        // Add more feature here
+        
+        // Get Classifier
+        JRadioButton nameClassifier = getSelection(buttonGroup1);
+        
+        // Call caculate and show the result
     }//GEN-LAST:event_btRunActionPerformed
 
     /**
@@ -290,14 +385,28 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
+    public static JRadioButton getSelection(ButtonGroup group) {
+    for (Enumeration e=group.getElements(); e.hasMoreElements(); ) {
+        JRadioButton b = (JRadioButton)e.nextElement();
+        if (b.getModel() == group.getSelection()) {
+            return b;
+        }
+    }
+    return null;
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btRun;
     private javax.swing.JButton btTestDataParth;
     private javax.swing.JButton btTrainingDataParth;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JCheckBox cbJaccardName;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox cbJaccardAfiliation;
+    private javax.swing.JCheckBox cbJaccardAuthorName;
+    private javax.swing.JCheckBox cbJaccardCoAuthor;
+    private javax.swing.JCheckBox cbJaccardKeyInteresting;
+    private javax.swing.JCheckBox cbJaccardKeyword;
+    private javax.swing.JCheckBox cbLevenshteinAfflicaiton;
+    private javax.swing.JCheckBox cbLevenshteinAuthorName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
