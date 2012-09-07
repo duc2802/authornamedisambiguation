@@ -4,6 +4,9 @@
  */
 package uit.tkorg.and.gui;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author tiendv
@@ -56,8 +59,18 @@ public class Main extends javax.swing.JFrame {
         jLabel2.setText("Test Data");
 
         btTrainingDataParth.setText("Open");
+        btTrainingDataParth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btTrainingDataParthActionPerformed(evt);
+            }
+        });
 
         btTestDataParth.setText("Open");
+        btTestDataParth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btTestDataParthActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -148,15 +161,19 @@ public class Main extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rbRF)
                     .addComponent(rbSVM)
-                    .addComponent(rbBayes))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(rbBayes)))
         );
 
         btRun.setText("RUN");
+        btRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRunActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -188,14 +205,49 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btRun)
                 .addGap(20, 20, 20))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btTrainingDataParthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTrainingDataParthActionPerformed
+        // TODO add your handling code here:
+        
+
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.showOpenDialog(this);  
+        // Show open dialog; this method does not return until the dialog is closed       
+        tfTrainingDataParth.setText(fc.getCurrentDirectory().toString());
+    }//GEN-LAST:event_btTrainingDataParthActionPerformed
+
+    private void btTestDataParthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTestDataParthActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.showOpenDialog(this);  
+        // Show open dialog; this method does not return until the dialog is closed       
+        tfTestDataParth.setText(fc.getCurrentDirectory().toString());
+    }//GEN-LAST:event_btTestDataParthActionPerformed
+
+    private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
+        // TODO add your handling code here:
+        // Get path data
+        String pathForTrain = tfTrainingDataParth.getText();
+        String pathForTest = tfTestDataParth.getText();
+        
+        //Get Feature
+        Boolean ftJCAuthorName = false;
+        
+        // Get classìier
+        
+        
+        
+    }//GEN-LAST:event_btRunActionPerformed
 
     /**
      * @param args the command line arguments
