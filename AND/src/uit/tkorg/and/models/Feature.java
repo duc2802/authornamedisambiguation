@@ -91,4 +91,11 @@ public class Feature {
         this.levenshteinAuthorname = levenshteinAuthorname;
     }
     
+    public static final String JC_AUTHOR_NAME = "jcAuthorName";
+    public static final String JC_AFFILIATION = "jcAffiliation";
+    public static final String JC_INTERESTING_KEYWORD = "jcInterestingKeyword";
+    public static final String JC_CO_AUTHOR = "jcCoAuthor";
+    public static final String JC_KEYWORD = "jcKeyword";
+    public static final String LEVENSHTEIN_AUTHOR_NAME = "levenshteinAuthorname";
+    public static final String LEVENSHTEIN_AFFILIATION = "levenshteinAffiliaiton";        
 }

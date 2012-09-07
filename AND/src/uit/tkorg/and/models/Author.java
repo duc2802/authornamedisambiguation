@@ -15,7 +15,7 @@ public class Author {
     String authorEmail;
     int authorOrder;
     String authorInterests;
-    int authorResult=0;
+    int authorResult = 0;
     String interest;
 
     public Author() {

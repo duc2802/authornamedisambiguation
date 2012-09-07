@@ -4,12 +4,21 @@
  */
 package uit.tkorg.and.gui;
 
+import java.awt.Frame;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import uit.tkorg.and.models.Vector;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import uit.tkorg.and.models.Feature;
+import uit.tkorg.and.models.MachineLearning;
+import weka.classifiers.Evaluation;
+import weka.core.Instances;
+import weka.core.Utils;
 
 /**
  *
@@ -22,6 +31,7 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -55,6 +65,9 @@ public class Main extends javax.swing.JFrame {
         rbSVM = new javax.swing.JRadioButton();
         rbBayes = new javax.swing.JRadioButton();
         btRun = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taLog = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -86,15 +99,15 @@ public class Main extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tfTrainingDataParth)
-                    .addComponent(tfTestDataParth, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(tfTestDataParth)
+                    .addComponent(tfTrainingDataParth, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btTrainingDataParth)
                     .addComponent(btTestDataParth))
@@ -103,7 +116,6 @@ public class Main extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(tfTrainingDataParth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,7 +125,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(tfTestDataParth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btTestDataParth))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Features"));
@@ -140,37 +152,33 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(cbLevenshteinAuthorName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbLevenshteinAfflicaiton))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(cbJaccardAuthorName)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbJaccardAfiliation)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbJaccardCoAuthor)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbJaccardKeyword)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbJaccardKeyInteresting)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbLevenshteinAfflicaiton)
+                    .addComponent(cbLevenshteinAuthorName)
+                    .addComponent(cbJaccardKeyInteresting)
+                    .addComponent(cbJaccardKeyword)
+                    .addComponent(cbJaccardCoAuthor)
+                    .addComponent(cbJaccardAfiliation)
+                    .addComponent(cbJaccardAuthorName))
+                .addContainerGap(161, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbJaccardAuthorName)
-                    .addComponent(cbJaccardAfiliation)
-                    .addComponent(cbJaccardCoAuthor)
-                    .addComponent(cbJaccardKeyword)
-                    .addComponent(cbJaccardKeyInteresting))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbLevenshteinAuthorName)
-                    .addComponent(cbLevenshteinAfflicaiton))
-                .addContainerGap(175, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(cbJaccardAuthorName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbJaccardAfiliation)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbJaccardCoAuthor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbJaccardKeyword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbJaccardKeyInteresting)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbLevenshteinAuthorName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbLevenshteinAfflicaiton)
+                .addContainerGap(113, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Classifiers"));
@@ -189,22 +197,22 @@ public class Main extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap()
                 .addComponent(rbRF)
-                .addGap(118, 118, 118)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(rbSVM)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
                 .addComponent(rbBayes)
-                .addGap(115, 115, 115))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rbRF)
                     .addComponent(rbSVM)
-                    .addComponent(rbBayes)))
+                    .addComponent(rbBayes))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         btRun.setText("RUN");
@@ -213,6 +221,28 @@ public class Main extends javax.swing.JFrame {
                 btRunActionPerformed(evt);
             }
         });
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Log"));
+
+        taLog.setColumns(20);
+        taLog.setRows(5);
+        jScrollPane1.setViewportView(taLog);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -227,27 +257,34 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btRun)
-                .addGap(20, 20, 20))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -258,7 +295,7 @@ public class Main extends javax.swing.JFrame {
         
 
         JFileChooser fc = new JFileChooser();
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.showOpenDialog(this);  
         // Show open dialog; this method does not return until the dialog is closed       
         tfTrainingDataParth.setText(fc.getCurrentDirectory().toString());
@@ -267,18 +304,19 @@ public class Main extends javax.swing.JFrame {
     private void btTestDataParthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTestDataParthActionPerformed
         // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.showOpenDialog(this);  
         // Show open dialog; this method does not return until the dialog is closed       
-        tfTestDataParth.setText(fc.getCurrentDirectory().toString());
+        tfTestDataParth.setText(fc.getSelectedFile().getAbsolutePath().toString());
     }//GEN-LAST:event_btTestDataParthActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         // TODO add your handling code here:
-        
+        String pathForTrain = "C:\\DataTrain";
+        String pathForTest = "C:\\DataTest";
         // Get path data
-        String pathForTrain = tfTrainingDataParth.getText();
-        String pathForTest = tfTestDataParth.getText();
+        //pathForTrain = tfTrainingDataParth.getText();
+        //pathForTest = tfTestDataParth.getText();
         
         //Get Feature
         
@@ -334,14 +372,53 @@ public class Main extends javax.swing.JFrame {
             dimension ++;
             selectFeatures.setNumberSelectFeature(dimension);
             selectFeatures.setLevenshteinAffiliaiton(true);
-        }
+        }        
         
-        // Add more feature here
+        // Add more feature here   
         
         // Get Classifier
         JRadioButton nameClassifier = getSelection(buttonGroup1);
+        String name = nameClassifier.getText();
+        taLog.append(name);
+        taLog.append("\n");
         
-        // Call caculate and show the result
+        Instances train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);
+        Instances test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
+        
+        MachineLearning mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
+        try {
+            mc.cModel.buildClassifier(train);
+            Evaluation eTest = new Evaluation(test);
+            eTest.evaluateModel(mc.cModel, test);
+
+            taLog.append("\t # \t actual \t predicted \t error \t distribution");
+            taLog.append("\n");
+            for (int i = 0; i < test.numInstances(); i++) {
+                double pred = mc.cModel.classifyInstance(test.instance(i));
+                double actual = test.instance(i).classValue();
+                double[] dist = test.instance(i).toDoubleArray();
+                taLog.append("\t" + (i + 1));
+                taLog.append(" \t ");
+                taLog.append(test.instance(i).toString(test.classIndex()));
+                taLog.append(" \t ");
+                taLog.append(test.classAttribute().value((int) pred));
+                taLog.append(" \t ");
+                if (pred != test.instance(i).classValue()) {
+                    taLog.append("false");
+                } else {
+                    taLog.append("correct");
+                }
+                taLog.append(" \t ");
+                taLog.append(Utils.arrayToString(dist));
+                taLog.append("\n");
+            }
+            taLog.append(eTest.toSummaryString());
+            taLog.append(eTest.toClassDetailsString());
+            taLog.append(eTest.toMatrixString());
+        } catch (Exception ex) {
+            taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
+        }
+        
     }//GEN-LAST:event_btRunActionPerformed
 
     /**
@@ -415,9 +492,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbBayes;
     private javax.swing.JRadioButton rbRF;
     private javax.swing.JRadioButton rbSVM;
+    public static javax.swing.JTextArea taLog;
     private javax.swing.JTextField tfTestDataParth;
     private javax.swing.JTextField tfTrainingDataParth;
     // End of variables declaration//GEN-END:variables
