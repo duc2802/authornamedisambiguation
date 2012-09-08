@@ -13,4 +13,8 @@ import uit.tkorg.and.models.Publication;
 public interface FeaturesBase {    
     public float makeJaccardSimilarity(Publication publicationA, Publication publicationB);
     public float makeLevenshteinSimilarity (Publication publicationA, Publication publicationB);
+    public float makeJaroSimilarity (Publication publicationA, Publication publicationB);
+    public float makeSmithWatermanSimilarity (Publication publicationA, Publication publicationB);
+    public float makeOverlapCoefficientSimilarity (Publication publicationA, Publication publicationB);
+    public float makeJaroWinklerSimilarity (Publication publicationA, Publication publicationB);
 }

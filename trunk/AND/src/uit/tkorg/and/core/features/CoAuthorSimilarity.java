@@ -60,4 +60,24 @@ public class CoAuthorSimilarity implements FeaturesBase{
     public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public float makeJaroSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public float makeSmithWatermanSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public float makeOverlapCoefficientSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public float makeJaroWinklerSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
