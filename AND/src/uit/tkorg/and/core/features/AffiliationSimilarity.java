@@ -6,6 +6,8 @@ package uit.tkorg.and.core.features;
 
 import java.util.ArrayList;
 import uit.tkorg.and.core.similarity.JaccardSimilarity;
+import uit.tkorg.and.core.similarity.Jaro;
+import uit.tkorg.and.core.similarity.JaroWinkler;
 import uit.tkorg.and.core.similarity.Levenshtein;
 import uit.tkorg.and.core.tokenisers.TokeniserWhitespace;
 import uit.tkorg.and.models.Author;
@@ -44,6 +46,30 @@ public class AffiliationSimilarity implements FeaturesBase{
     public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
         Levenshtein levenshteinSimilarity = new Levenshtein();
         return levenshteinSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
+                publicationB.getMainAuthor().getAuthorAfflication());
+    }
+
+    @Override
+    public float makeJaroSimilarity(Publication publicationA, Publication publicationB) {
+        Jaro jaroSimilarity = new Jaro();
+        return jaroSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
+                publicationB.getMainAuthor().getAuthorAfflication());
+    }
+
+    @Override
+    public float makeSmithWatermanSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public float makeOverlapCoefficientSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public float makeJaroWinklerSimilarity(Publication publicationA, Publication publicationB) {
+        JaroWinkler jaroWinklerSimilarity = new JaroWinkler(); 
+        return jaroWinklerSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
                 publicationB.getMainAuthor().getAuthorAfflication());
     }
 }
