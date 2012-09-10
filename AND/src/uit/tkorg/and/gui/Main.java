@@ -9,6 +9,9 @@ import java.io.File;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import uit.tkorg.and.models.Vector;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
@@ -311,112 +314,121 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btTestDataParthActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
-        // TODO add your handling code here:
-        String pathForTrain = "C:\\DataTrain";
-        String pathForTest = "C:\\DataTest";
-        // Get path data
-        //pathForTrain = tfTrainingDataParth.getText();
-        //pathForTest = tfTestDataParth.getText();
-        
-        //Get Feature
-        
-        Feature selectFeatures = new Feature();
-        int dimension =0;
-        
-        // Jaccard Authorname
-        if(cbJaccardAuthorName.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setJcAuthorName(true);
-        }
-        // Jaccard Coauthor 
-        if(cbJaccardCoAuthor.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setJcCoAuthor(true);
-        }
-          // Jaccard Afiliation
-        if(cbJaccardAfiliation.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setJcAffiliation(true);
-        }
-          // Jaccard keword
-        if(cbJaccardKeyword.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setJcKeyword(true);
-        }
-          // Jaccard Interesting
-        if(cbJaccardKeyInteresting.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setJcInterestingKeyword(true);
-        }
-        
-          // Levenshtein Author name
-        if(cbLevenshteinAuthorName.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setLevenshteinAuthorname(true);
-        }
-          // Levenshtein Affilication
-        if(cbLevenshteinAfflicaiton.isSelected())
-        {
-            dimension ++;
-            selectFeatures.setNumberSelectFeature(dimension);
-            selectFeatures.setLevenshteinAffiliaiton(true);
-        }        
-        
-        // Add more feature here   
-        
-        // Get Classifier
-        JRadioButton nameClassifier = getSelection(buttonGroup1);
-        String name = nameClassifier.getText();
-        taLog.append(name);
-        taLog.append("\n");
-        
-        Instances train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);
-        Instances test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
-        
-        MachineLearning mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
-        try {
-            mc.cModel.buildClassifier(train);
-            Evaluation eTest = new Evaluation(test);
-            eTest.evaluateModel(mc.cModel, test);
-
-            taLog.append("\t # \t actual \t predicted \t error \t distribution");
-            taLog.append("\n");
-            for (int i = 0; i < test.numInstances(); i++) {
-                double pred = mc.cModel.classifyInstance(test.instance(i));
-                double actual = test.instance(i).classValue();
-                double[] dist = test.instance(i).toDoubleArray();
-                taLog.append("\t" + (i + 1));
-                taLog.append(" \t ");
-                taLog.append(test.instance(i).toString(test.classIndex()));
-                taLog.append(" \t ");
-                taLog.append(test.classAttribute().value((int) pred));
-                taLog.append(" \t ");
-                if (pred != test.instance(i).classValue()) {
-                    taLog.append("false");
-                } else {
-                    taLog.append("correct");
-                }
-                taLog.append(" \t ");
-                taLog.append(Utils.arrayToString(dist));
-                taLog.append("\n");
+        try {                                      
+            // TODO add your handling code here:
+            String pathForTrain = "C:\\DataTrain";
+            String pathForTest = "C:\\DataTest";
+            // Get path data
+            //pathForTrain = tfTrainingDataParth.getText();
+            //pathForTest = tfTestDataParth.getText();
+            
+            //Get Feature
+            
+            Feature selectFeatures = new Feature();
+            int dimension =0;
+            
+            // Jaccard Authorname
+            if(cbJaccardAuthorName.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJcAuthorName(true);
             }
-            taLog.append(eTest.toSummaryString());
-            taLog.append(eTest.toClassDetailsString());
-            taLog.append(eTest.toMatrixString());
-        } catch (Exception ex) {
-            taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            // Jaccard Coauthor 
+            if(cbJaccardCoAuthor.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJcCoAuthor(true);
+            }
+              // Jaccard Afiliation
+            if(cbJaccardAfiliation.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJcAffiliation(true);
+            }
+              // Jaccard keword
+            if(cbJaccardKeyword.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJcKeyword(true);
+            }
+              // Jaccard Interesting
+            if(cbJaccardKeyInteresting.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJcInterestingKeyword(true);
+            }
+            
+              // Levenshtein Author name
+            if(cbLevenshteinAuthorName.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setLevenshteinAuthorname(true);
+            }
+              // Levenshtein Affilication
+            if(cbLevenshteinAfflicaiton.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setLevenshteinAffiliaiton(true);
+            }        
+            
+            // Add more feature here   
+            
+            // Get Classifier
+            JRadioButton nameClassifier = getSelection(buttonGroup1);
+            String name = nameClassifier.getText();
+            taLog.append(name);
+            taLog.append("\n");
+            
+            Instances train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);
+            Instances test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
+            
+            MachineLearning mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
+            try {
+                mc.cModel.buildClassifier(train);
+                Evaluation eTest = new Evaluation(test);
+                eTest.evaluateModel(mc.cModel, test);
+
+                taLog.append("\t # \t actual \t predicted \t error \t distribution");
+                taLog.append("\n");
+                for (int i = 0; i < test.numInstances(); i++) {
+                    double pred = mc.cModel.classifyInstance(test.instance(i));
+                    double actual = test.instance(i).classValue();
+                    double[] dist = test.instance(i).toDoubleArray();
+                    taLog.append("\t" + (i + 1));
+                    taLog.append(" \t ");
+                    taLog.append(test.instance(i).toString(test.classIndex()));
+                    taLog.append(" \t ");
+                    taLog.append(test.classAttribute().value((int) pred));
+                    taLog.append(" \t ");
+                    if (pred != test.instance(i).classValue()) {
+                        taLog.append("false");
+                    } else {
+                        taLog.append("correct");
+                    }
+                    taLog.append(" \t ");
+                    taLog.append(Utils.arrayToString(dist));
+                    taLog.append("\n");
+                }
+                taLog.append(eTest.toSummaryString());
+                taLog.append(eTest.toClassDetailsString());
+                taLog.append(eTest.toMatrixString());
+            } catch (Exception ex) {
+                taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            }
+            
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btRunActionPerformed
