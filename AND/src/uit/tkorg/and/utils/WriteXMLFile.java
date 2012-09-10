@@ -71,9 +71,10 @@ public class WriteXMLFile {
     public void makeXMLFile(Publication publicaitonA, Publication publicaitonB, String name, String path) throws ParserConfigurationException, TransformerConfigurationException, TransformerException 
     {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-	DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        // root elements
         Document doc = docBuilder.newDocument();
-        
         Element rootElement = doc.createElement("pair");
         doc.appendChild(rootElement);
         
@@ -86,14 +87,14 @@ public class WriteXMLFile {
         rootElement.appendChild(paperB);
         
         Element tag = doc.createElement("tag");
-        doc.appendChild(tag);
+        rootElement.appendChild(tag);
         
         // write the content into xml file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
         String file = path +"\\"+name+".xml";
-        StreamResult result = new StreamResult(new File(file));
+        StreamResult result = new StreamResult(new File("C:\\file.xml"));
 
         // Output to console for testing
         // StreamResult result = new StreamResult(System.out);
@@ -108,7 +109,6 @@ public class WriteXMLFile {
     {           
    
         Element rootElement = doc.createElement("paper");
-        doc.appendChild(rootElement);
         Attr attr = doc.createAttribute("id");
         attr.setValue(Integer.toString(id));
         rootElement.setAttributeNode(attr);
