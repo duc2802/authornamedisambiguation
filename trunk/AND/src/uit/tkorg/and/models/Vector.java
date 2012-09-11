@@ -5,6 +5,9 @@
 package uit.tkorg.and.models;
 
 import java.io.File;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import uit.tkorg.and.core.features.AffiliationSimilarity;
 import uit.tkorg.and.core.features.AuthorSimilarity;
 import uit.tkorg.and.core.features.CoAuthorSimilarity;
@@ -12,6 +15,7 @@ import uit.tkorg.and.core.features.InterestKeywordSimilarity;
 import uit.tkorg.and.core.features.KeywordSimilarity;
 import uit.tkorg.and.gui.Main;
 import uit.tkorg.and.utils.ReadXML;
+import uit.tkorg.and.utils.WriteXMLFile;
 import weka.core.AbstractInstance;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -154,7 +158,7 @@ public class Vector {
      * @param selectFeatures
      * @return 
      */
-     public static Instances buildVectorsFromFolderWithSelectFeatures(String rootDirectory, Feature selectFeatures)
+     public static Instances buildVectorsFromFolderWithSelectFeatures(String rootDirectory, Feature selectFeatures) throws ParserConfigurationException, TransformerConfigurationException, TransformerException
     {
         int dimension = selectFeatures.getNumberSelectFeature() + 1;
         Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
@@ -200,6 +204,11 @@ public class Vector {
                                 " vs " + data[index2].toString() + 
                                 " label: " + instancesData.get(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
                              Main.taLog.append("\n");
+                             // Make xml file
+                             
+                             WriteXMLFile writeFile = new WriteXMLFile();
+                             String name= Integer.toString(index)+Integer.toString(index2);
+                             writeFile.makeXMLFile(data[index], data[index2],name, listSubFolder[length].getName());
                         }
                     }
                     length++;

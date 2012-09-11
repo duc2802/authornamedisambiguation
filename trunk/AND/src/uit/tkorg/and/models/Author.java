@@ -10,13 +10,13 @@ package uit.tkorg.and.models;
  */
 public class Author {
     
-    String authorName;
-    String authorAfflication;
-    String authorEmail;
-    int authorOrder;
-    String authorInterests;
+    String authorName="";
+    String authorAfflication="";
+    String authorEmail="";
+    int authorOrder=0;
+    String authorInterests="";
     int authorResult = 0;
-    String interest;
+    String interest="";
 
     public Author() {
     }

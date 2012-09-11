@@ -25,8 +25,6 @@ import uit.tkorg.and.models.Publication;
  */
 public class WriteXMLFile {
     
-        
-    
     /**
      * DTD
      * <pair>
@@ -86,15 +84,23 @@ public class WriteXMLFile {
         Element paperB = makePaperElement(doc, publicaitonB, 2);
         rootElement.appendChild(paperB);
         
+        String compare="0";
         Element tag = doc.createElement("tag");
+        int sum = publicaitonA.getMainAuthor().getAuthorResult() + publicaitonB.getMainAuthor().getAuthorResult();
+        if(sum == 2)
+            compare="1";
+        else
+            compare="0";
+        tag.appendChild(doc.createTextNode(compare));
         rootElement.appendChild(tag);
         
         // write the content into xml file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        String file = path +"\\"+name+".xml";
-        StreamResult result = new StreamResult(new File("C:\\file.xml"));
+        String file =name+".xml";
+        boolean forder = new File("c:\\"+path).mkdir();
+        StreamResult result = new StreamResult(new File("c:\\"+path,file));
 
         // Output to console for testing
         // StreamResult result = new StreamResult(System.out);
@@ -128,9 +134,11 @@ public class WriteXMLFile {
         mainAuthor.appendChild(authorName);
         
         // email elements
+     
         Element email = doc.createElement("email");
         email.appendChild(doc.createTextNode(paper.getMainAuthor().getAuthorEmail()));
         mainAuthor.appendChild(email);
+
         
         // interest elements
         Element interest = doc.createElement("interest");
@@ -151,7 +159,8 @@ public class WriteXMLFile {
         Element coAuthor = doc.createElement("coauthor");
         String nameCoauthor="";
         for(int i=0; i<paper.getCoAuthor().size();i++)
-            nameCoauthor = paper.getCoAuthor().get(i).getAuthorName()+", ";
+            nameCoauthor = nameCoauthor+paper.getCoAuthor().get(i).getAuthorName()+", ";
+        
         coAuthor.appendChild(doc.createTextNode(nameCoauthor));
         rootElement.appendChild(coAuthor);
         
