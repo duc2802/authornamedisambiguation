@@ -77,16 +77,65 @@ public class Vector {
            vector.addElement(attInterestSimilarity);    
         }
         
+        // Levenshtein Author Name 
         if(selectFeature.getLevenshteinAuthorname()==true)
         {
            Attribute attLevenshteinAuthorname = new Attribute(Feature.LEVENSHTEIN_AUTHOR_NAME);
            vector.addElement(attLevenshteinAuthorname);    
         }
-        
+        // Levenshtein Affiliation
         if(selectFeature.getLevenshteinAffiliaiton()==true)
         {
            Attribute attLevenshteinAffiliaiton = new Attribute(Feature.LEVENSHTEIN_AFFILIATION);
            vector.addElement(attLevenshteinAffiliaiton);    
+        }
+        // Jaro Author Name
+        if(selectFeature.getJaroAuthorName()==true)
+        {
+           Attribute attJaroAuthorName = new Attribute(Feature.JARO_AUTHOR_NAME);
+           vector.addElement(attJaroAuthorName);    
+        }
+        // Jaro Affiliation
+        if(selectFeature.getJaroAffiliation()==true)
+        {
+           Attribute attJaroAffiliation = new Attribute(Feature.JARO_AFFILIATION);
+           vector.addElement(attJaroAffiliation);    
+        }
+         // Jarowinkler Author Name
+        if(selectFeature.getJarowinklerAuthorName()==true)
+        {
+           Attribute attJaroWinklerAuthorName = new Attribute(Feature.JAROWINKLER_AUTHOR_NAME);
+           vector.addElement(attJaroWinklerAuthorName);    
+        }
+        // Jarowinkler Author Affiliation
+        if(selectFeature.getJarowinklerAffiliaiton()==true)
+        {
+           Attribute attJaroWinklerAffiliation = new Attribute(Feature.JAROWIKLER_AFFILIATION);
+           vector.addElement(attJaroWinklerAffiliation);    
+        }
+        // smithWaterman Author AuthorName
+        if(selectFeature.getSmithWatermanAuthorName()==true)
+        {
+           Attribute attSmithWatermanAuthorName = new Attribute(Feature.SMITHWATERMAN_AUTHOR_NAME);
+           vector.addElement(attSmithWatermanAuthorName);    
+        }
+        // smithWaterman Author Affiliation
+        if(selectFeature.getSmithWatermanAffiliation()==true)
+        {
+           Attribute attSmithWatermanAffiliaiton= new Attribute(Feature.SMITHWATERMAN_AFFILIATION);
+           vector.addElement(attSmithWatermanAffiliaiton);    
+        }
+         // Monge-Elkan Author Name
+        if(selectFeature.getMongeElkanAuthorName()==true)
+        {
+           Attribute attSmithMongeElkanAuthorName= new Attribute(Feature.MONGEELKAN_AUTHOR_NAME);
+           vector.addElement(attSmithMongeElkanAuthorName);    
+        }
+          // Monge-Elkan Author Affiliation
+        if(selectFeature.getMongeElkanAuthorName()==true)
+        {
+           Attribute attSmithMongeElkanAuthorAffiliation= new Attribute(Feature.MONGEELKAN_AFFILIATION);
+           vector.addElement(attSmithMongeElkanAuthorAffiliation);    
         }
         
         // add more feature here
@@ -141,6 +190,30 @@ public class Vector {
         
         if(selectFeature.getLevenshteinAffiliaiton()==true)
         simple.setValue((Attribute) instancesData.attribute(Feature.LEVENSHTEIN_AFFILIATION), affiliationSimilarity.makeLevenshteinSimilarity(pubA, pubB));        
+        
+        if(selectFeature.getJaroAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JARO_AUTHOR_NAME), authorSimilarity.makeJaroSimilarity(pubA, pubB));  
+        
+        if(selectFeature.getJaroAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JARO_AFFILIATION), affiliationSimilarity.makeJaroSimilarity(pubA, pubB));     
+        
+        if(selectFeature.getJarowinklerAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JAROWINKLER_AUTHOR_NAME), authorSimilarity.makeJaroWinklerSimilarity(pubA, pubB));        
+        
+        if(selectFeature.getJarowinklerAffiliaiton()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JAROWIKLER_AFFILIATION), affiliationSimilarity.makeJaroWinklerSimilarity(pubA, pubB));        
+        
+        if(selectFeature.getSmithWatermanAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.SMITHWATERMAN_AUTHOR_NAME), authorSimilarity.makeSmithWatermanSimilarity(pubA, pubB)); 
+        
+        if(selectFeature.getSmithWatermanAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.SMITHWATERMAN_AFFILIATION), affiliationSimilarity.makeSmithWatermanSimilarity(pubA, pubB)); 
+        
+        if(selectFeature.getMongeElkanAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.MONGEELKAN_AUTHOR_NAME), authorSimilarity.makeMongeElkanSimilarity(pubA, pubB));        
+        
+        if(selectFeature.getMongeElkanAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.MONGEELKAN_AFFILIATION), affiliationSimilarity.makeMongeElkanSimilarity(pubA, pubB)); 
     
         // Add more feature here
         int sum = pubA.getMainAuthor().getAuthorResult() + pubB.getMainAuthor().getAuthorResult();

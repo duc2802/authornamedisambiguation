@@ -112,7 +112,7 @@
                       <Component id="btTrainingDataParth" min="-2" max="-2" attributes="0"/>
                       <Component id="btTestDataParth" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="116" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -183,15 +183,26 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cbJaccardAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaroWinklerAffiliaiton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaroWinklerAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJarodAfiliation" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbJaroAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbLevenshteinAfflicaiton" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbLevenshteinAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbJaccardKeyInteresting" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbJaccardKeyword" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbJaccardCoAuthor" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbJaccardAfiliation" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbJaccardAuthorName" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="161" max="32767" attributes="0"/>
+                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cbSmithWatermanAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbSmithWatermanAffiliation" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbMongeElkanAuthorName" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbMongeElkanAffiliaiton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="49" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -199,20 +210,40 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbJaccardAuthorName" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbJaccardAuthorName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbSmithWatermanAuthorName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="cbJaccardAfiliation" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbJaccardAfiliation" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbSmithWatermanAffiliation" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbJaccardCoAuthor" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbJaccardCoAuthor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbMongeElkanAuthorName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbJaccardKeyword" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbJaccardKeyword" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbMongeElkanAffiliaiton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbJaccardKeyInteresting" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbLevenshteinAuthorName" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbLevenshteinAfflicaiton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="113" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="cbJaroAuthorName" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="cbJarodAfiliation" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cbJaroWinklerAuthorName" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cbJaroWinklerAffiliaiton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="15" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -245,13 +276,53 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbLevenshteinAuthorName">
           <Properties>
-            <Property name="text" type="java.lang.String" value="LevenshteinAuthor"/>
+            <Property name="text" type="java.lang.String" value="LevenshteinAuthorName"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbLevenshteinAfflicaiton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="LvAffiliation"/>
+            <Property name="text" type="java.lang.String" value="LevenshteinAffiliation"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJaroAuthorName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JaroAuthorName"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJarodAfiliation">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JaroAffiliation "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJaroWinklerAuthorName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JaroWinklerAuthorName"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbJaroWinklerAffiliaiton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="JaroWinklerAffiliaiton"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbSmithWatermanAuthorName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="SmithWatermanAuthorName"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbSmithWatermanAffiliation">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="SmithWatermanAffiliation"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbMongeElkanAuthorName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="MongeElkanAuthorName"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbMongeElkanAffiliaiton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="MongeElkanAffiliaiton"/>
           </Properties>
         </Component>
       </SubComponents>
