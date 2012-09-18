@@ -63,6 +63,14 @@ public class Main extends javax.swing.JFrame {
         cbJaccardKeyInteresting = new javax.swing.JCheckBox();
         cbLevenshteinAuthorName = new javax.swing.JCheckBox();
         cbLevenshteinAfflicaiton = new javax.swing.JCheckBox();
+        cbJaroAuthorName = new javax.swing.JCheckBox();
+        cbJarodAfiliation = new javax.swing.JCheckBox();
+        cbJaroWinklerAuthorName = new javax.swing.JCheckBox();
+        cbJaroWinklerAffiliaiton = new javax.swing.JCheckBox();
+        cbSmithWatermanAuthorName = new javax.swing.JCheckBox();
+        cbSmithWatermanAffiliation = new javax.swing.JCheckBox();
+        cbMongeElkanAuthorName = new javax.swing.JCheckBox();
+        cbMongeElkanAffiliaiton = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         rbRF = new javax.swing.JRadioButton();
         rbSVM = new javax.swing.JRadioButton();
@@ -114,7 +122,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btTrainingDataParth)
                     .addComponent(btTestDataParth))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,10 +151,26 @@ public class Main extends javax.swing.JFrame {
 
         cbJaccardKeyInteresting.setText("JCKeyInteresting");
 
-        cbLevenshteinAuthorName.setText("LevenshteinAuthor");
+        cbLevenshteinAuthorName.setText("LevenshteinAuthorName");
         cbLevenshteinAuthorName.setToolTipText("");
 
-        cbLevenshteinAfflicaiton.setText("LvAffiliation");
+        cbLevenshteinAfflicaiton.setText("LevenshteinAffiliation");
+
+        cbJaroAuthorName.setText("JaroAuthorName");
+
+        cbJarodAfiliation.setText("JaroAffiliation ");
+
+        cbJaroWinklerAuthorName.setText("JaroWinklerAuthorName");
+
+        cbJaroWinklerAffiliaiton.setText("JaroWinklerAffiliaiton");
+
+        cbSmithWatermanAuthorName.setText("SmithWatermanAuthorName");
+
+        cbSmithWatermanAffiliation.setText("SmithWatermanAffiliation");
+
+        cbMongeElkanAuthorName.setText("MongeElkanAuthorName");
+
+        cbMongeElkanAffiliaiton.setText("MongeElkanAffiliaiton");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -155,33 +179,59 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbJaccardAuthorName)
+                    .addComponent(cbJaroWinklerAffiliaiton)
+                    .addComponent(cbJaroWinklerAuthorName)
+                    .addComponent(cbJarodAfiliation)
+                    .addComponent(cbJaroAuthorName)
                     .addComponent(cbLevenshteinAfflicaiton)
                     .addComponent(cbLevenshteinAuthorName)
                     .addComponent(cbJaccardKeyInteresting)
                     .addComponent(cbJaccardKeyword)
                     .addComponent(cbJaccardCoAuthor)
-                    .addComponent(cbJaccardAfiliation)
-                    .addComponent(cbJaccardAuthorName))
-                .addContainerGap(161, Short.MAX_VALUE))
+                    .addComponent(cbJaccardAfiliation))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbSmithWatermanAuthorName)
+                    .addComponent(cbSmithWatermanAffiliation)
+                    .addComponent(cbMongeElkanAuthorName)
+                    .addComponent(cbMongeElkanAffiliaiton))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cbJaccardAuthorName)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbJaccardAuthorName)
+                    .addComponent(cbSmithWatermanAuthorName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbJaccardAfiliation)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbJaccardAfiliation)
+                    .addComponent(cbSmithWatermanAffiliation))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbJaccardCoAuthor)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbJaccardCoAuthor)
+                    .addComponent(cbMongeElkanAuthorName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbJaccardKeyword)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbJaccardKeyword)
+                    .addComponent(cbMongeElkanAffiliaiton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbJaccardKeyInteresting)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbLevenshteinAuthorName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbLevenshteinAfflicaiton)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbJaroAuthorName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbJarodAfiliation)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbJaroWinklerAuthorName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbJaroWinklerAffiliaiton)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Classifiers"));
@@ -376,7 +426,63 @@ public class Main extends javax.swing.JFrame {
                 dimension ++;
                 selectFeatures.setNumberSelectFeature(dimension);
                 selectFeatures.setLevenshteinAffiliaiton(true);
-            }        
+            }    
+            // Jaro Author Name
+            if(cbJaroAuthorName.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJaroAuthorName(true);
+            }            
+            // Jarro Affilication
+            if(cbJarodAfiliation.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJaroAffiliation(true);
+            }  
+            // Jarro Winkler AuthorName
+            if(cbJaroWinklerAuthorName.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJarowinklerAuthorName(true);
+            }
+             // Jarro Winkler Affiliaction 
+            if(cbJaroWinklerAffiliaiton.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setJarowinklerAffiliaiton(true);
+            }
+            // SmithWaterman AuthorName
+            if(cbSmithWatermanAuthorName.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setSmithWatermanAuthorName(true);
+            }
+           // SmithWaterman Author Affiliaiton
+            if(cbSmithWatermanAffiliation.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setSmithWatermanAffiliation(true);
+            }
+           // Monge-Elkan Author Name
+            if(cbMongeElkanAuthorName.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setMongeElkanAuthorName(true);
+            }
+            // Monge-Elkan Author Affiliation
+            if(cbMongeElkanAffiliaiton.isSelected())
+            {
+                dimension ++;
+                selectFeatures.setNumberSelectFeature(dimension);
+                selectFeatures.setMongeElkanAffiliation(true);
+            }
             
             // Add more feature here   
             
@@ -494,8 +600,16 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JCheckBox cbJaccardCoAuthor;
     private javax.swing.JCheckBox cbJaccardKeyInteresting;
     private javax.swing.JCheckBox cbJaccardKeyword;
+    private javax.swing.JCheckBox cbJaroAuthorName;
+    private javax.swing.JCheckBox cbJaroWinklerAffiliaiton;
+    private javax.swing.JCheckBox cbJaroWinklerAuthorName;
+    private javax.swing.JCheckBox cbJarodAfiliation;
     private javax.swing.JCheckBox cbLevenshteinAfflicaiton;
     private javax.swing.JCheckBox cbLevenshteinAuthorName;
+    private javax.swing.JCheckBox cbMongeElkanAffiliaiton;
+    private javax.swing.JCheckBox cbMongeElkanAuthorName;
+    private javax.swing.JCheckBox cbSmithWatermanAffiliation;
+    private javax.swing.JCheckBox cbSmithWatermanAuthorName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;

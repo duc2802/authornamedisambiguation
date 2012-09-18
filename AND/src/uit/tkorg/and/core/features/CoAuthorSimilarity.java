@@ -80,4 +80,9 @@ public class CoAuthorSimilarity implements FeaturesBase{
     public float makeJaroWinklerSimilarity(Publication publicationA, Publication publicationB) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public float makeMongeElkanSimilarity(Publication publicationA, Publication publicationB) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
