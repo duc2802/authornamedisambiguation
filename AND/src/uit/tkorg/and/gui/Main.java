@@ -357,7 +357,7 @@ public class Main extends javax.swing.JFrame {
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.showOpenDialog(this);  
         // Show open dialog; this method does not return until the dialog is closed       
-        tfTrainingDataParth.setText(fc.getCurrentDirectory().toString());
+        tfTrainingDataParth.setText(fc.getSelectedFile().getAbsolutePath());
     }//GEN-LAST:event_btTrainingDataParthActionPerformed
 
     private void btTestDataParthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTestDataParthActionPerformed
@@ -366,18 +366,17 @@ public class Main extends javax.swing.JFrame {
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fc.showOpenDialog(this);  
         // Show open dialog; this method does not return until the dialog is closed       
-        tfTestDataParth.setText(fc.getSelectedFile().getAbsolutePath().toString());
+        tfTestDataParth.setText(fc.getSelectedFile().getAbsolutePath());
     }//GEN-LAST:event_btTestDataParthActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         try {                                      
             // TODO add your handling code here:
-            String pathForTrain = "C:\\DataTrain";
-            String pathForTest = "C:\\DataTest";
             // Get path data
-            //pathForTrain = tfTrainingDataParth.getText();
-            //pathForTest = tfTestDataParth.getText();
             
+            String pathForTrain = tfTrainingDataParth.getText();
+            String pathForTest = tfTestDataParth.getText();
+
             //Get Feature
             
             Feature selectFeatures = new Feature();
