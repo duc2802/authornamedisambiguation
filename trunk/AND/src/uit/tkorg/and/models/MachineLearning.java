@@ -7,6 +7,7 @@ package uit.tkorg.and.models;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.Utils;
@@ -20,8 +21,7 @@ public class MachineLearning {
     public Classifier cModel;
     
     public Instances train;
-    public Instances test;
-    
+    public Instances test;  
     public MachineLearning(TypeClassifier type)
     {        
         switch(type){
@@ -33,6 +33,9 @@ public class MachineLearning {
                 break;
             case SVM:
                 break;
+            case C45:
+                cModel = (Classifier)new J48();
+                break; 
         }
     }
     
@@ -59,6 +62,6 @@ public class MachineLearning {
     }
     
     public enum TypeClassifier {
-       RF, SVM, BY
+       RF, SVM, BY,C45
      }
 }

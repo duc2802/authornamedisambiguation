@@ -75,6 +75,7 @@ public class Main extends javax.swing.JFrame {
         rbRF = new javax.swing.JRadioButton();
         rbSVM = new javax.swing.JRadioButton();
         rbBayes = new javax.swing.JRadioButton();
+        rbc45 = new javax.swing.JRadioButton();
         btRun = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -245,6 +246,9 @@ public class Main extends javax.swing.JFrame {
         buttonGroup1.add(rbBayes);
         rbBayes.setText("Bayes");
 
+        buttonGroup1.add(rbc45);
+        rbc45.setText("C4.5");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -256,7 +260,9 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(rbSVM)
                 .addGap(10, 10, 10)
                 .addComponent(rbBayes)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(rbc45)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,7 +270,8 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rbRF)
                     .addComponent(rbSVM)
-                    .addComponent(rbBayes))
+                    .addComponent(rbBayes)
+                    .addComponent(rbc45))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -311,14 +318,13 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
@@ -489,13 +495,22 @@ public class Main extends javax.swing.JFrame {
             // Get Classifier
             JRadioButton nameClassifier = getSelection(buttonGroup1);
             String name = nameClassifier.getText();
+            MachineLearning mc = null;
+            if(name.equals("Random Forest"))
+                mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
+            if(name.equals("SVM"))
+                mc = new MachineLearning(MachineLearning.TypeClassifier.SVM);
+            if(name.equals("Bayes"))
+                mc = new MachineLearning(MachineLearning.TypeClassifier.BY);
+            if(name.equals("C4.5"))
+                mc = new MachineLearning(MachineLearning.TypeClassifier.C45);
+            
             taLog.append(name);
             taLog.append("\n");
             
             Instances train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);
             Instances test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
             
-            MachineLearning mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
             try {
                 mc.cModel.buildClassifier(train);
                 Evaluation eTest = new Evaluation(test);
@@ -623,6 +638,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbBayes;
     private javax.swing.JRadioButton rbRF;
     private javax.swing.JRadioButton rbSVM;
+    private javax.swing.JRadioButton rbc45;
     public static javax.swing.JTextArea taLog;
     private javax.swing.JTextField tfTestDataParth;
     private javax.swing.JTextField tfTrainingDataParth;

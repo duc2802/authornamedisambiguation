@@ -16,7 +16,6 @@ import uit.tkorg.and.core.features.KeywordSimilarity;
 import uit.tkorg.and.gui.Main;
 import uit.tkorg.and.utils.ReadXML;
 import uit.tkorg.and.utils.WriteXMLFile;
-import weka.core.AbstractInstance;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
