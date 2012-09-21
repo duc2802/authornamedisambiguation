@@ -9,7 +9,9 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
+import weka.classifiers.functions.LibSVM;
 import weka.core.Instances;
+import weka.core.SelectedTag;
 import weka.core.Utils;
 
 /**
@@ -21,7 +23,9 @@ public class MachineLearning {
     public Classifier cModel;
     
     public Instances train;
-    public Instances test;  
+    public Instances test;
+    public LibSVM svm;
+    
     public MachineLearning(TypeClassifier type)
     {        
         switch(type){
@@ -32,6 +36,14 @@ public class MachineLearning {
                 cModel = (Classifier)new NaiveBayes();
                 break;
             case SVM:
+                {     svm = new LibSVM();
+//                    SelectedTag kt = new SelectedTag(0, LibSVM.TAGS_KERNELTYPE);
+//                    SelectedTag svmt = new SelectedTag(0, LibSVM.TAGS_SVMTYPE);
+//                    svm.setKernelType(kt);
+//                    svm.setSVMType(svmt);
+//                    svm.setProbabilityEstimates(true);
+                }    
+                cModel = svm;
                 break;
             case C45:
                 cModel = (Classifier)new J48();

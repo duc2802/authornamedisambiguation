@@ -274,13 +274,12 @@ public class Vector {
                                 instancesData.add(simple);
                              Main.taLog.append("\t\t\t-" + data[index].toString() + 
                                 " vs " + data[index2].toString() + 
-                                " label: " + instancesData.get(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
+                                " label: " + instancesData.instance(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
                              Main.taLog.append("\n");
                              // Make xml file
-                             
-                             WriteXMLFile writeFile = new WriteXMLFile();
-                             String name= Integer.toString(index)+Integer.toString(index2);
-                             writeFile.makeXMLFile(data[index], data[index2],name, listSubFolder[length].getName());
+//                             WriteXMLFile writeFile = new WriteXMLFile();
+//                             String name= Integer.toString(index)+Integer.toString(index2);
+//                             writeFile.makeXMLFile(data[index], data[index2],name, listSubFolder[length].getName());
                         }
                     }
                     length++;
