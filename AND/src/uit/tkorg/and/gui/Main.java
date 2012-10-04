@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import uit.tkorg.and.models.Feature;
 import uit.tkorg.and.models.MachineLearning;
+import uit.tkorg.and.models.PairPublication;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
 import weka.core.Utils;
@@ -28,7 +29,9 @@ import weka.core.Utils;
  * @author tiendv
  */
 public class Main extends javax.swing.JFrame {
-
+    private PairPublication[] data;
+    private Instances train;
+    private Instances test;
     /**
      * Creates new form Main
      */
@@ -88,7 +91,7 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data"));
 
-        jLabel1.setText("Training Data");
+        jLabel1.setText("Source files:");
 
         jLabel2.setText("Test Data");
 
@@ -123,7 +126,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btTrainingDataParth)
                     .addComponent(btTestDataParth))
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +265,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(rbBayes)
                 .addGap(18, 18, 18)
                 .addComponent(rbc45)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,188 +374,257 @@ public class Main extends javax.swing.JFrame {
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         try {                                      
-            // TODO add your handling code here:
-            // Get path data
-            
-            String pathForTrain = tfTrainingDataParth.getText();
-            String pathForTest = tfTestDataParth.getText();
+                // TODO add your handling code here:
+                // Get path data
 
-            //Get Feature
-            
-            Feature selectFeatures = new Feature();
-            int dimension =0;
-            
-            // Jaccard Authorname
-            if(cbJaccardAuthorName.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJcAuthorName(true);
-            }
-            // Jaccard Coauthor 
-            if(cbJaccardCoAuthor.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJcCoAuthor(true);
-            }
-              // Jaccard Afiliation
-            if(cbJaccardAfiliation.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJcAffiliation(true);
-            }
-              // Jaccard keword
-            if(cbJaccardKeyword.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJcKeyword(true);
-            }
-              // Jaccard Interesting
-            if(cbJaccardKeyInteresting.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJcInterestingKeyword(true);
-            }
-            
-              // Levenshtein Author name
-            if(cbLevenshteinAuthorName.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setLevenshteinAuthorname(true);
-            }
-              // Levenshtein Affilication
-            if(cbLevenshteinAfflicaiton.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setLevenshteinAffiliaiton(true);
-            }    
-            // Jaro Author Name
-            if(cbJaroAuthorName.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJaroAuthorName(true);
-            }            
-            // Jarro Affilication
-            if(cbJarodAfiliation.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJaroAffiliation(true);
-            }  
-            // Jarro Winkler AuthorName
-            if(cbJaroWinklerAuthorName.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJarowinklerAuthorName(true);
-            }
-             // Jarro Winkler Affiliaction 
-            if(cbJaroWinklerAffiliaiton.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setJarowinklerAffiliaiton(true);
-            }
-            // SmithWaterman AuthorName
-            if(cbSmithWatermanAuthorName.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setSmithWatermanAuthorName(true);
-            }
-           // SmithWaterman Author Affiliaiton
-            if(cbSmithWatermanAffiliation.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setSmithWatermanAffiliation(true);
-            }
-           // Monge-Elkan Author Name
-            if(cbMongeElkanAuthorName.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setMongeElkanAuthorName(true);
-            }
-            // Monge-Elkan Author Affiliation
-            if(cbMongeElkanAffiliaiton.isSelected())
-            {
-                dimension ++;
-                selectFeatures.setNumberSelectFeature(dimension);
-                selectFeatures.setMongeElkanAffiliation(true);
-            }
-            
-            // Add more feature here   
-            
-            // Get Classifier
-            JRadioButton nameClassifier = getSelection(buttonGroup1);
-            String name = nameClassifier.getText();
-            MachineLearning mc = null;
-            if(name.equals("Random Forest"))
-                mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
-            if(name.equals("SVM"))
-                mc = new MachineLearning(MachineLearning.TypeClassifier.SVM);
-            if(name.equals("Bayes"))
-                mc = new MachineLearning(MachineLearning.TypeClassifier.BY);
-            if(name.equals("C4.5"))
-                mc = new MachineLearning(MachineLearning.TypeClassifier.C45);
-            
-            taLog.append(name);
-            taLog.append("\n");
-            
-            Instances train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);
-            Instances test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
-            
-            try {
-                mc.cModel.buildClassifier(train);
-                Evaluation eTest = new Evaluation(test);
-                eTest.evaluateModel(mc.cModel, test);
+                String pathForTrain = tfTrainingDataParth.getText();
+                String pathForTest = tfTestDataParth.getText();
 
-                taLog.append("\t # \t actual \t predicted \t error \t distribution");
-                taLog.append("\n");
-                for (int i = 0; i < test.numInstances(); i++) {
-                    double pred = mc.cModel.classifyInstance(test.instance(i));
-                    double actual = test.instance(i).classValue();
-                    double[] dist = test.instance(i).toDoubleArray();
-                    taLog.append("\t" + (i + 1));
-                    taLog.append(" \t ");
-                    taLog.append(test.instance(i).toString(test.classIndex()));
-                    taLog.append(" \t ");
-                    taLog.append(test.classAttribute().value((int) pred));
-                    taLog.append(" \t ");
-                    if (pred != test.instance(i).classValue()) {
-                        taLog.append("false");
-                    } else {
-                        taLog.append("correct");
-                    }
-                    taLog.append(" \t ");
-                    taLog.append(Utils.arrayToString(dist));
-                    taLog.append("\n");
+                //Get Feature
+
+                Feature selectFeatures = new Feature();
+                int dimension =0;
+
+                // Jaccard Authorname
+                if(cbJaccardAuthorName.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJcAuthorName(true);
                 }
-                taLog.append(eTest.toSummaryString());
-                taLog.append(eTest.toClassDetailsString());
-                taLog.append(eTest.toMatrixString());
-            } catch (Exception ex) {
-                taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
-            }
-            
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }//GEN-LAST:event_btRunActionPerformed
+                // Jaccard Coauthor 
+                if(cbJaccardCoAuthor.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJcCoAuthor(true);
+                }
+                  // Jaccard Afiliation
+                if(cbJaccardAfiliation.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJcAffiliation(true);
+                }
+                  // Jaccard keword
+                if(cbJaccardKeyword.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJcKeyword(true);
+                }
+                  // Jaccard Interesting
+                if(cbJaccardKeyInteresting.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJcInterestingKeyword(true);
+                }
 
+                  // Levenshtein Author name
+                if(cbLevenshteinAuthorName.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setLevenshteinAuthorname(true);
+                }
+                  // Levenshtein Affilication
+                if(cbLevenshteinAfflicaiton.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setLevenshteinAffiliaiton(true);
+                }    
+                // Jaro Author Name
+                if(cbJaroAuthorName.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJaroAuthorName(true);
+                }            
+                // Jarro Affilication
+                if(cbJarodAfiliation.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJaroAffiliation(true);
+                }  
+                // Jarro Winkler AuthorName
+                if(cbJaroWinklerAuthorName.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJarowinklerAuthorName(true);
+                }
+                 // Jarro Winkler Affiliaction 
+                if(cbJaroWinklerAffiliaiton.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setJarowinklerAffiliaiton(true);
+                }
+                // SmithWaterman AuthorName
+                if(cbSmithWatermanAuthorName.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setSmithWatermanAuthorName(true);
+                }
+               // SmithWaterman Author Affiliaiton
+                if(cbSmithWatermanAffiliation.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setSmithWatermanAffiliation(true);
+                }
+               // Monge-Elkan Author Name
+                if(cbMongeElkanAuthorName.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setMongeElkanAuthorName(true);
+                }
+                // Monge-Elkan Author Affiliation
+                if(cbMongeElkanAffiliaiton.isSelected())
+                {
+                    dimension ++;
+                    selectFeatures.setNumberSelectFeature(dimension);
+                    selectFeatures.setMongeElkanAffiliation(true);
+                }
+
+                // Add more feature here   
+
+                // Get Classifier
+                JRadioButton nameClassifier = getSelection(buttonGroup1);
+                String name = nameClassifier.getText();
+                MachineLearning mc = null;
+                if(name.equals("Random Forest"))
+                    mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
+                if(name.equals("SVM"))
+                    mc = new MachineLearning(MachineLearning.TypeClassifier.SVM);
+                if(name.equals("Bayes"))
+                    mc = new MachineLearning(MachineLearning.TypeClassifier.BY);
+                if(name.equals("C4.5"))
+                    mc = new MachineLearning(MachineLearning.TypeClassifier.C45);
+
+                taLog.append(name);
+                taLog.append("\n");
+
+                //Load data:
+                PairPublication[] pair = Vector.buildVectorsFromFolderPairPublication(pathForTrain);
+                data = this.doubleListPairPublication(pair);
+
+                int unit = pair.length / 10;
+
+                int start = 0;
+                int end = 0;
+
+                int loop = 0;
+                while(loop < 10)
+                {
+                    System.out.println("==========LOOP:"+ (loop + 1) +"=========");
+                    start = loop * unit;
+                    end = (unit * 6) + start;    
+                    //System.out.println("==========TRAIN=========");
+                    train = Vector.buildVectorTrain(data, selectFeatures, start, end);                
+                    //System.out.println("==========END-TRAIN=========");
+                    //System.out.println("==========TEST=========");
+                    if(end <= pair.length){                    
+                        test = Vector.buildVectorTest(pair, selectFeatures, start, end);
+                    }
+                    else {
+                        test = Vector.buildVectorTrain(pair, selectFeatures, end - pair.length, start);
+                    } 
+                    //System.out.println("==========END-TEST=========");
+
+                    mc.cModel.buildClassifier(train);
+                    Evaluation eTest = new Evaluation(test);
+                    eTest.evaluateModel(mc.cModel, test);
+                    
+                    System.out.println("Result : ");                    
+                    System.out.println(eTest.toMatrixString());
+                    System.out.println(eTest.toSummaryString());                    
+                    
+//                    taLog.append("================================================\n");
+//                    taLog.append("\t # \t actual \t predicted \t error \t distribution");
+//                    taLog.append("\n");
+//                    for (int i = 0; i < test.numInstances(); i++) {
+//                        double pred = mc.cModel.classifyInstance(test.instance(i));
+//                        double actual = test.instance(i).classValue();
+//                        double[] dist = test.instance(i).toDoubleArray();
+//                        taLog.append("\t" + (i + 1));
+//                        taLog.append(" \t ");
+//                        taLog.append(test.instance(i).toString(test.classIndex()));
+//                        taLog.append(" \t ");
+//                        taLog.append(test.classAttribute().value((int) pred));
+//                        taLog.append(" \t ");
+//                        if (pred != test.instance(i).classValue()) {
+//                            taLog.append("false");
+//                        } else {
+//                            taLog.append("correct");
+//                        }
+//                        taLog.append(" \t ");
+//                        taLog.append(Utils.arrayToString(dist));
+//                        taLog.append("\n");
+//                    }
+//                    taLog.append(eTest.toSummaryString());
+//                    taLog.append(eTest.toClassDetailsString());
+//                    taLog.append(eTest.toMatrixString());
+//                    
+                    loop++;
+                }
+                    
+//                try {
+//                    train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);            
+//                    test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
+//
+//                    mc.cModel.buildClassifier(train);
+//                    Evaluation eTest = new Evaluation(test);
+//                    eTest.evaluateModel(mc.cModel, test);
+//
+//                    taLog.append("\t # \t actual \t predicted \t error \t distribution");
+//                    taLog.append("\n");
+//                    for (int i = 0; i < test.numInstances(); i++) {
+//                        double pred = mc.cModel.classifyInstance(test.instance(i));
+//                        double actual = test.instance(i).classValue();
+//                        double[] dist = test.instance(i).toDoubleArray();
+//                        taLog.append("\t" + (i + 1));
+//                        taLog.append(" \t ");
+//                        taLog.append(test.instance(i).toString(test.classIndex()));
+//                        taLog.append(" \t ");
+//                        taLog.append(test.classAttribute().value((int) pred));
+//                        taLog.append(" \t ");
+//                        if (pred != test.instance(i).classValue()) {
+//                            taLog.append("false");
+//                        } else {
+//                            taLog.append("correct");
+//                        }
+//                        taLog.append(" \t ");
+//                        taLog.append(Utils.arrayToString(dist));
+//                        taLog.append("\n");
+//                    }
+//                    taLog.append(eTest.toSummaryString());
+//                    taLog.append(eTest.toClassDetailsString());
+//                    taLog.append(eTest.toMatrixString());
+//                } catch (Exception ex) {
+//                    taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
+//                } 
+         } catch (Exception ex) {
+            taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
+        }         
+    }//GEN-LAST:event_btRunActionPerformed
+    
+    public PairPublication[] doubleListPairPublication(PairPublication[] pairList)
+    {
+        PairPublication[] list = new PairPublication[pairList.length * 2];        
+        for(int i = 0; i < pairList.length; i++)
+        {
+            list[i] = pairList[i];
+            list[i + pairList.length] = pairList[i];
+        }        
+        return list;
+    }
+    
     /**
      * @param args the command line arguments
      */
