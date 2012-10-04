@@ -150,6 +150,81 @@ public class Vector {
         instances.setClassIndex(selectFeature.getNumberSelectFeature()); // cai nay xem co dung khong
         return instances;
     }
+    
+      /**
+     * DucHuynh.
+     * @param instancesData
+     * @param pubA
+     * @param pubB
+     * @param Feature : select features
+     * @param label
+     * @return 
+     */
+    public static Instance calculateVectorOfPairPublication(Instances instancesData, PairPublication pair, Feature selectFeature)
+    {                
+        AuthorSimilarity authorSimilarity = new AuthorSimilarity();
+        AffiliationSimilarity affiliationSimilarity = new AffiliationSimilarity();
+        CoAuthorSimilarity coAuthorSimilarity = new CoAuthorSimilarity();
+        KeywordSimilarity keywordSimilarity = new KeywordSimilarity();
+        InterestKeywordSimilarity interestKeywordSimilarity = new InterestKeywordSimilarity();
+        int dimension = selectFeature.getNumberSelectFeature()+1;
+        Instance simple = new SparseInstance(dimension);
+        
+        if(selectFeature.getJcAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JC_AUTHOR_NAME), authorSimilarity.makeJaccardSimilarity(pair.getPublicationA(), pair.getPublicationB()));
+        
+        if(selectFeature.getJcAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JC_AFFILIATION), affiliationSimilarity.makeJaccardSimilarity(pair.getPublicationA(), pair.getPublicationB()));
+        
+        if(selectFeature.getJcCoAuthor()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JC_CO_AUTHOR), coAuthorSimilarity.makeJaccardSimilarity(pair.getPublicationA(), pair.getPublicationB()));
+        
+        if(selectFeature.getJcKeyword()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JC_KEYWORD), keywordSimilarity.makeJaccardSimilarity(pair.getPublicationA(), pair.getPublicationB()));
+        
+        if(selectFeature.getJcInterestingKeyword()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JC_INTERESTING_KEYWORD), interestKeywordSimilarity.makeJaccardSimilarity(pair.getPublicationA(), pair.getPublicationB()));        
+        
+        if(selectFeature.getLevenshteinAuthorname()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.LEVENSHTEIN_AUTHOR_NAME), authorSimilarity.makeLevenshteinSimilarity(pair.getPublicationA(), pair.getPublicationB()));        
+        
+        if(selectFeature.getLevenshteinAffiliaiton()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.LEVENSHTEIN_AFFILIATION), affiliationSimilarity.makeLevenshteinSimilarity(pair.getPublicationA(), pair.getPublicationB()));        
+        
+        if(selectFeature.getJaroAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JARO_AUTHOR_NAME), authorSimilarity.makeJaroSimilarity(pair.getPublicationA(), pair.getPublicationB()));  
+        
+        if(selectFeature.getJaroAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JARO_AFFILIATION), affiliationSimilarity.makeJaroSimilarity(pair.getPublicationA(), pair.getPublicationB()));     
+        
+        if(selectFeature.getJarowinklerAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JAROWINKLER_AUTHOR_NAME), authorSimilarity.makeJaroWinklerSimilarity(pair.getPublicationA(), pair.getPublicationB()));        
+        
+        if(selectFeature.getJarowinklerAffiliaiton()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.JAROWIKLER_AFFILIATION), affiliationSimilarity.makeJaroWinklerSimilarity(pair.getPublicationA(), pair.getPublicationB()));        
+        
+        if(selectFeature.getSmithWatermanAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.SMITHWATERMAN_AUTHOR_NAME), authorSimilarity.makeSmithWatermanSimilarity(pair.getPublicationA(), pair.getPublicationB())); 
+        
+        if(selectFeature.getSmithWatermanAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.SMITHWATERMAN_AFFILIATION), affiliationSimilarity.makeSmithWatermanSimilarity(pair.getPublicationA(), pair.getPublicationB())); 
+        
+        if(selectFeature.getMongeElkanAuthorName()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.MONGEELKAN_AUTHOR_NAME), authorSimilarity.makeMongeElkanSimilarity(pair.getPublicationA(), pair.getPublicationB()));        
+        
+        if(selectFeature.getMongeElkanAffiliation()==true)
+        simple.setValue((Attribute) instancesData.attribute(Feature.MONGEELKAN_AFFILIATION), affiliationSimilarity.makeMongeElkanSimilarity(pair.getPublicationA(), pair.getPublicationB())); 
+    
+        // Add more feature here
+       
+        if(pair.getClassificationLabel() == 1) 
+            simple.setValue((Attribute)instancesData.attribute(selectFeature.getNumberSelectFeature()), "same"); 
+        else 
+            simple.setValue((Attribute) instancesData.attribute(selectFeature.getNumberSelectFeature()), "diff"); 
+        
+        return simple;
+    }
+    
     /**
      * tiendv
      * @param instancesData
@@ -224,6 +299,62 @@ public class Vector {
         
         return simple;
     }
+    
+     /**
+     * tiendv
+     * @param rootDirectory
+     * @param selectFeatures
+     * @return 
+     */
+     public static PairPublication[] buildVectorsFromFolderPairPublication(String rootDirectory)
+    {
+        PairPublication[] pairList = null;
+        final ReadXML reader = new ReadXML();
+        Main.taLog.append("Root: -" + rootDirectory);
+        Main.taLog.append("\n");
+        File root = new File(rootDirectory);
+        File[] listChild = root.listFiles();
+        
+        pairList = new PairPublication[listChild.length];
+        
+        for (int i = 0; i < listChild.length; i++) {
+            File file = listChild[i];           
+            Main.taLog.append("\t \t-" + file.getName());
+            Main.taLog.append("\n");                                            
+            PairPublication pair = reader.readPairPublicationFromXML(file.getAbsolutePath());    
+            pairList[i] = pair;
+        }
+        return pairList;
+    }
+    
+     public static Instances buildVectorTrain(PairPublication[] data, Feature selectFeatures, int start, int end)
+     {                
+        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);        
+        for(int i = start; i < end; i++)
+        {
+            //System.out.println("File  : " + i);
+            Instance simple = calculateVectorOfPairPublication(instancesData, data[i], selectFeatures);
+            instancesData.add(simple);
+        }         
+        return instancesData;
+        
+     }
+         
+     public static Instances buildVectorTest(PairPublication[] data, Feature selectFeatures, int start, int end)
+     {        
+        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
+        for(int i = 0; i < data.length; i++)
+        {
+            if(i >= end || i < start)
+            {
+                //System.out.println("File: " + i);
+                Instance simple = calculateVectorOfPairPublication(instancesData, data[i], selectFeatures);
+                instancesData.add(simple);
+            }
+        } 
+        return instancesData;
+     }
+     
     /**
      * tiendv
      * @param rootDirectory
@@ -243,47 +374,49 @@ public class Vector {
         for (int i = 0; i < listChild.length; i++) {
             File child = listChild[i];
             if(child.isDirectory())
-            {
-               Main.taLog.append("\t-" + child.getName());
-               Main.taLog.append("\n");
-                File[] listSubFolder = child.listFiles();
-                int length = 0;                
-                while(length < listSubFolder.length)
+            {             
+                //Main.taLog.append(rootDirectory);
+                Main.taLog.append("\t \t-" + child.getName());
+                Main.taLog.append("\n");
+                File[] listFiles = child.listFiles();
+                int lengthListFile = 0;
+                Publication[] data = new Publication[listFiles.length];
+                while(lengthListFile < listFiles.length)
                 {
-                    //Main.taLog.append(rootDirectory);
-                    Main.taLog.append("\t \t-" + listSubFolder[length].getName());
-                    Main.taLog.append("\n");
-                    File[] listFiles = listSubFolder[length].listFiles();
-                    int lengthListFile = 0;
-                    Publication[] data = new Publication[listFiles.length];
-                    while(lengthListFile < listFiles.length)
-                    {
-                        File file = listFiles[lengthListFile];
-                        if(file.isFile())
-                        {                            
-                            Publication publication = reader.importPubFromXML(file.getAbsolutePath());
-                            data[lengthListFile] = publication;                            
-                        }
-                        lengthListFile++;
-                    } 
-                    int count = 0;
-                    for (int index = 0; index < listFiles.length - 1; index++) {
-                        for (int index2 = index + 1; index2 < listFiles.length; index2++) {
-                             count++;
-                             Instance simple = calculateVectorWithSelectFeatures(instancesData, data[index], data[index2], selectFeatures, child.getName());
-                                instancesData.add(simple);
-                             Main.taLog.append("\t\t\t-" + data[index].toString() + 
-                                " vs " + data[index2].toString() + 
-                                " label: " + instancesData.instance(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
-                             Main.taLog.append("\n");
-                             // Make xml file
-//                             WriteXMLFile writeFile = new WriteXMLFile();
-//                             String name= Integer.toString(index)+Integer.toString(index2);
-//                             writeFile.makeXMLFile(data[index], data[index2],name, listSubFolder[length].getName());
-                        }
+                    File file = listFiles[lengthListFile];
+                    if(file.isFile())
+                    {                            
+                        Publication publication = reader.importPubFromXML(file.getAbsolutePath());
+                        data[lengthListFile] = publication;                            
                     }
-                    length++;
-                }                
+                    lengthListFile++;
+                } 
+                int count = 0;
+                int countSame = 0;
+                int countDiff = 0;
+                for (int index = 0; index < listFiles.length - 1; index++) {
+                    for (int index2 = index + 1; index2 < listFiles.length; index2++) {
+                         count++;
+                         int sum = data[index].getMainAuthor().getAuthorResult() + data[index2].getMainAuthor().getAuthorResult();        
+                        if(sum == 2) 
+                            countSame++;
+                        else 
+                            countDiff++;
+                        
+                         Instance simple = calculateVectorWithSelectFeatures(instancesData, data[index], data[index2], selectFeatures, child.getName());
+                         
+                         instancesData.add(simple);
+                         Main.taLog.append("\t\t\t -" + count + "\t" + data[index].toString() + 
+                            " \t " + data[index2].toString() + 
+                            " \t " + instancesData.instance(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
+                         Main.taLog.append("\n");
+//                         // Make xml file
+                         WriteXMLFile writeFile = new WriteXMLFile();
+                         String name= Integer.toString(index)+Integer.toString(index2);
+                         writeFile.makeXMLFile(data[index], data[index2], Integer.toString(count), child.getName());
+                    }
+                }
+                Main.taLog.append("Same : " + countSame + " Diff : " + countDiff);
             }            
         }
         return instancesData;
