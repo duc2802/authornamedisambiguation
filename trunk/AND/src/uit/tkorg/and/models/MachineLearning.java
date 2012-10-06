@@ -10,6 +10,7 @@ import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.classifiers.functions.LibSVM;
+import weka.classifiers.lazy.IBk;
 import weka.core.Instances;
 import weka.core.SelectedTag;
 import weka.core.Utils;
@@ -48,6 +49,9 @@ public class MachineLearning {
             case C45:
                 cModel = (Classifier)new J48();
                 break; 
+            case KNN:
+                cModel = (Classifier)new IBk();
+                break; 
         }
     }
     
@@ -74,6 +78,6 @@ public class MachineLearning {
     }
     
     public enum TypeClassifier {
-       RF, SVM, BY,C45
+       RF, SVM, BY,C45, KNN
      }
 }

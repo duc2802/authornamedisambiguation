@@ -79,6 +79,7 @@ public class Main extends javax.swing.JFrame {
         rbSVM = new javax.swing.JRadioButton();
         rbBayes = new javax.swing.JRadioButton();
         rbc45 = new javax.swing.JRadioButton();
+        rdKNN = new javax.swing.JRadioButton();
         btRun = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -91,9 +92,12 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data"));
 
-        jLabel1.setText("Source files:");
+        jLabel1.setText("Dateset Folder:");
 
         jLabel2.setText("Test Data");
+        jLabel2.setEnabled(false);
+
+        tfTestDataParth.setEditable(false);
 
         btTrainingDataParth.setText("Open");
         btTrainingDataParth.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +107,7 @@ public class Main extends javax.swing.JFrame {
         });
 
         btTestDataParth.setText("Open");
+        btTestDataParth.setEnabled(false);
         btTestDataParth.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btTestDataParthActionPerformed(evt);
@@ -157,24 +162,34 @@ public class Main extends javax.swing.JFrame {
 
         cbLevenshteinAuthorName.setText("LevenshteinAuthorName");
         cbLevenshteinAuthorName.setToolTipText("");
+        cbLevenshteinAuthorName.setEnabled(false);
 
         cbLevenshteinAfflicaiton.setText("LevenshteinAffiliation");
+        cbLevenshteinAfflicaiton.setEnabled(false);
 
         cbJaroAuthorName.setText("JaroAuthorName");
+        cbJaroAuthorName.setEnabled(false);
 
         cbJarodAfiliation.setText("JaroAffiliation ");
+        cbJarodAfiliation.setEnabled(false);
 
         cbJaroWinklerAuthorName.setText("JaroWinklerAuthorName");
+        cbJaroWinklerAuthorName.setEnabled(false);
 
         cbJaroWinklerAffiliaiton.setText("JaroWinklerAffiliaiton");
+        cbJaroWinklerAffiliaiton.setEnabled(false);
 
         cbSmithWatermanAuthorName.setText("SmithWatermanAuthorName");
+        cbSmithWatermanAuthorName.setEnabled(false);
 
         cbSmithWatermanAffiliation.setText("SmithWatermanAffiliation");
+        cbSmithWatermanAffiliation.setEnabled(false);
 
         cbMongeElkanAuthorName.setText("MongeElkanAuthorName");
+        cbMongeElkanAuthorName.setEnabled(false);
 
         cbMongeElkanAffiliaiton.setText("MongeElkanAffiliaiton");
+        cbMongeElkanAffiliaiton.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -200,7 +215,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(cbSmithWatermanAffiliation)
                     .addComponent(cbMongeElkanAuthorName)
                     .addComponent(cbMongeElkanAffiliaiton))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,6 +267,9 @@ public class Main extends javax.swing.JFrame {
         buttonGroup1.add(rbc45);
         rbc45.setText("C4.5");
 
+        buttonGroup1.add(rdKNN);
+        rdKNN.setText("KNN");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -265,7 +283,9 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(rbBayes)
                 .addGap(18, 18, 18)
                 .addComponent(rbc45)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(rdKNN)
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,7 +294,8 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(rbRF)
                     .addComponent(rbSVM)
                     .addComponent(rbBayes)
-                    .addComponent(rbc45))
+                    .addComponent(rbc45)
+                    .addComponent(rdKNN))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -497,6 +518,8 @@ public class Main extends javax.swing.JFrame {
                 // Get Classifier
                 JRadioButton nameClassifier = getSelection(buttonGroup1);
                 String name = nameClassifier.getText();
+                Main.taLog.append("Classifier: " + name);
+                Main.taLog.append("\n");
                 MachineLearning mc = null;
                 if(name.equals("Random Forest"))
                     mc = new MachineLearning(MachineLearning.TypeClassifier.RF);
@@ -506,10 +529,10 @@ public class Main extends javax.swing.JFrame {
                     mc = new MachineLearning(MachineLearning.TypeClassifier.BY);
                 if(name.equals("C4.5"))
                     mc = new MachineLearning(MachineLearning.TypeClassifier.C45);
+                if(name.equals("KNN"))
+                    mc = new MachineLearning(MachineLearning.TypeClassifier.KNN);
 
-                taLog.append(name);
-                taLog.append("\n");
-
+                
                 //Load data:
                 PairPublication[] pair = Vector.buildVectorsFromFolderPairPublication(pathForTrain);
                 data = this.doubleListPairPublication(pair);
@@ -523,6 +546,8 @@ public class Main extends javax.swing.JFrame {
                 while(loop < 10)
                 {
                     System.out.println("==========LOOP:"+ (loop + 1) +"=========");
+                    Main.taLog.append("==========LOOP:"+ (loop + 1) +"=========");
+                    Main.taLog.append("\n");
                     start = loop * unit;
                     end = (unit * 6) + start;    
                     //System.out.println("==========TRAIN=========");
@@ -543,7 +568,14 @@ public class Main extends javax.swing.JFrame {
                     
                     System.out.println("Result : ");                    
                     System.out.println(eTest.toMatrixString());
-                    System.out.println(eTest.toSummaryString());                    
+                    System.out.println(eTest.toSummaryString());  
+                    
+                    Main.taLog.append("Result : ");
+                    Main.taLog.append("\n");
+                    Main.taLog.append(eTest.toMatrixString());
+                    Main.taLog.append("\n");
+                    Main.taLog.append(eTest.toSummaryString());
+                    Main.taLog.append("\n");
                     
 //                    taLog.append("================================================\n");
 //                    taLog.append("\t # \t actual \t predicted \t error \t distribution");
@@ -710,6 +742,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbRF;
     private javax.swing.JRadioButton rbSVM;
     private javax.swing.JRadioButton rbc45;
+    private javax.swing.JRadioButton rdKNN;
     public static javax.swing.JTextArea taLog;
     private javax.swing.JTextField tfTestDataParth;
     private javax.swing.JTextField tfTrainingDataParth;
