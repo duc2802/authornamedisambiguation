@@ -310,8 +310,8 @@ public class Vector {
     {
         PairPublication[] pairList = null;
         final ReadXML reader = new ReadXML();
-        Main.taLog.append("Root: -" + rootDirectory);
-        Main.taLog.append("\n");
+//        Main.taLog.append("Root: -" + rootDirectory);
+//        Main.taLog.append("\n");
         File root = new File(rootDirectory);
         File[] listChild = root.listFiles();
         
@@ -319,8 +319,8 @@ public class Vector {
         
         for (int i = 0; i < listChild.length; i++) {
             File file = listChild[i];           
-            Main.taLog.append("\t \t-" + file.getName());
-            Main.taLog.append("\n");                                            
+//            Main.taLog.append("\t \t-" + file.getName());
+//            Main.taLog.append("\n");                                            
             PairPublication pair = reader.readPairPublicationFromXML(file.getAbsolutePath());    
             pairList[i] = pair;
         }
@@ -367,8 +367,8 @@ public class Vector {
         Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
         
         final ReadXML reader = new ReadXML();
-        Main.taLog.append("Root: -" + rootDirectory);
-        Main.taLog.append("\n");
+        //Main.taLog.append("Root: -" + rootDirectory);
+        //Main.taLog.append("\n");
         File root = new File(rootDirectory);
         File[] listChild = root.listFiles();
         for (int i = 0; i < listChild.length; i++) {
@@ -376,8 +376,8 @@ public class Vector {
             if(child.isDirectory())
             {             
                 //Main.taLog.append(rootDirectory);
-                Main.taLog.append("\t \t-" + child.getName());
-                Main.taLog.append("\n");
+                //Main.taLog.append("\t \t-" + child.getName());
+                //Main.taLog.append("\n");
                 File[] listFiles = child.listFiles();
                 int lengthListFile = 0;
                 Publication[] data = new Publication[listFiles.length];
@@ -406,17 +406,17 @@ public class Vector {
                          Instance simple = calculateVectorWithSelectFeatures(instancesData, data[index], data[index2], selectFeatures, child.getName());
                          
                          instancesData.add(simple);
-                         Main.taLog.append("\t\t\t -" + count + "\t" + data[index].toString() + 
-                            " \t " + data[index2].toString() + 
-                            " \t " + instancesData.instance(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
-                         Main.taLog.append("\n");
+//                         Main.taLog.append("\t\t\t -" + count + "\t" + data[index].toString() + 
+//                            " \t " + data[index2].toString() + 
+//                            " \t " + instancesData.instance(count - 1).stringValue(selectFeatures.getNumberSelectFeature()));
+//                         Main.taLog.append("\n");
 //                         // Make xml file
                          WriteXMLFile writeFile = new WriteXMLFile();
                          String name= Integer.toString(index)+Integer.toString(index2);
                          writeFile.makeXMLFile(data[index], data[index2], Integer.toString(count), child.getName());
                     }
                 }
-                Main.taLog.append("Same : " + countSame + " Diff : " + countDiff);
+                //Main.taLog.append("Same : " + countSame + " Diff : " + countDiff);
             }            
         }
         return instancesData;

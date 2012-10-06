@@ -136,17 +136,21 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Source files:"/>
+            <Property name="text" type="java.lang.String" value="Dateset Folder:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Test Data"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tfTrainingDataParth">
         </Component>
         <Component class="javax.swing.JTextField" name="tfTestDataParth">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btTrainingDataParth">
           <Properties>
@@ -159,6 +163,7 @@
         <Component class="javax.swing.JButton" name="btTestDataParth">
           <Properties>
             <Property name="text" type="java.lang.String" value="Open"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btTestDataParthActionPerformed"/>
@@ -200,7 +205,7 @@
                       <Component id="cbMongeElkanAuthorName" min="-2" max="-2" attributes="0"/>
                       <Component id="cbMongeElkanAffiliaiton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="49" max="32767" attributes="0"/>
+                  <EmptySpace pref="65" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -276,51 +281,61 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="LevenshteinAuthorName"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbLevenshteinAfflicaiton">
           <Properties>
             <Property name="text" type="java.lang.String" value="LevenshteinAffiliation"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJaroAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroAuthorName"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJarodAfiliation">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroAffiliation "/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJaroWinklerAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroWinklerAuthorName"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJaroWinklerAffiliaiton">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroWinklerAffiliaiton"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbSmithWatermanAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="SmithWatermanAuthorName"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbSmithWatermanAffiliation">
           <Properties>
             <Property name="text" type="java.lang.String" value="SmithWatermanAffiliation"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbMongeElkanAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="MongeElkanAuthorName"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbMongeElkanAffiliaiton">
           <Properties>
             <Property name="text" type="java.lang.String" value="MongeElkanAffiliaiton"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -346,7 +361,9 @@
                   <Component id="rbBayes" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="rbc45" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="121" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="rdKNN" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="74" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -358,6 +375,7 @@
                       <Component id="rbSVM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbBayes" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbc45" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rdKNN" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="9" max="32767" attributes="0"/>
               </Group>
@@ -395,6 +413,14 @@
               <ComponentRef name="buttonGroup1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="C4.5"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rdKNN">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="KNN"/>
           </Properties>
         </Component>
       </SubComponents>
