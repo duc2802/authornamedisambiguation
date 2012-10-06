@@ -551,7 +551,8 @@ public class Main extends javax.swing.JFrame {
                     start = loop * unit;
                     end = (unit * 6) + start;    
                     //System.out.println("==========TRAIN=========");
-                    train = Vector.buildVectorTrain(data, selectFeatures, start, end);                
+                    train = Vector.buildVectorTrain(data, selectFeatures, start, end); 
+                    
                     //System.out.println("==========END-TRAIN=========");
                     //System.out.println("==========TEST=========");
                     if(end <= pair.length){                    
@@ -575,6 +576,7 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append(eTest.toMatrixString());
                     Main.taLog.append("\n");
                     Main.taLog.append(eTest.toSummaryString());
+                    Main.taLog.append("Total Number of Instance For Train : " + train.numInstances());
                     Main.taLog.append("\n");
                     
 //                    taLog.append("================================================\n");
