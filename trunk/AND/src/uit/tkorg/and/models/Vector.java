@@ -5,6 +5,8 @@
 package uit.tkorg.and.models;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -366,18 +368,13 @@ public class Vector {
         int dimension = selectFeatures.getNumberSelectFeature() + 1;
         Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
         
-        final ReadXML reader = new ReadXML();
-        //Main.taLog.append("Root: -" + rootDirectory);
-        //Main.taLog.append("\n");
+        final ReadXML reader = new ReadXML();        
         File root = new File(rootDirectory);
         File[] listChild = root.listFiles();
         for (int i = 0; i < listChild.length; i++) {
             File child = listChild[i];
             if(child.isDirectory())
-            {             
-                //Main.taLog.append(rootDirectory);
-                //Main.taLog.append("\t \t-" + child.getName());
-                //Main.taLog.append("\n");
+            { 
                 File[] listFiles = child.listFiles();
                 int lengthListFile = 0;
                 Publication[] data = new Publication[listFiles.length];
@@ -416,10 +413,68 @@ public class Vector {
                          writeFile.makeXMLFile(data[index], data[index2], Integer.toString(count), child.getName());
                     }
                 }
-                //Main.taLog.append("Same : " + countSame + " Diff : " + countDiff);
             }            
         }
         return instancesData;
+    }    
+     
+    public void makePairFile(String rootDirectory) throws ParserConfigurationException, TransformerConfigurationException, TransformerException
+    {
+        final ReadXML reader = new ReadXML();        
+        File root = new File(rootDirectory);
+        File[] listChild = root.listFiles();
+        for (int i = 0; i < listChild.length; i++) {
+            File child = listChild[i];
+            System.out.println(child.getAbsolutePath());
+            if(child.isDirectory())
+            { 
+                File[] listFiles = child.listFiles();
+                int lengthListFile = 0;
+                Publication[] data = new Publication[listFiles.length];
+                while(lengthListFile < listFiles.length)
+                {
+                    File file = listFiles[lengthListFile];
+                    System.out.println(file.getAbsolutePath());
+                    if(file.isFile())
+                    {                            
+                        Publication publication = reader.importPubFromXML(file.getAbsolutePath());
+                        data[lengthListFile] = publication;                            
+                    }                    
+                    lengthListFile++;                    
+                } 
+                int count = 0;
+                int countSame = 0;
+                int countDiff = 0;
+                for (int index = 0; index < listFiles.length - 1; index++) {
+                    for (int index2 = index + 1; index2 < listFiles.length; index2++) {
+                         count++;
+                         int sum = data[index].getMainAuthor().getAuthorResult() + data[index2].getMainAuthor().getAuthorResult();        
+                        if(sum == 2) 
+                            countSame++;
+                        else 
+                            countDiff++;
+                        
+                         WriteXMLFile writeFile = new WriteXMLFile();                         
+                         writeFile.makeXMLFile(data[index], data[index2], Integer.toString(count), child.getName());
+                    }
+                }
+            }
+        }
+    }
+     
+    public static void main(String[] args) {
+        try {
+            String pathFile = "c:\\DataLoad\\";
+            Vector vector = new Vector();
+            vector.makePairFile(pathFile);
+            
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(Vector.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(Vector.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(Vector.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

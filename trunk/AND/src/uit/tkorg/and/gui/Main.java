@@ -549,7 +549,7 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append("==========LOOP:"+ (loop + 1) +"=========");
                     Main.taLog.append("\n");
                     start = loop * unit;
-                    end = (unit * 6) + start;    
+                    end = (int)((float)unit * 7) + start;    
                     //System.out.println("==========TRAIN=========");
                     train = Vector.buildVectorTrain(data, selectFeatures, start, end); 
                     
@@ -578,71 +578,8 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append(eTest.toSummaryString());
                     Main.taLog.append("Total Number of Instance For Train : " + train.numInstances());
                     Main.taLog.append("\n");
-                    
-//                    taLog.append("================================================\n");
-//                    taLog.append("\t # \t actual \t predicted \t error \t distribution");
-//                    taLog.append("\n");
-//                    for (int i = 0; i < test.numInstances(); i++) {
-//                        double pred = mc.cModel.classifyInstance(test.instance(i));
-//                        double actual = test.instance(i).classValue();
-//                        double[] dist = test.instance(i).toDoubleArray();
-//                        taLog.append("\t" + (i + 1));
-//                        taLog.append(" \t ");
-//                        taLog.append(test.instance(i).toString(test.classIndex()));
-//                        taLog.append(" \t ");
-//                        taLog.append(test.classAttribute().value((int) pred));
-//                        taLog.append(" \t ");
-//                        if (pred != test.instance(i).classValue()) {
-//                            taLog.append("false");
-//                        } else {
-//                            taLog.append("correct");
-//                        }
-//                        taLog.append(" \t ");
-//                        taLog.append(Utils.arrayToString(dist));
-//                        taLog.append("\n");
-//                    }
-//                    taLog.append(eTest.toSummaryString());
-//                    taLog.append(eTest.toClassDetailsString());
-//                    taLog.append(eTest.toMatrixString());
-//                    
                     loop++;
                 }
-                    
-//                try {
-//                    train = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTrain, selectFeatures);            
-//                    test = Vector.buildVectorsFromFolderWithSelectFeatures(pathForTest, selectFeatures);
-//
-//                    mc.cModel.buildClassifier(train);
-//                    Evaluation eTest = new Evaluation(test);
-//                    eTest.evaluateModel(mc.cModel, test);
-//
-//                    taLog.append("\t # \t actual \t predicted \t error \t distribution");
-//                    taLog.append("\n");
-//                    for (int i = 0; i < test.numInstances(); i++) {
-//                        double pred = mc.cModel.classifyInstance(test.instance(i));
-//                        double actual = test.instance(i).classValue();
-//                        double[] dist = test.instance(i).toDoubleArray();
-//                        taLog.append("\t" + (i + 1));
-//                        taLog.append(" \t ");
-//                        taLog.append(test.instance(i).toString(test.classIndex()));
-//                        taLog.append(" \t ");
-//                        taLog.append(test.classAttribute().value((int) pred));
-//                        taLog.append(" \t ");
-//                        if (pred != test.instance(i).classValue()) {
-//                            taLog.append("false");
-//                        } else {
-//                            taLog.append("correct");
-//                        }
-//                        taLog.append(" \t ");
-//                        taLog.append(Utils.arrayToString(dist));
-//                        taLog.append("\n");
-//                    }
-//                    taLog.append(eTest.toSummaryString());
-//                    taLog.append(eTest.toClassDetailsString());
-//                    taLog.append(eTest.toMatrixString());
-//                } catch (Exception ex) {
-//                    taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
-//                } 
          } catch (Exception ex) {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
         }         
