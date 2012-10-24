@@ -32,14 +32,7 @@ public class CrossValiationDataGenerateApp {
         File[] listChild = root.listFiles();
         
         int allOfFile = listChild.length;
-        
-//        File[] listFileDouple = new File[allOfFile * 2];        
-//        for(int i = 0; i < allOfFile; i++)
-//        {
-//            listFileDouple[i] = listChild[i];
-//            listFileDouple[i + allOfFile] = listChild[i];
-//        }  
-        
+                
         int unit = allOfFile / 10;
 
         int start = 0;
