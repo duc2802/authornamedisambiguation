@@ -534,34 +534,52 @@ public class Main extends javax.swing.JFrame {
 
                 
                 //Load data:
-                PairPublication[] pair = Vector.buildVectorsFromFolderPairPublication(pathForTrain);
-                data = this.doubleListPairPublication(pair);
+                //PairPublication[] pair = Vector.buildVectorsFromFolderPairPublication(pathForTrain);
+                
+                String testCrossPath = "\\test";
+                String trainCrossPath = "\\train";
+                
+                PairPublication[] pairTest = null;
+                PairPublication[] pairTrain = null;
+                
+                //data = this.doubleListPairPublication(pair);
 
-                int unit = pair.length / 10;
+                //int unit = pair.length / 10;
 
-                int start = 0;
-                int end = 0;
+//                int start = 0;
+//                int end = 0;
 
-                int loop = 0;
-                while(loop < 10)
+                int loop = 1;
+                while(loop <= 10)
                 {
-                    System.out.println("==========LOOP:"+ (loop + 1) +"=========");
-                    Main.taLog.append("==========LOOP:"+ (loop + 1) +"=========");
-                    Main.taLog.append("\n");
-                    start = loop * unit;
-                    end = (int)((float)unit * 7) + start;    
-                    //System.out.println("==========TRAIN=========");
-                    train = Vector.buildVectorTrain(data, selectFeatures, start, end); 
-                    
-                    //System.out.println("==========END-TRAIN=========");
-                    //System.out.println("==========TEST=========");
-                    if(end <= pair.length){                    
-                        test = Vector.buildVectorTest(pair, selectFeatures, start, end);
-                    }
-                    else {
-                        test = Vector.buildVectorTrain(pair, selectFeatures, end - pair.length, start);
-                    } 
+                    //<editor-fold defaultstate="collapsed" desc="Old code">
+//                    System.out.println("==========LOOP:"+ (loop + 1) +"=========");
+//                    Main.taLog.append("==========LOOP:"+ (loop + 1) +"=========");
+//                    Main.taLog.append("\n");
+//                    start = loop * unit;
+//                    end = (int)((float)unit * 6) + start;    
+//                    //System.out.println("==========TRAIN=========");
+//                    train = Vector.buildVectorTrain(data, selectFeatures, start, end); 
+//                    
+//                    //System.out.println("==========END-TRAIN=========");
+//                    //System.out.println("==========TEST=========");
+//                    if(end <= pair.length){                    
+//                        test = Vector.buildVectorTest(pair, selectFeatures, start, end);
+//                    }
+//                    else {
+//                        test = Vector.buildVectorTrain(pair, selectFeatures, end - pair.length, start);
+//                    } 
                     //System.out.println("==========END-TEST=========");
+                    //</editor-fold>
+                    
+                    testCrossPath = pathForTrain + "\\" + loop + "\\" + "test\\";
+                    trainCrossPath = pathForTrain + "\\" + loop + "\\" + "train\\";
+                    
+                    pairTest = Vector.buildVectorsFromFolderPairPublication(testCrossPath);    
+                    pairTrain = Vector.buildVectorsFromFolderPairPublication(trainCrossPath);   
+                    
+                    test = Vector.buildVector(pairTest, selectFeatures);
+                    train = Vector.buildVector(pairTrain, selectFeatures);
 
                     mc.cModel.buildClassifier(train);
                     Evaluation eTest = new Evaluation(test);
@@ -579,6 +597,12 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append("Total Number of Instance For Train : " + train.numInstances());
                     Main.taLog.append("\n");
                     loop++;
+                    
+                    test = null;
+                    train = null;
+                    
+                    pairTest.clone();
+                    pairTrain.clone();
                 }
          } catch (Exception ex) {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());

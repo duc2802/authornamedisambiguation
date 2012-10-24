@@ -357,6 +357,17 @@ public class Vector {
         return instancesData;
      }
      
+     public static Instances buildVector(PairPublication[] data, Feature selectFeatures)
+     {        
+        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
+        for(int i = 0; i < data.length; i++)
+        {  
+            Instance simple = calculateVectorOfPairPublication(instancesData, data[i], selectFeatures);
+            instancesData.add(simple);
+        } 
+        return instancesData;
+     }
+     
     /**
      * tiendv
      * @param rootDirectory
