@@ -33,7 +33,7 @@ public class ReadXML {
      */
         
     public static void main(String[] args) {
-        String path = "c:\\DataTest\\a.xml";
+        String path = "c:\\a.xml";
         ReadXML reader = new ReadXML();
         PairPublication pair = reader.readPairPublicationFromXML(path);        
     }
