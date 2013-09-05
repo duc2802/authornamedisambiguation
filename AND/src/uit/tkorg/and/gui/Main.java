@@ -97,8 +97,6 @@ public class Main extends javax.swing.JFrame {
         jLabel2.setText("Test Data");
         jLabel2.setEnabled(false);
 
-        tfTestDataParth.setEditable(false);
-
         btTrainingDataParth.setText("Open");
         btTrainingDataParth.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,7 +105,6 @@ public class Main extends javax.swing.JFrame {
         });
 
         btTestDataParth.setText("Open");
-        btTestDataParth.setEnabled(false);
         btTestDataParth.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btTestDataParthActionPerformed(evt);
@@ -549,9 +546,9 @@ public class Main extends javax.swing.JFrame {
 //                int start = 0;
 //                int end = 0;
 
-                int loop = 1;
-                while(loop <= 10)
-                {
+//                int loop = 1;
+//                while(loop <= 10)
+//                {
                     //<editor-fold defaultstate="collapsed" desc="Old code">
 //                    System.out.println("==========LOOP:"+ (loop + 1) +"=========");
 //                    Main.taLog.append("==========LOOP:"+ (loop + 1) +"=========");
@@ -572,8 +569,11 @@ public class Main extends javax.swing.JFrame {
                     //System.out.println("==========END-TEST=========");
                     //</editor-fold>
                     
-                    testCrossPath = pathForTrain + "\\" + loop + "\\" + "test\\";
-                    trainCrossPath = pathForTrain + "\\" + loop + "\\" + "train\\";
+//                    testCrossPath = pathForTrain + "\\" + loop + "\\" + "test\\";
+//                    trainCrossPath = pathForTrain + "\\" + loop + "\\" + "train\\";
+                    
+                    testCrossPath = pathForTest + "\\";
+                    trainCrossPath = pathForTrain + "\\";
                     
                     pairTest = Vector.buildVectorsFromFolderPairPublication(testCrossPath);    
                     pairTrain = Vector.buildVectorsFromFolderPairPublication(trainCrossPath);   
@@ -596,14 +596,14 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append(eTest.toSummaryString());
                     Main.taLog.append("Total Number of Instance For Train : " + train.numInstances());
                     Main.taLog.append("\n");
-                    loop++;
+                    //loop++;
                     
                     test = null;
                     train = null;
                     
                     pairTest.clone();
                     pairTrain.clone();
-                }
+               // }
          } catch (Exception ex) {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
         }         
