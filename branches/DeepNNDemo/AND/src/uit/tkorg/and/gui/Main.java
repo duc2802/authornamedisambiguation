@@ -21,6 +21,7 @@ import uit.tkorg.and.models.Feature;
 import uit.tkorg.and.models.MachineLearning;
 import uit.tkorg.and.models.PairPublication;
 import weka.classifiers.Evaluation;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Utils;
 
@@ -580,6 +581,31 @@ public class Main extends javax.swing.JFrame {
                     
                     test = Vector.buildVector(pairTest, selectFeatures);
                     train = Vector.buildVector(pairTrain, selectFeatures);
+                    
+                    /**
+                     *  Create code for input DNN 
+                     * 
+                     * 
+                     */
+                    
+                    // For train
+                    int numberOfAtributeVector = dimension;
+                    int numberOfTrainItems = test.numInstances();
+                    double AND_INPUT[][];
+                    double AND_Label[][];
+                    AND_INPUT= new double[numberOfTrainItems][numberOfAtributeVector];
+                    AND_Label= new double[numberOfTrainItems][1];
+                    for(int i=0;i < numberOfTrainItems;i++ )
+                    {
+                        Instance temp = test.instance(i);
+                         for(int j=0; i<numberOfAtributeVector-1;j++)
+                         {    
+                              AND_INPUT[i][j] = temp.index(j);
+                         }
+                        AND_Label[i][1] = temp.index(dimension+1);
+                    }
+                   
+                    
 
                     mc.cModel.buildClassifier(train);
                     Evaluation eTest = new Evaluation(test);
