@@ -585,28 +585,15 @@ public class Main extends javax.swing.JFrame {
                     /**
                      *  Create code for input DNN 
                      * 
-                     * 
                      */
                     
                     // For train
-                    int numberOfAtributeVector = dimension;
-                    int numberOfTrainItems = test.numInstances();
                     double AND_INPUT[][];
                     double AND_Label[][];
-                    AND_INPUT= new double[numberOfTrainItems][numberOfAtributeVector];
-                    AND_Label= new double[numberOfTrainItems][1];
-                    for(int i=0;i < numberOfTrainItems;i++ )
-                    {
-                        Instance temp = test.instance(i);
-                         for(int j=0; i<numberOfAtributeVector-1;j++)
-                         {    
-                              AND_INPUT[i][j] = temp.index(j);
-                         }
-                        AND_Label[i][1] = temp.index(dimension+1);
-                    }
-                   
+                    AND_INPUT = asArrayInput(train);
+                    AND_Label =asArrayLabel(train,dimension);
                     
-
+                    
                     mc.cModel.buildClassifier(train);
                     Evaluation eTest = new Evaluation(test);
                     eTest.evaluateModel(mc.cModel, test);
@@ -634,7 +621,25 @@ public class Main extends javax.swing.JFrame {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
         }         
     }//GEN-LAST:event_btRunActionPerformed
-    
+    public static double[][] asArrayInput(Instances data) {
+            double Data[][] = new double[data.numInstances()][data.numAttributes()-1];
+            for (int i = 0; i < data.numInstances(); i++) {
+                for (int j = 0; j < data.numAttributes()-1; j++) {
+                    Data[i][j ] = data.instance(i).value(j);
+                }
+            }
+            return Data;
+      } 
+        public static double[][] asArrayLabel(Instances data, int dimension) {
+            double Data[][] = new double[data.numInstances()][1];
+            for (int i = 0; i < data.numInstances(); i++) {
+                for (int j = 0; j < data.numAttributes()-1; j++) {
+                    Data[i][0] = data.instance(i).value(dimension);
+                }
+            }
+            return Data;
+      } 
+        
     public PairPublication[] doubleListPairPublication(PairPublication[] pairList)
     {
         PairPublication[] list = new PairPublication[pairList.length * 2];        
