@@ -588,10 +588,19 @@ public class Main extends javax.swing.JFrame {
                      */
                     
                     // For train
-                    double AND_INPUT[][];
-                    double AND_Label[][];
-                    AND_INPUT = asArrayInput(train);
-                    AND_Label =asArrayLabel(train,dimension);
+                    double AND_INPUT_Train[][];
+                    double AND_Label_Train[][];
+                    AND_INPUT_Train = asArrayInput(train);
+                    AND_INPUT_Train =asArrayLabel(train,dimension);
+                    
+                     // For Test
+                    double AND_INPUT_Test[][];
+                    double AND_Label_Test[][];
+                    AND_INPUT_Train = asArrayInput(test);
+                    AND_INPUT_Train =asArrayLabel(test,dimension);
+                    
+                    // Code DNN here
+                    
                     
                     
                     mc.cModel.buildClassifier(train);
