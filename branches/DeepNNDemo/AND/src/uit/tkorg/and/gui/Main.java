@@ -170,34 +170,24 @@ public class Main extends javax.swing.JFrame {
 
         cbLevenshteinAuthorName.setText("LevenshteinAuthorName");
         cbLevenshteinAuthorName.setToolTipText("");
-        cbLevenshteinAuthorName.setEnabled(false);
 
         cbLevenshteinAfflicaiton.setText("LevenshteinAffiliation");
-        cbLevenshteinAfflicaiton.setEnabled(false);
 
         cbJaroAuthorName.setText("JaroAuthorName");
-        cbJaroAuthorName.setEnabled(false);
 
         cbJarodAfiliation.setText("JaroAffiliation ");
-        cbJarodAfiliation.setEnabled(false);
 
         cbJaroWinklerAuthorName.setText("JaroWinklerAuthorName");
-        cbJaroWinklerAuthorName.setEnabled(false);
 
         cbJaroWinklerAffiliaiton.setText("JaroWinklerAffiliaiton");
-        cbJaroWinklerAffiliaiton.setEnabled(false);
 
         cbSmithWatermanAuthorName.setText("SmithWatermanAuthorName");
-        cbSmithWatermanAuthorName.setEnabled(false);
 
         cbSmithWatermanAffiliation.setText("SmithWatermanAffiliation");
-        cbSmithWatermanAffiliation.setEnabled(false);
 
         cbMongeElkanAuthorName.setText("MongeElkanAuthorName");
-        cbMongeElkanAuthorName.setEnabled(false);
 
         cbMongeElkanAffiliaiton.setText("MongeElkanAffiliaiton");
-        cbMongeElkanAffiliaiton.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

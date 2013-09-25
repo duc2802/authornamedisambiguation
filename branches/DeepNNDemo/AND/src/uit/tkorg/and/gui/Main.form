@@ -278,61 +278,51 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="LevenshteinAuthorName"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbLevenshteinAfflicaiton">
           <Properties>
             <Property name="text" type="java.lang.String" value="LevenshteinAffiliation"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJaroAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroAuthorName"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJarodAfiliation">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroAffiliation "/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJaroWinklerAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroWinklerAuthorName"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbJaroWinklerAffiliaiton">
           <Properties>
             <Property name="text" type="java.lang.String" value="JaroWinklerAffiliaiton"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbSmithWatermanAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="SmithWatermanAuthorName"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbSmithWatermanAffiliation">
           <Properties>
             <Property name="text" type="java.lang.String" value="SmithWatermanAffiliation"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbMongeElkanAuthorName">
           <Properties>
             <Property name="text" type="java.lang.String" value="MongeElkanAuthorName"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbMongeElkanAffiliaiton">
           <Properties>
             <Property name="text" type="java.lang.String" value="MongeElkanAffiliaiton"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
