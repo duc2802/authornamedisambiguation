@@ -111,7 +111,7 @@
                       <Component id="btTrainingDataParth" min="-2" max="-2" attributes="0"/>
                       <Component id="btTestDataParth" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="121" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -195,14 +195,14 @@
                       <Component id="cbJaccardCoAuthor" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbJaccardAfiliation" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="cbSmithWatermanAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbSmithWatermanAffiliation" min="-2" max="-2" attributes="0"/>
                       <Component id="cbMongeElkanAuthorName" min="-2" max="-2" attributes="0"/>
                       <Component id="cbMongeElkanAffiliaiton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="65" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -360,7 +360,9 @@
                   <Component id="rbc45" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="rdKNN" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="74" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -373,6 +375,7 @@
                       <Component id="rbBayes" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbc45" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rdKNN" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="9" max="32767" attributes="0"/>
               </Group>
@@ -420,6 +423,14 @@
             <Property name="text" type="java.lang.String" value="KNN"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButton1">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="DNN"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="btRun">
@@ -444,7 +455,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="564" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="585" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
