@@ -17,6 +17,15 @@ import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
+import org.encog.Encog;
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import uit.tkorg.and.models.Feature;
 import uit.tkorg.and.models.MachineLearning;
 import uit.tkorg.and.models.PairPublication;
@@ -81,6 +90,7 @@ public class Main extends javax.swing.JFrame {
         rbBayes = new javax.swing.JRadioButton();
         rbc45 = new javax.swing.JRadioButton();
         rdKNN = new javax.swing.JRadioButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
         btRun = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -129,7 +139,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btTrainingDataParth)
                     .addComponent(btTestDataParth))
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,13 +217,13 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(cbJaccardKeyword)
                     .addComponent(cbJaccardCoAuthor)
                     .addComponent(cbJaccardAfiliation))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbSmithWatermanAuthorName)
                     .addComponent(cbSmithWatermanAffiliation)
                     .addComponent(cbMongeElkanAuthorName)
                     .addComponent(cbMongeElkanAffiliaiton))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,6 +278,9 @@ public class Main extends javax.swing.JFrame {
         buttonGroup1.add(rdKNN);
         rdKNN.setText("KNN");
 
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("DNN");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -283,7 +296,9 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(rbc45)
                 .addGap(18, 18, 18)
                 .addComponent(rdKNN)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,7 +308,8 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(rbSVM)
                     .addComponent(rbBayes)
                     .addComponent(rbc45)
-                    .addComponent(rdKNN))
+                    .addComponent(rdKNN)
+                    .addComponent(jRadioButton1))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -316,7 +332,7 @@ public class Main extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -529,88 +545,84 @@ public class Main extends javax.swing.JFrame {
                     mc = new MachineLearning(MachineLearning.TypeClassifier.C45);
                 if(name.equals("KNN"))
                     mc = new MachineLearning(MachineLearning.TypeClassifier.KNN);
-
-                
-                //Load data:
-                //PairPublication[] pair = Vector.buildVectorsFromFolderPairPublication(pathForTrain);
-                
+            
                 String testCrossPath = "\\test";
                 String trainCrossPath = "\\train";
                 
                 PairPublication[] pairTest = null;
                 PairPublication[] pairTrain = null;
                 
-                //data = this.doubleListPairPublication(pair);
+                testCrossPath = pathForTest + "\\";
+                trainCrossPath = pathForTrain + "\\";
 
-                //int unit = pair.length / 10;
+                pairTest = Vector.buildVectorsFromFolderPairPublication(testCrossPath);    
+                pairTrain = Vector.buildVectorsFromFolderPairPublication(trainCrossPath);   
 
-//                int start = 0;
-//                int end = 0;
+                test = Vector.buildVector(pairTest, selectFeatures);
+                train = Vector.buildVector(pairTrain, selectFeatures);
 
-//                int loop = 1;
-//                while(loop <= 10)
-//                {
-                    //<editor-fold defaultstate="collapsed" desc="Old code">
-//                    System.out.println("==========LOOP:"+ (loop + 1) +"=========");
-//                    Main.taLog.append("==========LOOP:"+ (loop + 1) +"=========");
-//                    Main.taLog.append("\n");
-//                    start = loop * unit;
-//                    end = (int)((float)unit * 6) + start;    
-//                    //System.out.println("==========TRAIN=========");
-//                    train = Vector.buildVectorTrain(data, selectFeatures, start, end); 
-//                    
-//                    //System.out.println("==========END-TRAIN=========");
-//                    //System.out.println("==========TEST=========");
-//                    if(end <= pair.length){                    
-//                        test = Vector.buildVectorTest(pair, selectFeatures, start, end);
-//                    }
-//                    else {
-//                        test = Vector.buildVectorTrain(pair, selectFeatures, end - pair.length, start);
-//                    } 
-                    //System.out.println("==========END-TEST=========");
-                    //</editor-fold>
-                    
-//                    testCrossPath = pathForTrain + "\\" + loop + "\\" + "test\\";
-//                    trainCrossPath = pathForTrain + "\\" + loop + "\\" + "train\\";
-                    
-                    testCrossPath = pathForTest + "\\";
-                    trainCrossPath = pathForTrain + "\\";
-                    
-                    pairTest = Vector.buildVectorsFromFolderPairPublication(testCrossPath);    
-                    pairTrain = Vector.buildVectorsFromFolderPairPublication(trainCrossPath);   
-                    
-                    test = Vector.buildVector(pairTest, selectFeatures);
-                    train = Vector.buildVector(pairTrain, selectFeatures);
-                    
-                    /**
-                     *  Create code for input DNN 
-                     * 
-                     */
-                    
-                    // For train
+                /**
+                 *  Create code for input DNN 
+                 * 
+                 */
+                if(name.equals("DNN"))
+                {
+                     // For train
                     double AND_INPUT_Train[][];
                     double AND_Label_Train[][];
                     AND_INPUT_Train = asArrayInput(train);
                     AND_INPUT_Train =asArrayLabel(train,dimension);
-                    
+
                      // For Test
                     double AND_INPUT_Test[][];
                     double AND_Label_Test[][];
                     AND_INPUT_Train = asArrayInput(test);
-                    AND_INPUT_Train =asArrayLabel(test,dimension);
-                    
+                    AND_Label_Test =asArrayLabel(test,dimension);                
                     // Code DNN here
-                    
-                    
-                    
+                    // create a neural network, without using a factory
+                    BasicNetwork network = new BasicNetwork();
+                    network.addLayer(new BasicLayer(null,true,2));
+                    network.addLayer(new BasicLayer(new ActivationSigmoid(),true,3));
+                    network.addLayer(new BasicLayer(new ActivationSigmoid(),false,1));
+                    network.getStructure().finalizeStructure();
+                    network.reset();
+
+                    // create training data
+                    MLDataSet trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Test);
+
+                    // train the neural network
+                    final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+
+                    int epoch = 1;
+
+                    do {
+                            train.iteration();
+                            System.out.println("Epoch #" + epoch + " Error:" + train.getError());
+                            epoch++;
+                    } while(train.getError() > 0.01);
+                    train.finishTraining();
+
+                    // test the neural network
+                    System.out.println("Neural Network Results:");
+                    for(MLDataPair pair: trainingSet ) {
+                            final MLData output = network.compute(pair.getInput());
+                            System.out.println(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
+                                            + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
+                    }
+
+                    Encog.getInstance().shutdown();
+
+                }
+                else
+                {
                     mc.cModel.buildClassifier(train);
                     Evaluation eTest = new Evaluation(test);
                     eTest.evaluateModel(mc.cModel, test);
-                    
+
                     System.out.println("Result : ");                    
                     System.out.println(eTest.toMatrixString());
                     System.out.println(eTest.toSummaryString());  
-                    
+
                     Main.taLog.append("Result : ");
                     Main.taLog.append("\n");
                     Main.taLog.append(eTest.toMatrixString());
@@ -618,14 +630,13 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append(eTest.toSummaryString());
                     Main.taLog.append("Total Number of Instance For Train : " + train.numInstances());
                     Main.taLog.append("\n");
-                    //loop++;
-                    
-                    test = null;
-                    train = null;
-                    
-                    pairTest.clone();
-                    pairTrain.clone();
-               // }
+                }
+                
+                test = null;
+                train = null;
+
+                pairTest.clone();
+                pairTrain.clone();
          } catch (Exception ex) {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
         }         
@@ -740,6 +751,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbBayes;
     private javax.swing.JRadioButton rbRF;
