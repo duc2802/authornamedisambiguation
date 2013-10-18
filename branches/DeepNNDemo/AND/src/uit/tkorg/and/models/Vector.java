@@ -472,12 +472,95 @@ public class Vector {
             }
         }
     }
+    
+        public void makePairFileWithTwoDifferenceAuthor(String rootDirectory) throws ParserConfigurationException, TransformerConfigurationException, TransformerException
+    {
+        int lengthListFile = 0;
+        int lengthListFile2 = 0;
+        final ReadXML reader = new ReadXML();
+        // Read root
+        File root = new File(rootDirectory);
+        File[] listChild = root.listFiles();
+        Publication[] dataFoder2 = null;
+        Publication[] data = null;
+        // Data foder 1
+            File child = listChild[0];
+            System.out.println(child.getAbsolutePath());
+            if(child.isDirectory())
+            { 
+                File[] listFiles = child.listFiles();
+                
+                // Xong phan doc du lieu cua forder dau tien
+                data = new Publication[listFiles.length];
+                while(lengthListFile < listFiles.length)
+                {
+                    File file = listFiles[lengthListFile];
+                    System.out.println(file.getAbsolutePath());
+                    if(file.isFile())
+                    {                            
+                        Publication publication = reader.importPubFromXML(file.getAbsolutePath());
+                        data[lengthListFile] = publication;                            
+                    }                    
+                    lengthListFile++;                    
+                } 
+            }
+            
+            // Data foder 2
+            
+            File childForder2 = listChild[1];
+            System.out.println(childForder2.getAbsolutePath());
+            if(childForder2.isDirectory())
+            { 
+                File[] listFiles = childForder2.listFiles();
+                // Xong phan doc du lieu cua forder dau tien
+                dataFoder2 = new Publication[listFiles.length];
+                while(lengthListFile2 < listFiles.length)
+                {
+                    File file = listFiles[lengthListFile2];
+                    System.out.println(file.getAbsolutePath());
+                    if(file.isFile())
+                    {                            
+                        Publication publication = reader.importPubFromXML(file.getAbsolutePath());
+                        dataFoder2[lengthListFile2] = publication;                            
+                    }                    
+                    lengthListFile2++;                    
+                } 
+            }
+            int count = 0;
+            for(int indexfile1=0; indexfile1<lengthListFile-1; indexfile1++)
+            {
+                for(int indexfile2=0; indexfile2<lengthListFile2-1;indexfile2++ )
+                {    count ++;
+                     WriteXMLFile writeFile = new WriteXMLFile();                         
+                     writeFile.makeXMLFileWithTwoDifferenceAuthors(data[indexfile1], dataFoder2[indexfile2], Integer.toString(count), child.getName());
+                    
+                }                  
+            }
+//                int count = 0;
+//                int countSame = 0;
+//                int countDiff = 0;
+//                for (int index = 0; index < listFiles.length - 1; index++) {
+//                    for (int index2 = index + 1; index2 < listFiles.length; index2++) {
+//                         count++;
+//                         int sum = data[index].getMainAuthor().getAuthorResult() + data[index2].getMainAuthor().getAuthorResult();        
+//                        if(sum == 2) 
+//                            countSame++;
+//                        else 
+//                            countDiff++;
+//                        
+//                         WriteXMLFile writeFile = new WriteXMLFile();                         
+//                         writeFile.makeXMLFile(data[index], data[index2], Integer.toString(count), child.getName());
+//                    }
+//                }
+//            }
+//        }
+    }
      
     public static void main(String[] args) {
         try {
             String pathFile = "c:\\DataLoad\\";
             Vector vector = new Vector();
-            vector.makePairFile(pathFile);
+            vector.makePairFileWithTwoDifferenceAuthor(pathFile);
             
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(Vector.class.getName()).log(Level.SEVERE, null, ex);

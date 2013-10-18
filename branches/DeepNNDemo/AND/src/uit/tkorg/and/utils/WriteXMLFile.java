@@ -106,6 +106,42 @@ public class WriteXMLFile {
         // StreamResult result = new StreamResult(System.out);
         transformer.transform(source, result);
     }
+    
+    public void makeXMLFileWithTwoDifferenceAuthors(Publication publicaitonA, Publication publicaitonB, String name, String path) throws ParserConfigurationException, TransformerConfigurationException, TransformerException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        // root elements
+        Document doc = docBuilder.newDocument();
+        Element rootElement = doc.createElement("pair");
+        doc.appendChild(rootElement);
+
+        //Element paper A
+        Element paperA = makePaperElement(doc, publicaitonA, 1);
+        rootElement.appendChild(paperA);
+
+        //Element paper B
+        Element paperB = makePaperElement(doc, publicaitonB, 2);
+        rootElement.appendChild(paperB);
+
+        String compare = "0";
+        Element tag = doc.createElement("tag");
+        compare = "0";
+        tag.appendChild(doc.createTextNode(compare));
+        rootElement.appendChild(tag);
+
+        // write the content into xml file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        String file = name + ".xml";
+        boolean forder = new File("c:\\Export\\" + path).mkdir();
+        StreamResult result = new StreamResult(new File("c:\\Export\\" + path, file));
+
+        // Output to console for testing
+        // StreamResult result = new StreamResult(System.out);
+        transformer.transform(source, result);
+    }
 
     /** 
      * @param paper
