@@ -18,7 +18,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import org.encog.Encog;
+import org.encog.engine.network.activation.ActivationElliottSymmetric;
 import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationSoftMax;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -566,15 +568,21 @@ public class Main extends javax.swing.JFrame {
                      // For Test
                     double AND_INPUT_Test[][];
                     double AND_Label_Test[][];
-                    AND_INPUT_Train = asArrayInput(test);
-                    AND_Label_Test =asArrayLabel(test,dimension);                
+                    AND_INPUT_Test = asArrayInput(test);
+                    AND_Label_Test = asArrayLabel(test,dimension);                
                     
                     // Code DNN here
-                    // create a neural network, without using a factory
+                    // Tune size of DNN
+                    int numHiddenLayer = 1;
+                    int numHiddenUnit = 100;
                     BasicNetwork network = new BasicNetwork();
-                    network.addLayer(new BasicLayer(null,true,2));
-                    network.addLayer(new BasicLayer(new ActivationSigmoid(),true,3));
-                    network.addLayer(new BasicLayer(new ActivationSigmoid(),false,1));
+                    network.addLayer(new BasicLayer(null,true,dimension));
+                    // Add hidden layers
+                    for (int i = 0; i < numHiddenLayer; i++)
+                    {
+                        network.addLayer(new BasicLayer(new ActivationElliottSymmetric(),true,numHiddenUnit));
+                    }
+                    network.addLayer(new BasicLayer(new ActivationSoftMax(),false,2));
                     network.getStructure().finalizeStructure();
                     network.reset();
 
@@ -583,6 +591,8 @@ public class Main extends javax.swing.JFrame {
 
                     // train the neural network
                     final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+                    // Auto set number of threads for multi-threading
+                    train.setThreadCount(0);
 
                     int epoch = 1;
 
@@ -591,18 +601,16 @@ public class Main extends javax.swing.JFrame {
                             System.out.println("Epoch #" + epoch + " Error:" + train.getError());
                             epoch++;
                     } while(train.getError() > 0.01);
+                    // network.calculateError(trainingSet);
                     train.finishTraining();
 
                     // test the neural network
-                    System.out.println("Neural Network Results:");
-                    for(MLDataPair pair: trainingSet ) {
-                            final MLData output = network.compute(pair.getInput());
-                            System.out.println(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
-                                            + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
-                    }
+                    // create testing data
+                    MLDataSet testSet = new BasicMLDataSet(AND_INPUT_Test, AND_Label_Test);
+                    double testErrorRate = network.calculateError(testSet);
+                    System.out.println("Neural Network Results: " + testErrorRate);
 
                     Encog.getInstance().shutdown();
-
                 }
                 else
                 {
