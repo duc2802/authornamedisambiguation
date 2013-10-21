@@ -105,10 +105,10 @@ public class ReadXML {
                         coAuthor.setAuthorName("");
                     }
                     if(nodeInCoAuthor.getChildNodes().item(1).getTextContent() != null){
-                        coAuthor.setAuthorAfflication(nodeInCoAuthor.getChildNodes().item(1).getTextContent());
+                        coAuthor.setAuthorAffliation(nodeInCoAuthor.getChildNodes().item(1).getTextContent());
                         System.out.println("Aff co-author : " + nodeInCoAuthor.getChildNodes().item(1).getTextContent());
                     }else {
-                        coAuthor.setAuthorAfflication("");
+                        coAuthor.setAuthorAffliation("");
                     }
                     listCoAuthorAuthor.add(coAuthor);
                 }
@@ -143,10 +143,10 @@ public class ReadXML {
                 }                
             }else if(nodeNameInMainAuthor.equals("affiliation")){   
                 if(nodeInMainAuthor.getTextContent() != null){
-                    mainAuthor.setAuthorAfflication(nodeInMainAuthor.getTextContent());
+                    mainAuthor.setAuthorAffliation(nodeInMainAuthor.getTextContent());
                     System.out.println("Affiliation main author: " + nodeInMainAuthor.getTextContent());
                 }else {
-                    mainAuthor.setAuthorAfflication("");
+                    mainAuthor.setAuthorAffliation("");
                 }                
             }else if(nodeNameInMainAuthor.equals("interest")){
                 if(nodeInMainAuthor.getTextContent() != null){
@@ -208,7 +208,7 @@ public class ReadXML {
                 if (!getTagValue("name", eElement).equals("")) {
                     mainAuthor = new Author();
                     mainAuthor.setAuthorName(getTagValue("name", eElement));
-                    mainAuthor.setAuthorAfflication(getTagValue("afflication", eElement)); 
+                    mainAuthor.setAuthorAffliation(getTagValue("afflication", eElement)); 
                                   
                     //if("main".equals(eElement.getParentNode().getNodeName())){
                         //System.out.print("");

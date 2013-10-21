@@ -35,8 +35,8 @@ public class AuthorSimilarity implements FeaturesBase {
     @Override
     public float makeJaroSimilarity(Publication publicationA, Publication publicationB) {
         Jaro jaroSimilarity = new Jaro();
-        return jaroSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+        return jaroSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
 
     @Override

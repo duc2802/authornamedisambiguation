@@ -24,8 +24,8 @@ public class AffiliationSimilarity implements FeaturesBase{
     @Override
     public float makeJaccardSimilarity(Publication publicationA, Publication publicationB) {
         JaccardSimilarity jaccardSimilarity = new JaccardSimilarity();
-        return jaccardSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+        return jaccardSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
     
     /**
@@ -37,8 +37,8 @@ public class AffiliationSimilarity implements FeaturesBase{
     public float sumTFIDFWeightsOfSharedTerms(Publication publicationA, Publication publicationB)
     {
         TokeniserWhitespace tokeniserWhitespace = new TokeniserWhitespace();
-        ArrayList<String> affATokens = tokeniserWhitespace.tokenizeToArrayList(publicationA.getMainAuthor().getAuthorAfflication());
-        ArrayList<String> affBTokens = tokeniserWhitespace.tokenizeToArrayList(publicationB.getMainAuthor().getAuthorAfflication());
+        ArrayList<String> affATokens = tokeniserWhitespace.tokenizeToArrayList(publicationA.getMainAuthor().getAuthorAffliation());
+        ArrayList<String> affBTokens = tokeniserWhitespace.tokenizeToArrayList(publicationB.getMainAuthor().getAuthorAffliation());
         ArrayList<String> intersectionTokens = tokeniserWhitespace.findIntersection(affATokens, affBTokens);
         //calculate TFIDF for each of term in intersectionTokens.
         return 0;
@@ -47,22 +47,22 @@ public class AffiliationSimilarity implements FeaturesBase{
     @Override
     public float makeLevenshteinSimilarity(Publication publicationA, Publication publicationB) {
         Levenshtein levenshteinSimilarity = new Levenshtein();
-        return levenshteinSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+        return levenshteinSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
 
     @Override
     public float makeJaroSimilarity(Publication publicationA, Publication publicationB) {
         Jaro jaroSimilarity = new Jaro();
-        return jaroSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+        return jaroSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
 
     @Override
     public float makeSmithWatermanSimilarity(Publication publicationA, Publication publicationB) {
        SmithWaterman swSimilarity = new SmithWaterman();
-       return swSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+       return swSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
 
     @Override
@@ -73,14 +73,14 @@ public class AffiliationSimilarity implements FeaturesBase{
     @Override
     public float makeJaroWinklerSimilarity(Publication publicationA, Publication publicationB) {
         JaroWinkler jaroWinklerSimilarity = new JaroWinkler(); 
-        return jaroWinklerSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+        return jaroWinklerSimilarity.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
 
     @Override
     public float makeMongeElkanSimilarity(Publication publicationA, Publication publicationB) {
         MongeElkan mongeElakan = new MongeElkan();
-        return mongeElakan.getSimilarity(publicationA.getMainAuthor().getAuthorAfflication(), 
-                publicationB.getMainAuthor().getAuthorAfflication());
+        return mongeElakan.getSimilarity(publicationA.getMainAuthor().getAuthorAffliation(), 
+                publicationB.getMainAuthor().getAuthorAffliation());
     }
 }

@@ -11,7 +11,7 @@ package uit.tkorg.and.models;
 public class Author {
     
     String authorName="";
-    String authorAfflication="";
+    String authorAffliation="";
     String authorEmail="";
     int authorOrder=0;
     String authorInterests="";
@@ -23,7 +23,7 @@ public class Author {
     
     public Author(String authorName, String authorAfflication, String authorEmail, int authorOrder, String authorInterests) {
         this.authorName = authorName;
-        this.authorAfflication = authorAfflication;
+        this.authorAffliation = authorAfflication;
         this.authorEmail = authorEmail;
         this.authorOrder = authorOrder;
         this.authorInterests = authorInterests;        
@@ -38,8 +38,8 @@ public class Author {
     }
 
     
-    public String getAuthorAfflication() {
-        return authorAfflication;
+    public String getAuthorAffliation() {
+        return authorAffliation;
     }
 
     public String getAuthorEmail() {
@@ -62,8 +62,8 @@ public class Author {
         return authorResult;
     }
 
-    public void setAuthorAfflication(String authorAfflication) {
-        this.authorAfflication = authorAfflication;
+    public void setAuthorAffliation(String authorAffliation) {
+        this.authorAffliation = authorAffliation;
     }
 
     public void setAuthorEmail(String authorEmail) {
