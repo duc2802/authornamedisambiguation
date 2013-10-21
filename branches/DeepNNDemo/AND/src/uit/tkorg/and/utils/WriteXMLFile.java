@@ -182,7 +182,7 @@ public class WriteXMLFile {
 
         // affiliation elements
         Element affiliation = doc.createElement("affiliation");
-        affiliation.appendChild(doc.createTextNode(paper.getMainAuthor().getAuthorAfflication()));
+        affiliation.appendChild(doc.createTextNode(paper.getMainAuthor().getAuthorAffliation()));
         mainAuthor.appendChild(affiliation);
 
         // affiliation elements
@@ -201,7 +201,7 @@ public class WriteXMLFile {
             author.appendChild(name);
 
             Element affilation = doc.createElement("aff");
-            affilation.appendChild(doc.createTextNode(paper.getCoAuthor().get(i).getAuthorAfflication()));
+            affilation.appendChild(doc.createTextNode(paper.getCoAuthor().get(i).getAuthorAffliation()));
             author.appendChild(affilation);
             
             coAuthor.appendChild(author);

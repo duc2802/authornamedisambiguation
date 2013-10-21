@@ -120,7 +120,7 @@ public class CrossValiationDataGenerateApp {
     	    outStream.close();
     	    System.out.println("Successful: " + source + " to " + dest);
     	}catch(IOException e){
-            System.out.println("Canot copy: " + source + " to " + dest + " : " + e.getMessage());
+            System.out.println("Cannot copy: " + source + " to " + dest + " : " + e.getMessage());
     	}
     }
 }

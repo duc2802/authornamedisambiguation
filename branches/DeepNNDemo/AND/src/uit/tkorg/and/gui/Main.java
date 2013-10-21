@@ -561,13 +561,14 @@ public class Main extends javax.swing.JFrame {
                     double AND_INPUT_Train[][];
                     double AND_Label_Train[][];
                     AND_INPUT_Train = asArrayInput(train);
-                    AND_INPUT_Train =asArrayLabel(train,dimension);
+                    AND_Label_Train = asArrayLabel(train,dimension);
 
                      // For Test
                     double AND_INPUT_Test[][];
                     double AND_Label_Test[][];
                     AND_INPUT_Train = asArrayInput(test);
                     AND_Label_Test =asArrayLabel(test,dimension);                
+                    
                     // Code DNN here
                     // create a neural network, without using a factory
                     BasicNetwork network = new BasicNetwork();
@@ -578,7 +579,7 @@ public class Main extends javax.swing.JFrame {
                     network.reset();
 
                     // create training data
-                    MLDataSet trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Test);
+                    MLDataSet trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Train);
 
                     // train the neural network
                     final ResilientPropagation train = new ResilientPropagation(network, trainingSet);

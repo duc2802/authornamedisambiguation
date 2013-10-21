@@ -42,13 +42,13 @@ public class CoAuthorSimilarity implements FeaturesBase{
     { 
         StringBuilder affCoauthorAString = new StringBuilder();        
         for (Author author : publicationA.getCoAuthor()) {
-            affCoauthorAString.append(author.getAuthorAfflication());
+            affCoauthorAString.append(author.getAuthorAffliation());
             affCoauthorAString.append(" ");
         }
         
         StringBuilder affCoauthorBString = new StringBuilder();
         for (Author author : publicationB.getCoAuthor()) {
-            affCoauthorBString.append(author.getAuthorAfflication());
+            affCoauthorBString.append(author.getAuthorAffliation());
             affCoauthorBString.append(" ");
         }
         
