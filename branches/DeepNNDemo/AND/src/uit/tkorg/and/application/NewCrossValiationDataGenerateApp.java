@@ -88,22 +88,26 @@ public class NewCrossValiationDataGenerateApp {
             }
         }
        
-        int unit = allOfFile / 10;
+        int unitfortag0 = listFileIDTage0.size() / 10;
+        int unitfortag1 = listFileIDTage1.size() / 10;
         int endIndexWithTag0=0;
         int endIndexWithTag1=0;
         int startIndexWithTag0 =0;
+        int startIndexWithTag1 =0;
         
-        for( startIndexWithTag0 =0;startIndexWithTag0 < unit*2; startIndexWithTag0++ ) {
+        for( startIndexWithTag0 =0;startIndexWithTag0 < unitfortag0*2; startIndexWithTag0++ ) {
             if (listFileIDTage0.size() > startIndexWithTag0)
             {
                 copy(listChild[listFileIDTage0.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag0\\" + (startIndexWithTag0 + 1) + ".xml");
                  endIndexWithTag0++;
             }
-            
-            if (listFileIDTage1.size() > startIndexWithTag0)
+        }
+        
+         for( startIndexWithTag1 =0;startIndexWithTag1 < unitfortag1*2; startIndexWithTag1++ ) {
+            if (listFileIDTage1.size() > startIndexWithTag1)
             {
-                copy(listChild[listFileIDTage1.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag1\\" + (startIndexWithTag0 + 1) + ".xml");
-                endIndexWithTag1++;
+                copy(listChild[listFileIDTage1.get(startIndexWithTag1)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag1\\" + (startIndexWithTag1 + 1) + ".xml");
+                 endIndexWithTag0++;
             }
         }
         
@@ -138,9 +142,7 @@ public class NewCrossValiationDataGenerateApp {
                   endIndexWithTag1++;
             }
             //select test  
-            loop++;
-            
-            
+            loop++;       
         }
         System.out.println("Please go to C:\\Data check your data");
     }
