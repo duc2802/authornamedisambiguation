@@ -62,9 +62,9 @@ public class NewCrossValiationDataGenerateApp {
        // Tạo forder voi tag 0
       File fileRoot = new File("C:\\Data");
        
-       if(new File("C:\\TestData\\20PercentWithTag0").exists())
+       if(new File("C:\\Data\\TestData\\20PercentWithTag0").exists())
         {
-            new File("C:\\TestData\\20PercentWithTag0").deleteOnExit();
+            new File("C:\\Data\\TestData\\20PercentWithTag0").deleteOnExit();
         }
         else {
             File file = new File("C:\\Data\\TestData\\" +"20PercentWithTag0" );
@@ -75,9 +75,9 @@ public class NewCrossValiationDataGenerateApp {
             }
         }
        
-       if(new File("C:\\TestData\\20PercentWithTag1").exists())
+       if(new File("C:\\Data\\TestData\\20PercentWithTag1").exists())
         {
-            new File("C:\\TestData\\20PercentWithTag1").deleteOnExit();
+            new File("C:\\Data\\TestData\\20PercentWithTag1").deleteOnExit();
         }
         else {
             File file = new File("C:\\Data\\TestData\\" +"20PercentWithTag1" );
@@ -89,61 +89,60 @@ public class NewCrossValiationDataGenerateApp {
         }
        
         int unit = allOfFile / 10;
-        int endIndexWithTag;
+        int endIndexWithTag0=0;
+        int endIndexWithTag1=0;
         int startIndexWithTag0 =0;
         
         for( startIndexWithTag0 =0;startIndexWithTag0 < unit*2; startIndexWithTag0++ ) {
-            copy(listChild[listFileIDTage0.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag0\\" + (startIndexWithTag0 + 1) + ".xml");
-            copy(listChild[listFileIDTage0.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag1\\" + (startIndexWithTag0 + 1) + ".xml");
+            if (listFileIDTage0.size() > startIndexWithTag0)
+            {
+                copy(listChild[listFileIDTage0.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag0\\" + (startIndexWithTag0 + 1) + ".xml");
+                 endIndexWithTag0++;
+            }
+            
+            if (listFileIDTage1.size() > startIndexWithTag0)
+            {
+                copy(listChild[listFileIDTage1.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag1\\" + (startIndexWithTag0 + 1) + ".xml");
+                endIndexWithTag1++;
+            }
         }
         
+        int numberoffpair0 = listFileIDTage0.size() - endIndexWithTag0;
+        int numberoffpair1= listFileIDTage1.size() - endIndexWithTag1 ;
+        
+        int unitforoneforderwithtag0 =numberoffpair0/5;
+        int unitforoneforderwithtag1= numberoffpair1/5;
+        
         // Chia so con lai vao 5 forder
-        
-        
-//        while(loop < 10)
-//        {
-//            System.out.println("===========================Loop " + (loop + 1) + "================================="); 
-//            
-//            // <editor-fold defaultstate="collapsed" desc="mkdir : Folder">            
-//            File file = new File("C:\\CrossValidate\\" + (loop + 1));
-//            if(file.mkdir()){
-//                    System.out.println("Directory is created! : " + file.getAbsolutePath());
-//            }else{
-//                    System.out.println("Failed to create directory!" + file.getAbsolutePath());
-//            }
-//            
-//            if(new File(file.getAbsoluteFile() + "\\test").mkdir()){
-//                System.out.println("Directory is created! : C:\\CrossValidate\\..\\test");
-//            }else{
-//                System.out.println("Failed to create directory! C:\\CrossValidate\\..\\test");
-//            }
-//
-//            if(new File(file.getAbsoluteFile() + "\\train").mkdir()){
-//                System.out.println("Directory is created! : C:\\CrossValidate\\..\\train");
-//            }else{
-//                System.out.println("Failed to create directory! C:\\CrossValidate\\..\\train");
-//            }        
-//            //</editor-fold>
-//            
-//            start = loop * unit;
-//            end = (int)((float)unit * 1) + start;
-//            
-//            //select test
-//            for(int i = 0; i < allOfFile; i++)
-//            {
-//                if(i >= end || i < start)
-//                {
-//                    copy(listChild[i].getAbsolutePath().toString(), file.getAbsolutePath().toString() + "\\train\\" + (i + 1) + ".xml");
-//                }
-//                else
-//                {
-//                    copy(listChild[i].getAbsolutePath().toString(), file.getAbsolutePath().toString() + "\\test\\" + (i + 1) + ".xml");
-//                }
-//            }    
-//            loop++;
-//            
-//            System.out.println("Please go to C:\\CrossValidate check it again.");
-//        }
+        int loop=0;
+        while(loop < 5)
+        {
+            System.out.println("===========================Loop " + (loop + 1) + "================================="); 
+            
+            // <editor-fold defaultstate="collapsed" desc="mkdir : Folder">            
+            File file = new File("C:\\Data\\TrainData\\" + (loop + 1));
+            if(file.mkdir()){
+                    System.out.println("Directory is created! : " + file.getAbsolutePath());
+            }else{
+                    System.out.println("Failed to create directory!" + file.getAbsolutePath());
+            }
+            
+            for (int indexfor5forderwithtag0 =0;indexfor5forderwithtag0<unitforoneforderwithtag0; indexfor5forderwithtag0++)
+            {
+                  copy(listChild[listFileIDTage0.get(endIndexWithTag0)].getAbsolutePath().toString(),file.getAbsolutePath().toString() +"\\"+"Tag0"+ (indexfor5forderwithtag0 + 1) + ".xml"); 
+                  endIndexWithTag0++;
+            }
+            for (int indexfor5forderwithtag1 =0;indexfor5forderwithtag1<unitforoneforderwithtag1; indexfor5forderwithtag1++)
+            {
+                  copy(listChild[listFileIDTage1.get(endIndexWithTag1)].getAbsolutePath().toString(),file.getAbsolutePath().toString() +"\\"+"Tag1"+(indexfor5forderwithtag1 + 1) + ".xml"); 
+                  endIndexWithTag1++;
+            }
+            //select test  
+            loop++;
+            
+            
+        }
+        System.out.println("Please go to C:\\Data check your data");
     }
     
     public static void copy(String source, String dest)
