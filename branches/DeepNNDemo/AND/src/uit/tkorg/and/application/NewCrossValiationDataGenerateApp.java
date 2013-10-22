@@ -92,9 +92,9 @@ public class NewCrossValiationDataGenerateApp {
         int endIndexWithTag;
         int startIndexWithTag0 =0;
         
-        for( endIndexWithTag =0;startIndexWithTag0 < unit*2; endIndexWithTag++ ) {
-            copy(listChild[listFileIDTage0.get(endIndexWithTag)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag0\\" + (startIndexWithTag0 + 1) + ".xml");
-            copy(listChild[listFileIDTage0.get(endIndexWithTag)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag1\\" + (startIndexWithTag0 + 1) + ".xml");
+        for( startIndexWithTag0 =0;startIndexWithTag0 < unit*2; startIndexWithTag0++ ) {
+            copy(listChild[listFileIDTage0.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag0\\" + (startIndexWithTag0 + 1) + ".xml");
+            copy(listChild[listFileIDTage0.get(startIndexWithTag0)].getAbsolutePath().toString(),fileRoot.getAbsolutePath().toString() + "\\TestData\\20PercentWithTag1\\" + (startIndexWithTag0 + 1) + ".xml");
         }
         
         // Chia so con lai vao 5 forder
