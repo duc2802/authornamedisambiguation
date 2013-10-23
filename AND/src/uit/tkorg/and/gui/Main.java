@@ -548,23 +548,25 @@ public class Main extends javax.swing.JFrame {
                 if(name.equals("KNN"))
                     mc = new MachineLearning(MachineLearning.TypeClassifier.KNN);
             
-                String testCrossPath = "\\test";
-                String trainCrossPath = "\\train";
+//------------- Prepare data ---------------------------------------------------                
+                String testPath = "C:\\VANDData\\TestData";
+                String trainCrossPath = "C:\\VANDData\\TrainData";
                 
                 PairPublication[] pairTest = null;
                 PairPublication[] pairTrain = null;
                 
-                testCrossPath = pathForTest + "\\";
+                testPath = pathForTest + "\\";
                 trainCrossPath = pathForTrain + "\\";
 
-                pairTest = Vector.buildVectorsFromFolderPairPublication(testCrossPath);    
+                pairTest = Vector.buildVectorsFromFolderPairPublication(testPath);    
                 pairTrain = Vector.buildVectorsFromFolderPairPublication(trainCrossPath);   
 
                 test = Vector.buildVector(pairTest, selectFeatures);
                 train = Vector.buildVector(pairTrain, selectFeatures);
+//------------- Prepare data ---------------------------------------------------                
 
                 /**
-                 *  Create code for input DNN 
+                 *  DNN option.
                  * 
                  */
                 if(name.equals("DNN"))
