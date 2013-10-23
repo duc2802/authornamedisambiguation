@@ -62,7 +62,7 @@ public class DNN {
 //            // Design rectifier activation function
 //            network.addLayer(new BasicLayer(new ActivationRamp(Double.POSITIVE_INFINITY, 0, Double.POSITIVE_INFINITY, 0),true,numHiddenUnit));
         }
-        network.addLayer(new BasicLayer(new ActivationSoftMax(),false,2));
+        network.addLayer(new BasicLayer(new ActivationSoftMax(),false,trainingSet.getIdealSize()));
         // Finalize structure.
         network.getStructure().finalizeStructure();
         network.reset();
