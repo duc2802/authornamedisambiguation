@@ -331,7 +331,7 @@ public class Vector {
     
      public static Instances buildVectorTrain(PairPublication[] data, Feature selectFeatures, int start, int end)
      {                
-        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);        
+        Instances instancesData = buildVectorWithFeatures(100000, selectFeatures);        
         for(int i = start; i < end; i++)
         {
             //System.out.println("File  : " + i);
@@ -344,7 +344,7 @@ public class Vector {
          
      public static Instances buildVectorTest(PairPublication[] data, Feature selectFeatures, int start, int end)
      {        
-        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
+        Instances instancesData = buildVectorWithFeatures(100000, selectFeatures);
         for(int i = 0; i < data.length; i++)
         {
             if(i >= end || i < start)
@@ -359,7 +359,7 @@ public class Vector {
      
      public static Instances buildVector(PairPublication[] data, Feature selectFeatures)
      {        
-        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
+        Instances instancesData = buildVectorWithFeatures(100000, selectFeatures);
         for(int i = 0; i < data.length; i++)
         {  
             Instance simple = calculateVectorOfPairPublication(instancesData, data[i], selectFeatures);
@@ -377,7 +377,7 @@ public class Vector {
      public static Instances buildVectorsFromFolderWithSelectFeatures(String rootDirectory, Feature selectFeatures) throws ParserConfigurationException, TransformerConfigurationException, TransformerException
     {
         int dimension = selectFeatures.getNumberSelectFeature() + 1;
-        Instances instancesData = buildVectorWithFeatures(1000, selectFeatures);
+        Instances instancesData = buildVectorWithFeatures(100000, selectFeatures);
         
         final ReadXML reader = new ReadXML();        
         File root = new File(rootDirectory);
