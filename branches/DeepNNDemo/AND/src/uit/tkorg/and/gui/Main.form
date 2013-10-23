@@ -198,8 +198,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="cbSmithWatermanAuthorName" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cbSmithWatermanAffiliation" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbMongeElkanAuthorName" min="-2" max="-2" attributes="0"/>
                       <Component id="cbMongeElkanAffiliaiton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                          <Component id="jToggleButton1" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbMongeElkanAuthorName" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -241,8 +244,11 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbJaroWinklerAuthorName" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbJaroWinklerAffiliaiton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbJaroWinklerAffiliaiton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jToggleButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -323,6 +329,14 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="MongeElkanAffiliaiton"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Toggle check all"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton1ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
