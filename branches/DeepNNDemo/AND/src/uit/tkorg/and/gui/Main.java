@@ -17,17 +17,27 @@ import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
+import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.encog.Encog;
+import org.encog.app.analyst.EncogAnalyst;
 import org.encog.engine.network.activation.ActivationElliottSymmetric;
+import org.encog.engine.network.activation.ActivationRamp;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.engine.network.activation.ActivationSoftMax;
+import org.encog.ensemble.bagging.Bagging;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.ml.train.strategy.end.EarlyStoppingStrategy;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.networks.training.strategy.RegularizationStrategy;
+import org.encog.util.EncogValidate;
+import org.encog.util.benchmark.EncogBenchmark;
+import org.encog.util.simple.EncogUtility;
+import uit.tkorg.and.core.classifications.DNN;
 import uit.tkorg.and.models.Feature;
 import uit.tkorg.and.models.MachineLearning;
 import uit.tkorg.and.models.PairPublication;
@@ -559,58 +569,33 @@ public class Main extends javax.swing.JFrame {
                  */
                 if(name.equals("DNN"))
                 {
-                     // For train
+                    // Prepare data
+                    // For train
                     double AND_INPUT_Train[][];
                     double AND_Label_Train[][];
                     AND_INPUT_Train = asArrayInput(train);
                     AND_Label_Train = asArrayLabel(train,dimension);
-
-                     // For Test
-                    double AND_INPUT_Test[][];
-                    double AND_Label_Test[][];
-                    AND_INPUT_Test = asArrayInput(test);
-                    AND_Label_Test = asArrayLabel(test,dimension);                
-                    
-                    // Code DNN here
-                    // Tune size of DNN
-                    int numHiddenLayer = 1;
-                    int numHiddenUnit = 100;
-                    BasicNetwork network = new BasicNetwork();
-                    network.addLayer(new BasicLayer(null,true,dimension));
-                    // Add hidden layers
-                    for (int i = 0; i < numHiddenLayer; i++)
-                    {
-                        network.addLayer(new BasicLayer(new ActivationElliottSymmetric(),true,numHiddenUnit));
-                    }
-                    network.addLayer(new BasicLayer(new ActivationSoftMax(),false,2));
-                    network.getStructure().finalizeStructure();
-                    network.reset();
-
                     // create training data
                     MLDataSet trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Train);
 
-                    // train the neural network
-                    final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-                    // Auto set number of threads for multi-threading
-                    train.setThreadCount(0);
-
-                    int epoch = 1;
-
-                    do {
-                            train.iteration();
-                            System.out.println("Epoch #" + epoch + " Error:" + train.getError());
-                            epoch++;
-                    } while(train.getError() > 0.01);
-                    // network.calculateError(trainingSet);
-                    train.finishTraining();
-
-                    // test the neural network
+                    // For Test
+                    double AND_INPUT_Test[][];
+                    double AND_Label_Test[][];
+                    AND_INPUT_Test = asArrayInput(test);
+                    AND_Label_Test = asArrayLabel(test,dimension);
                     // create testing data
                     MLDataSet testSet = new BasicMLDataSet(AND_INPUT_Test, AND_Label_Test);
-                    double testErrorRate = network.calculateError(testSet);
-                    System.out.println("Neural Network Results: " + testErrorRate);
+                    
+                    // Train DNN
+                    DNN dnn = new DNN();
+                    dnn.train(trainingSet);
 
-                    Encog.getInstance().shutdown();
+                    // test the neural network
+                    double testErrorRate = dnn.getNetwork().calculateError(testSet);
+                    System.out.println("Neural Network Results in MSE: " + testErrorRate);
+                    double testClassificationError = EncogUtility.calculateClassificationError(dnn.getNetwork(), testSet);
+                    System.out.println("Neural Network Results in classification error: " + testClassificationError);
+
                 }
                 else
                 {
@@ -641,22 +626,21 @@ public class Main extends javax.swing.JFrame {
         }         
     }//GEN-LAST:event_btRunActionPerformed
     public static double[][] asArrayInput(Instances data) {
-            double Data[][] = new double[data.numInstances()][data.numAttributes()-1];
-            for (int i = 0; i < data.numInstances(); i++) {
-                for (int j = 0; j < data.numAttributes()-1; j++) {
-                    Data[i][j ] = data.instance(i).value(j);
-                }
+        double Data[][] = new double[data.numInstances()][data.numAttributes()-1];
+        for (int i = 0; i < data.numInstances(); i++) {
+            for (int j = 0; j < data.numAttributes()-1; j++) {
+                Data[i][j] = data.instance(i).value(j);
             }
-            return Data;
+        }
+        return Data;
       } 
-        public static double[][] asArrayLabel(Instances data, int dimension) {
-            double Data[][] = new double[data.numInstances()][1];
-            for (int i = 0; i < data.numInstances(); i++) {
-                for (int j = 0; j < data.numAttributes()-1; j++) {
-                    Data[i][0] = data.instance(i).value(dimension);
-                }
-            }
-            return Data;
+    public static double[][] asArrayLabel(Instances data, int dimension) {
+        double Data[][] = new double[data.numInstances()][2];
+        for (int i = 0; i < data.numInstances(); i++) {
+            Data[i][0] = 1 - data.instance(i).value(dimension);
+            Data[i][1] = data.instance(i).value(dimension);
+        }
+        return Data;
       } 
         
     public PairPublication[] doubleListPairPublication(PairPublication[] pairList)
