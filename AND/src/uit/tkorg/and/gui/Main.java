@@ -96,6 +96,7 @@ public class Main extends javax.swing.JFrame {
         cbSmithWatermanAffiliation = new javax.swing.JCheckBox();
         cbMongeElkanAuthorName = new javax.swing.JCheckBox();
         cbMongeElkanAffiliaiton = new javax.swing.JCheckBox();
+        jToggleButton1 = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
         rbRF = new javax.swing.JRadioButton();
         rbSVM = new javax.swing.JRadioButton();
@@ -201,6 +202,13 @@ public class Main extends javax.swing.JFrame {
 
         cbMongeElkanAffiliaiton.setText("MongeElkanAffiliaiton");
 
+        jToggleButton1.setText("Toggle check all");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -223,8 +231,10 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbSmithWatermanAuthorName)
                     .addComponent(cbSmithWatermanAffiliation)
-                    .addComponent(cbMongeElkanAuthorName)
-                    .addComponent(cbMongeElkanAffiliaiton))
+                    .addComponent(cbMongeElkanAffiliaiton)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jToggleButton1)
+                        .addComponent(cbMongeElkanAuthorName)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -259,8 +269,10 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbJaroWinklerAuthorName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbJaroWinklerAffiliaiton)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbJaroWinklerAffiliaiton)
+                    .addComponent(jToggleButton1))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Classifiers"));
@@ -548,18 +560,17 @@ public class Main extends javax.swing.JFrame {
                 if(name.equals("KNN"))
                     mc = new MachineLearning(MachineLearning.TypeClassifier.KNN);
             
-//------------- Prepare data ---------------------------------------------------                
-                String testPath = "C:\\VANDData\\TestData";
-                String trainCrossPath = "C:\\VANDData\\TrainData";
+//------------- Prepare data ---------------------------------------------------
+                if (pathForTrain == null || pathForTrain.isEmpty())
+                    pathForTrain = "C:\\VANDData\\TrainData";
+                if (pathForTest == null || pathForTest.isEmpty())
+                    pathForTest = "C:\\VANDData\\TestData";
                 
                 PairPublication[] pairTest = null;
                 PairPublication[] pairTrain = null;
-                
-                testPath = pathForTest + "\\";
-                trainCrossPath = pathForTrain + "\\";
 
-                pairTest = Vector.buildVectorsFromFolderPairPublication(testPath);    
-                pairTrain = Vector.buildVectorsFromFolderPairPublication(trainCrossPath);   
+                pairTest = Vector.buildVectorsFromFolderPairPublication(pathForTest);    
+                pairTrain = Vector.buildVectorsFromFolderPairPublication(pathForTrain);   
 
                 test = Vector.buildVector(pairTest, selectFeatures);
                 train = Vector.buildVector(pairTrain, selectFeatures);
@@ -580,6 +591,11 @@ public class Main extends javax.swing.JFrame {
                     // create training data
                     MLDataSet trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Train);
 
+                    // Train DNN
+                    DNN dnn = new DNN();
+                    dnn.train(trainingSet);
+
+                    // Prepare data
                     // For Test
                     double AND_INPUT_Test[][];
                     double AND_Label_Test[][];
@@ -588,15 +604,11 @@ public class Main extends javax.swing.JFrame {
                     // create testing data
                     MLDataSet testSet = new BasicMLDataSet(AND_INPUT_Test, AND_Label_Test);
                     
-                    // Train DNN
-                    DNN dnn = new DNN();
-                    dnn.train(trainingSet);
-
                     // test the neural network
                     double testErrorRate = dnn.getNetwork().calculateError(testSet);
                     System.out.println("Neural Network Results in MSE: " + testErrorRate);
-                    double testClassificationError = EncogUtility.calculateClassificationError(dnn.getNetwork(), testSet);
-                    System.out.println("Neural Network Results in classification error: " + testClassificationError);
+                    double classificationError = EncogUtility.calculateClassificationError(dnn.getNetwork(), testSet);
+                    System.out.println("Neural Network Results in classification error: " + classificationError);
 
                 }
                 else
@@ -627,6 +639,25 @@ public class Main extends javax.swing.JFrame {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
         }         
     }//GEN-LAST:event_btRunActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        cbJaccardAuthorName.doClick();
+        cbJaccardAfiliation.doClick();
+        cbJaccardCoAuthor.doClick();
+        cbJaccardKeyInteresting.doClick();
+        cbJaccardKeyword.doClick();
+        cbJaroAuthorName.doClick();
+        cbJaroWinklerAffiliaiton.doClick();
+        cbJaroWinklerAuthorName.doClick();
+        cbJarodAfiliation.doClick();
+        cbLevenshteinAfflicaiton.doClick();
+        cbLevenshteinAuthorName.doClick();
+        cbMongeElkanAffiliaiton.doClick();
+        cbMongeElkanAuthorName.doClick();
+        cbSmithWatermanAffiliation.doClick();
+        cbSmithWatermanAuthorName.doClick();
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
     public static double[][] asArrayInput(Instances data) {
         double Data[][] = new double[data.numInstances()][data.numAttributes()-1];
         for (int i = 0; i < data.numInstances(); i++) {
@@ -637,10 +668,16 @@ public class Main extends javax.swing.JFrame {
         return Data;
       } 
     public static double[][] asArrayLabel(Instances data, int dimension) {
-        double Data[][] = new double[data.numInstances()][2];
+        // prob same, prob diff.
+        // 2 class -> 1 unit logistic.
+        // when output is too small, softmax produce NaN.
+        // sigmoid is softmax with 2 class, try sigmoid.
+//        double Data[][] = new double[data.numInstances()][2];
+        double Data[][] = new double[data.numInstances()][1];
+        
         for (int i = 0; i < data.numInstances(); i++) {
             Data[i][0] = 1 - data.instance(i).value(dimension);
-            Data[i][1] = data.instance(i).value(dimension);
+//            Data[i][1] = data.instance(i).value(dimension);
         }
         return Data;
       } 
@@ -738,6 +775,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JRadioButton rbBayes;
     private javax.swing.JRadioButton rbRF;
     private javax.swing.JRadioButton rbSVM;
