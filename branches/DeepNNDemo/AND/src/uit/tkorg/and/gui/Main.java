@@ -51,15 +51,26 @@ import weka.core.Utils;
  * @author tiendv
  */
 public class Main extends javax.swing.JFrame {
-    private PairPublication[] data;
-    private Instances train;
-    private Instances test;
+    private PairPublication[] pairTest = null;
+    private PairPublication[] pairTrain = null;
+
+    private Instances train = null;
+    private Instances test = null;
+
+    private double AND_INPUT_Train[][] = null;
+    private double AND_Label_Train[][] = null;
+    private double AND_INPUT_Test[][] = null;
+    private double AND_Label_Test[][] = null;
+    
+    private MLDataSet trainingSet = null;
+    private MLDataSet testSet = null;
+    
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setExtendedState(JFrame.NORMAL);
     }
 
     /**
@@ -103,11 +114,15 @@ public class Main extends javax.swing.JFrame {
         rbBayes = new javax.swing.JRadioButton();
         rbc45 = new javax.swing.JRadioButton();
         rdKNN = new javax.swing.JRadioButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
         btRun = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taLog = new javax.swing.JTextArea();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        tfNumHiddenLayer = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        tfNumHiddenUnit = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -119,7 +134,6 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setText("Dateset Folder:");
 
         jLabel2.setText("Test Data");
-        jLabel2.setEnabled(false);
 
         btTrainingDataParth.setText("Open");
         btTrainingDataParth.addActionListener(new java.awt.event.ActionListener() {
@@ -227,14 +241,13 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(cbJaccardKeyword)
                     .addComponent(cbJaccardCoAuthor)
                     .addComponent(cbJaccardAfiliation))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbSmithWatermanAuthorName)
                     .addComponent(cbSmithWatermanAffiliation)
                     .addComponent(cbMongeElkanAffiliaiton)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jToggleButton1)
-                        .addComponent(cbMongeElkanAuthorName)))
+                    .addComponent(cbMongeElkanAuthorName)
+                    .addComponent(jToggleButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -267,12 +280,16 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cbJarodAfiliation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbJaroWinklerAuthorName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbJaroWinklerAffiliaiton)
-                    .addComponent(jToggleButton1))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(cbJaroWinklerAuthorName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbJaroWinklerAffiliaiton)
+                        .addContainerGap(14, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jToggleButton1)
+                        .addGap(19, 19, 19))))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Classifiers"));
@@ -292,9 +309,6 @@ public class Main extends javax.swing.JFrame {
         buttonGroup1.add(rdKNN);
         rdKNN.setText("KNN");
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("DNN");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -310,8 +324,6 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(rbc45)
                 .addGap(18, 18, 18)
                 .addComponent(rdKNN)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -322,8 +334,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(rbSVM)
                     .addComponent(rbBayes)
                     .addComponent(rbc45)
-                    .addComponent(rdKNN)
-                    .addComponent(jRadioButton1))
+                    .addComponent(rdKNN))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -346,15 +357,26 @@ public class Main extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("DNN");
+
+        jLabel3.setText("#Hidden layer:");
+
+        tfNumHiddenLayer.setText("1");
+
+        jLabel4.setText("#Hidden unit:");
+
+        tfNumHiddenUnit.setText("25");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -369,15 +391,30 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jRadioButton1)
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tfNumHiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tfNumHiddenUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(21, 21, 21))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(155, 155, 155)
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
         );
@@ -389,11 +426,20 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRadioButton1)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel3)
+                                .addComponent(tfNumHiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(tfNumHiddenUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(25, 25, 25)
                         .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -561,19 +607,18 @@ public class Main extends javax.swing.JFrame {
                     mc = new MachineLearning(MachineLearning.TypeClassifier.KNN);
             
 //------------- Prepare data ---------------------------------------------------
-                if (pathForTrain == null || pathForTrain.isEmpty())
-                    pathForTrain = "C:\\VANDData\\TrainData";
-                if (pathForTest == null || pathForTest.isEmpty())
-                    pathForTest = "C:\\VANDData\\TestData";
-                
-                PairPublication[] pairTest = null;
-                PairPublication[] pairTrain = null;
+                if (train == null) {
+                    if (pathForTrain == null || pathForTrain.isEmpty())
+                        pathForTrain = "C:\\VANDData\\TrainData";
+                    if (pathForTest == null || pathForTest.isEmpty())
+                        pathForTest = "C:\\VANDData\\TestData";
 
-                pairTest = Vector.buildVectorsFromFolderPairPublication(pathForTest);    
-                pairTrain = Vector.buildVectorsFromFolderPairPublication(pathForTrain);   
+                    pairTest = Vector.buildVectorsFromFolderPairPublication(pathForTest);    
+                    pairTrain = Vector.buildVectorsFromFolderPairPublication(pathForTrain);   
 
-                test = Vector.buildVector(pairTest, selectFeatures);
-                train = Vector.buildVector(pairTrain, selectFeatures);
+                    test = Vector.buildVector(pairTest, selectFeatures);
+                    train = Vector.buildVector(pairTrain, selectFeatures);
+                }
 //------------- Prepare data ---------------------------------------------------                
 
                 /**
@@ -582,34 +627,37 @@ public class Main extends javax.swing.JFrame {
                  */
                 if(name.equals("DNN"))
                 {
-                    // Prepare data
-                    // For train
-                    double AND_INPUT_Train[][];
-                    double AND_Label_Train[][];
-                    AND_INPUT_Train = asArrayInput(train);
-                    AND_Label_Train = asArrayLabel(train,dimension);
-                    // create training data
-                    MLDataSet trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Train);
+                    if (AND_INPUT_Train == null) {
+                        // Prepare data
+                        // For train
+                        AND_INPUT_Train = asArrayInput(train);
+                        AND_Label_Train = asArrayLabel(train,dimension);
+                        // create training data
+                        trainingSet = new BasicMLDataSet(AND_INPUT_Train, AND_Label_Train);
 
+                        // Prepare data
+                        // For Test
+                        AND_INPUT_Test = asArrayInput(test);
+                        AND_Label_Test = asArrayLabel(test,dimension);
+                        // create testing data
+                        testSet = new BasicMLDataSet(AND_INPUT_Test, AND_Label_Test);
+                    }
+                    
+                    // Get size.
+                    int numHiddenLayer = Integer.parseInt(tfNumHiddenLayer.getText());
+                    int numHiddenUnit = Integer.parseInt(tfNumHiddenUnit.getText());
+                    
                     // Train DNN
                     DNN dnn = new DNN();
-                    dnn.train(trainingSet);
+                    dnn.train(trainingSet, testSet, numHiddenLayer, numHiddenUnit);
 
-                    // Prepare data
-                    // For Test
-                    double AND_INPUT_Test[][];
-                    double AND_Label_Test[][];
-                    AND_INPUT_Test = asArrayInput(test);
-                    AND_Label_Test = asArrayLabel(test,dimension);
-                    // create testing data
-                    MLDataSet testSet = new BasicMLDataSet(AND_INPUT_Test, AND_Label_Test);
-                    
                     // test the neural network
-                    double testErrorRate = dnn.getNetwork().calculateError(testSet);
-                    System.out.println("Neural Network Results in MSE: " + testErrorRate);
-                    double classificationError = EncogUtility.calculateClassificationError(dnn.getNetwork(), testSet);
-                    System.out.println("Neural Network Results in classification error: " + classificationError);
-
+                    double testSetMSE = dnn.getNetwork().calculateError(testSet);
+                    System.out.println("Test set MSE Error: " + testSetMSE);
+                    
+                    double classificationAccuracy = DNN.calculateAccuracy(dnn.getNetwork(), testSet);
+                    System.out.println("Test set Classification Accuracy: " + classificationAccuracy);
+                    System.out.println("Test set Classification Error rate: " + (1 - classificationAccuracy));
                 }
                 else
                 {
@@ -630,11 +678,11 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append("\n");
                 }
                 
-                test = null;
-                train = null;
-
-                pairTest.clone();
-                pairTrain.clone();
+//                test = null;
+//                train = null;
+//
+//                pairTest.clone();
+//                pairTrain.clone();
          } catch (Exception ex) {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
         }         
@@ -663,6 +711,13 @@ public class Main extends javax.swing.JFrame {
         for (int i = 0; i < data.numInstances(); i++) {
             for (int j = 0; j < data.numAttributes()-1; j++) {
                 Data[i][j] = data.instance(i).value(j);
+                // Standardize data.
+                if (Double.isNaN(Data[i][j])) {
+                    Data[i][j] = 0;
+                }
+                else if (Double.isInfinite(Data[i][j])) {
+                    Data[i][j] = 1;
+                }
             }
         }
         return Data;
@@ -670,17 +725,30 @@ public class Main extends javax.swing.JFrame {
     public static double[][] asArrayLabel(Instances data, int dimension) {
         // prob same, prob diff.
         // 2 class -> 1 unit logistic.
-        // when output is too small, softmax produce NaN.
-        // sigmoid is softmax with 2 class, try sigmoid.
+        // softmax require all units sum to 1, or it will produce NaN.
+        // sigmoid is special 1 unit softmax with 2 class, try sigmoid.
 //        double Data[][] = new double[data.numInstances()][2];
         double Data[][] = new double[data.numInstances()][1];
         
         for (int i = 0; i < data.numInstances(); i++) {
             Data[i][0] = 1 - data.instance(i).value(dimension);
 //            Data[i][1] = data.instance(i).value(dimension);
+            // Standardize data.
+            if (Double.isNaN(Data[i][0])) {
+                Data[i][0] = 0;
+            }
+            else if (Double.isInfinite(Data[i][0])) {
+                Data[i][0] = 1;
+            }
+            else if (Data[i][0] < 0.5) {
+                Data[i][0] = 0;
+            }
+            else if (Data[i][0] >= 0.5) {
+                Data[i][0] = 1;
+            }
         }
         return Data;
-      } 
+      }
         
     public PairPublication[] doubleListPairPublication(PairPublication[] pairList)
     {
@@ -766,6 +834,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JCheckBox cbSmithWatermanAuthorName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -782,6 +852,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbc45;
     private javax.swing.JRadioButton rdKNN;
     public static javax.swing.JTextArea taLog;
+    private javax.swing.JTextField tfNumHiddenLayer;
+    private javax.swing.JTextField tfNumHiddenUnit;
     private javax.swing.JTextField tfTestDataParth;
     private javax.swing.JTextField tfTrainingDataParth;
     // End of variables declaration//GEN-END:variables
