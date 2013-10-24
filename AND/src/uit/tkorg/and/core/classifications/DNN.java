@@ -9,6 +9,8 @@ import org.encog.engine.network.activation.ActivationElliottSymmetric;
 import org.encog.engine.network.activation.ActivationLinear;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.engine.network.activation.ActivationSoftMax;
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
@@ -19,6 +21,7 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.simple.EncogUtility;
+import uit.tkorg.and.gui.Main;
 
 /**
  *
@@ -49,8 +52,8 @@ public class DNN {
         this.network = network;
     }
     
-    public void train(MLDataSet trainingSet) {
-        
+    public void train(MLDataSet trainingSet, MLDataSet testSet, int numHiddenLayer, int numHiddenUnit) {
+        try {
 //// Test data:
 //double testArrayInput[][] = 
 //{{0.1883, 0.3033, 0.1517, 0.1046, 0.0523, 0.0418, 0.0157, 0.0000},
@@ -101,9 +104,9 @@ public class DNN {
 ////{0.5873, 0.2819}, {0.1961, 0.1459}, {0.0534, 0.0790}, {0.2458, 0.4906},
 ////{0.5539, 0.5518}, {0.5465, 0.3483}, {0.3603, 0.1987}, {0.1804, 0.0811},
 
-        // Tune size of DNN
-        int numHiddenLayer = 1;
-        int numHiddenUnit = 100;
+//        // Tune size of DNN
+//        int numHiddenLayer = 1;
+//        int numHiddenUnit = 100;
         
         
         // Construct DNN
@@ -128,8 +131,8 @@ public class DNN {
 //        final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
 //        final ResilientPropagation train = new ResilientPropagation(network, folded);
         final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-        // Auto set number of threads for multi-threading
-        train.setThreadCount(0);
+        // Set 0 for Auto set number of threads for multi-threading
+        train.setThreadCount(3);
         // MSE cost.
 //        // Early stopping when validation set no longer improve.
 //        train.addStrategy(new EarlyStoppingStrategy(trainingSet, trainingSet));
@@ -138,27 +141,49 @@ public class DNN {
 
         int epoch = 1;
         int countBad = 0;
+        int countClassBad = 0;
         double oldError = 1;
-        double oldClassificationError = 1;
+        double oldClassificationAccuracy = 1;
+        
         do {
 //                trainFolded.iteration();
 //                double error = trainFolded.getError();
-                double classificationError = EncogUtility.calculateClassificationError(network, trainingSet);
 
                 train.iteration();
                 double error = train.getError();
+                
+                double trainingClassificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), trainingSet);
+                double classificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), testSet);
 
-                if (error > oldError || classificationError > oldClassificationError) {
-                    countBad++;
-                }
-                oldError = error;
-                oldClassificationError = classificationError;
-
-                System.out.println("Epoch #" + epoch + " Error:" + error);
-                System.out.println("Neural Network Results in classification error: " + classificationError);
+                System.out.println("Epoch #" + epoch + " MSE Error:" + error + " Training Classification error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy));
                 epoch++;
                 
-        } while (countBad < 5 && epoch < 500);
+                
+
+                if (error <= oldError) {
+                    countBad = 0;
+                }
+                else {
+                    countBad++;
+                    if (countBad >= 5) {
+                        System.out.println("Boom countBad");
+                    }
+                }
+                if (classificationAccuracy >= oldClassificationAccuracy) {
+                    countClassBad = 0;
+                }
+                else {
+                    countClassBad++;
+                    if (countClassBad >= 5) {
+                        System.out.println("Boom countClassBad");
+                    }
+                }
+                    
+                oldError = error;
+                oldClassificationAccuracy = classificationAccuracy;
+                
+//        } while (countBad < 5 && countClassBad < 5 && epoch <= 500);
+        } while (epoch <= 500);
         
         // EncogUtility.calculateClassificationError(network, CVSet);
 //        trainFolded.finishTraining();
@@ -166,11 +191,39 @@ public class DNN {
         
 
         Encog.getInstance().shutdown();
+        
+        } catch (Exception ex) {
+           Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+           throw ex;
+        }
+    }
+    
+    public static double calculateAccuracy(BasicNetwork network, MLDataSet dataset) {
+        try {
+            // Manually test network.
+            double accuracy = 0;
+            long rightClass = 0;
+            for(MLDataPair pair: dataset ) {
+                final MLData output = network.compute(pair.getInput());
+                if ((output.getData(0) >= 0.5) && (pair.getIdeal().getData(0) == 1)) {
+                    rightClass++;
+                }
+                else if ((output.getData(0) < 0.5) && (pair.getIdeal().getData(0) == 0)) {
+                    rightClass++;
+                }
+            }
+            accuracy = (double) rightClass / dataset.getRecordCount();
+            return accuracy;
+         } catch (Exception ex) {
+            Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            throw ex;
+        }         
+
     }
     
     public static void main(String args[]) {
             DNN dnn = new DNN();
-            dnn.train(null);
+            dnn.train(null, null, 0, 0);
             Encog.getInstance().shutdown();
     }
 }
