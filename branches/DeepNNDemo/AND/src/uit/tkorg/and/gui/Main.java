@@ -485,6 +485,8 @@ public class Main extends javax.swing.JFrame {
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         try {                                      
+                Main.taLog.append("Reading option...\n");
+
                 // TODO add your handling code here:
                 // Get path data
 
@@ -625,6 +627,8 @@ public class Main extends javax.swing.JFrame {
             
 //------------- Prepare data ---------------------------------------------------
                 if (train == null) {
+                    Main.taLog.append("Preparing Data ...\n");
+
                     if (pathForTrain == null || pathForTrain.isEmpty())
                         pathForTrain = "C:\\VANDData\\TrainData";
                     if (pathForTest == null || pathForTest.isEmpty())
@@ -645,6 +649,8 @@ public class Main extends javax.swing.JFrame {
                 if(name.equals("DNN"))
                 {
                     if (AND_INPUT_Train == null) {
+                        Main.taLog.append("Preparing Data for DNN ...\n");
+
                         // Prepare data
                         // For construct
                         AND_INPUT_Train = asArrayInput(train);
@@ -665,6 +671,8 @@ public class Main extends javax.swing.JFrame {
                     numHiddenUnit = Integer.parseInt(tfNumHiddenUnit.getText());
                     
                     // Train DNN
+                    Main.taLog.append("Training DNN ...\n");
+
                     DNN dnn = new DNN();
                     dnn.train(trainingSet, testSet, numHiddenLayer, numHiddenUnit);
 
@@ -686,7 +694,7 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append("\n");
 
                 } else if (name.equals("WekaDNN")) {
-                    Main.taLog.append("Building classifier...");
+                    Main.taLog.append("Building classifier ...");
                     Main.taLog.append("\n");
                     // Get size.
                     numHiddenLayer = Integer.parseInt(tfNumHiddenLayer.getText());
@@ -713,6 +721,8 @@ public class Main extends javax.swing.JFrame {
                 }
                 else
                 {
+                    Main.taLog.append("Training ...\n");
+
                     mc.cModel.buildClassifier(train);
                     Evaluation eTest = new Evaluation(test);
                     eTest.evaluateModel(mc.cModel, test);
