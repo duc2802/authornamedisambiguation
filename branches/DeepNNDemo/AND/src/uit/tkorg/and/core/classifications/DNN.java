@@ -128,29 +128,30 @@ public class DNN {
 
         
         // Train DNN, rprop trainer will modify network.
-//        final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
-//        final ResilientPropagation train = new ResilientPropagation(network, folded);
-        final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+        final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
+        final ResilientPropagation train = new ResilientPropagation(network, folded);
+//        final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
         // Set 0 for Auto set number of threads for multi-threading
         train.setThreadCount(3);
         // MSE cost.
 //        // Early stopping when validation set no longer improve.
 //        train.addStrategy(new EarlyStoppingStrategy(trainingSet, trainingSet));
 
-//        final CrossValidationKFold trainFolded = new CrossValidationKFold(train,5);
+        final CrossValidationKFold trainFolded = new CrossValidationKFold(train,5);
 
         int epoch = 1;
         int countBad = 0;
         int countClassBad = 0;
+        int badThreshold = 20;
         double oldError = 1;
         double oldClassificationAccuracy = 1;
         
         do {
-//                trainFolded.iteration();
-//                double error = trainFolded.getError();
+                trainFolded.iteration();
+                double error = trainFolded.getError();
 
-                train.iteration();
-                double error = train.getError();
+//                train.iteration();
+//                double error = train.getError();
                 
                 double trainingClassificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), trainingSet);
                 double classificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), testSet);
@@ -165,7 +166,7 @@ public class DNN {
                 }
                 else {
                     countBad++;
-                    if (countBad >= 5) {
+                    if (countBad >= badThreshold) {
                         System.out.println("Boom countBad");
                     }
                 }
@@ -174,7 +175,7 @@ public class DNN {
                 }
                 else {
                     countClassBad++;
-                    if (countClassBad >= 5) {
+                    if (countClassBad >= badThreshold) {
                         System.out.println("Boom countClassBad");
                     }
                 }
@@ -182,11 +183,10 @@ public class DNN {
                 oldError = error;
                 oldClassificationAccuracy = classificationAccuracy;
                 
-//        } while (countBad < 5 && countClassBad < 5 && epoch <= 500);
-        } while (epoch <= 500);
+        } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 500);
+//        } while (epoch <= 500);
         
-        // EncogUtility.calculateClassificationError(network, CVSet);
-//        trainFolded.finishTraining();
+        trainFolded.finishTraining();
         train.finishTraining();
         
 
