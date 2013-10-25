@@ -5,22 +5,6 @@
 package uit.tkorg.and.core.classifications;
 
 import org.encog.Encog;
-import org.encog.engine.network.activation.ActivationElliottSymmetric;
-import org.encog.engine.network.activation.ActivationLinear;
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.engine.network.activation.ActivationSoftMax;
-import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataPair;
-import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.ml.data.folded.FoldedDataSet;
-import org.encog.ml.train.MLTrain;
-import org.encog.ml.train.strategy.end.EarlyStoppingStrategy;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.cross.CrossValidationKFold;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.encog.util.simple.EncogUtility;
 import uit.tkorg.and.gui.Main;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
@@ -54,7 +38,7 @@ public class WekaDNN {
         this.network = network;
     }
     
-    public void train(Instances trainingSet, Instances testSet, int numHiddenLayer, int numHiddenUnit) {
+    public void construct(Instances trainingSet, Instances testSet, int numHiddenLayer, int numHiddenUnit) {
         try {
 //// Test data:
 //double testArrayInput[][] = 
@@ -118,24 +102,26 @@ public class WekaDNN {
         String h = "";
         for (int i = 0; i < numHiddenLayer; i++)
         {
-            h = h + numHiddenUnit + " ";
+            h = h + numHiddenUnit + ",";
         }
-        h.trim();
+        h.substring(0, h.length() - 1);
         
         network.setHiddenLayers(h);
         network.setLearningRate(0.3);
         network.setDecay(true);
-        network.setMomentum(0.2);
+        network.setMomentum(0.1);
         network.setNominalToBinaryFilter(true);
         network.setNormalizeAttributes(true);
         network.setReset(true);
-        network.setValidationSetSize(10);
-        network.setValidationThreshold(5);
+        network.setValidationSetSize(0);
+        network.setValidationThreshold(20);
         
 //        network.buildClassifier(trainingSet);
         
         } catch (Exception ex) {
-           Main.taLog.append(WekaDNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            Main.taLog.append(WekaDNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            Main.taLog.append("\n");
+
         }
     }
     
@@ -143,7 +129,7 @@ public class WekaDNN {
     public static void main(String args[]) {
 //        weka.gui.GUIChooser.main(null);
         WekaDNN dnn = new WekaDNN();
-        dnn.train(null, null, 0, 0);
+        dnn.construct(null, null, 0, 0);
         Encog.getInstance().shutdown();
     }
 }
