@@ -65,7 +65,10 @@ public class Main extends javax.swing.JFrame {
     
     private MLDataSet trainingSet = null;
     private MLDataSet testSet = null;
-    
+
+    int numHiddenLayer = 0;
+    int numHiddenUnit = 0;
+
     /**
      * Creates new form Main
      */
@@ -605,6 +608,7 @@ public class Main extends javax.swing.JFrame {
                 // Get Classifier
                 JRadioButton nameClassifier = getSelection(buttonGroup1);
                 String name = nameClassifier.getText();
+                Main.taLog.append("=============================================\n");
                 Main.taLog.append("Classifier: " + name);
                 Main.taLog.append("\n");
                 MachineLearning mc = null;
@@ -642,7 +646,7 @@ public class Main extends javax.swing.JFrame {
                 {
                     if (AND_INPUT_Train == null) {
                         // Prepare data
-                        // For train
+                        // For construct
                         AND_INPUT_Train = asArrayInput(train);
                         AND_Label_Train = asArrayLabel(train,dimension);
                         // create training data
@@ -657,8 +661,8 @@ public class Main extends javax.swing.JFrame {
                     }
                     
                     // Get size.
-                    int numHiddenLayer = Integer.parseInt(tfNumHiddenLayer.getText());
-                    int numHiddenUnit = Integer.parseInt(tfNumHiddenUnit.getText());
+                    numHiddenLayer = Integer.parseInt(tfNumHiddenLayer.getText());
+                    numHiddenUnit = Integer.parseInt(tfNumHiddenUnit.getText());
                     
                     // Train DNN
                     DNN dnn = new DNN();
@@ -671,12 +675,27 @@ public class Main extends javax.swing.JFrame {
                     double classificationAccuracy = DNN.calculateAccuracy(dnn.getNetwork(), testSet);
                     System.out.println("Test set Classification Accuracy: " + classificationAccuracy);
                     System.out.println("Test set Classification Error rate: " + (1 - classificationAccuracy));
-                
-                } else if (name.equals("WekaDNN")) {
-                    Main.taLog.append("Classifier: " + name);
+                    
+                    Main.taLog.append("Result : ");
                     Main.taLog.append("\n");
+                    Main.taLog.append("Test set MSE Error: " + testSetMSE);
+                    Main.taLog.append("\n");
+                    Main.taLog.append("Test set Classification Accuracy: " + classificationAccuracy);
+                    Main.taLog.append("\n");
+                    Main.taLog.append("Test set Classification Error rate: " + (1 - classificationAccuracy));
+                    Main.taLog.append("\n");
+
+                } else if (name.equals("WekaDNN")) {
+                    Main.taLog.append("Building classifier...");
+                    Main.taLog.append("\n");
+                    // Get size.
+                    numHiddenLayer = Integer.parseInt(tfNumHiddenLayer.getText());
+                    numHiddenUnit = Integer.parseInt(tfNumHiddenUnit.getText());
+                    
                     WekaDNN wekaDNN = new WekaDNN();
-                        wekaDNN.getNetwork().buildClassifier(train);
+                    wekaDNN.construct(train, test, numHiddenLayer, numHiddenUnit);
+                    wekaDNN.getNetwork().buildClassifier(train);
+                    
                     Evaluation eTest = new Evaluation(test);
                     eTest.evaluateModel(wekaDNN.getNetwork(), test);
 
@@ -712,7 +731,7 @@ public class Main extends javax.swing.JFrame {
                 }
                 
 //                test = null;
-//                train = null;
+//                construct = null;
 //
 //                pairTest.clone();
 //                pairTrain.clone();

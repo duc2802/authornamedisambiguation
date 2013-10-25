@@ -193,8 +193,9 @@ public class DNN {
         Encog.getInstance().shutdown();
         
         } catch (Exception ex) {
-           Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
-           throw ex;
+            Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            Main.taLog.append("\n");
+            throw ex;
         }
     }
     
@@ -216,6 +217,7 @@ public class DNN {
             return accuracy;
          } catch (Exception ex) {
             Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            Main.taLog.append("\n");
             throw ex;
         }         
 
