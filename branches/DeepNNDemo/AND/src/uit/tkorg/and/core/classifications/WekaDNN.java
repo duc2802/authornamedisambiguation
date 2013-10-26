@@ -96,6 +96,7 @@ public class WekaDNN {
         
         
         // Construct DNN
+        network = new MultilayerPerceptron();
         network.setAutoBuild(false);
         
         // Add hidden layers
@@ -104,16 +105,19 @@ public class WekaDNN {
         {
             h = h + numHiddenUnit + ",";
         }
-        h.substring(0, h.length() - 1);
+        h = h.substring(0, h.length() - 1);
         
         network.setHiddenLayers(h);
+        
         network.setLearningRate(0.3);
         network.setDecay(true);
         network.setMomentum(0.1);
+        
         network.setNominalToBinaryFilter(true);
         network.setNormalizeAttributes(true);
+        
         network.setReset(true);
-        network.setValidationSetSize(0);
+        network.setValidationSetSize(10);
         network.setValidationThreshold(20);
         
 //        network.buildClassifier(trainingSet);

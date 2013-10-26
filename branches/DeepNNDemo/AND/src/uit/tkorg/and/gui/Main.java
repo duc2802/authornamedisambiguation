@@ -672,6 +672,7 @@ public class Main extends javax.swing.JFrame {
                     
                     // Train DNN
                     Main.taLog.append("Training DNN ...\n");
+                    Main.taLog.append(numHiddenLayer + " x " + numHiddenUnit + "\n");
 
                     DNN dnn = new DNN();
                     dnn.train(trainingSet, testSet, numHiddenLayer, numHiddenUnit);
@@ -696,9 +697,11 @@ public class Main extends javax.swing.JFrame {
                 } else if (name.equals("WekaDNN")) {
                     Main.taLog.append("Building classifier ...");
                     Main.taLog.append("\n");
+
                     // Get size.
                     numHiddenLayer = Integer.parseInt(tfNumHiddenLayer.getText());
                     numHiddenUnit = Integer.parseInt(tfNumHiddenUnit.getText());
+                    Main.taLog.append(numHiddenLayer + " x " + numHiddenUnit + "\n");
                     
                     WekaDNN wekaDNN = new WekaDNN();
                     wekaDNN.construct(train, test, numHiddenLayer, numHiddenUnit);
