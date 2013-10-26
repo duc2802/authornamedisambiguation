@@ -110,6 +110,7 @@ public class DNN {
         
         
         // Construct DNN
+        network = new BasicNetwork();
         network.addLayer(new BasicLayer(null,true,trainingSet.getInputSize()));
         // Add hidden layers
         for (int i = 0; i < numHiddenLayer; i++)
@@ -128,35 +129,34 @@ public class DNN {
 
         
         // Train DNN, rprop trainer will modify network.
-        final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
-        final ResilientPropagation train = new ResilientPropagation(network, folded);
-//        final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+//        final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
+//        final ResilientPropagation train = new ResilientPropagation(network, folded);
+        final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
         // Set 0 for Auto set number of threads for multi-threading
         train.setThreadCount(3);
         // MSE cost.
 //        // Early stopping when validation set no longer improve.
 //        train.addStrategy(new EarlyStoppingStrategy(trainingSet, trainingSet));
 
-        final CrossValidationKFold trainFolded = new CrossValidationKFold(train,5);
+//        final CrossValidationKFold trainFolded = new CrossValidationKFold(train,10);
 
         int epoch = 1;
         int countBad = 0;
         int countClassBad = 0;
-        int badThreshold = 20;
+        int badThreshold = 1;
         double oldError = 1;
-        double oldClassificationAccuracy = 1;
+        double oldClassificationAccuracy = 0;
         
         do {
-                trainFolded.iteration();
-                double error = trainFolded.getError();
+//                trainFolded.iteration();
+//                double error = trainFolded.getError();
 
-//                train.iteration();
-//                double error = train.getError();
-                
+                train.iteration();
+                double error = train.getError();
                 double trainingClassificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), trainingSet);
                 double classificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), testSet);
 
-                System.out.println("Epoch #" + epoch + " MSE Error:" + error + " Training Classification error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy));
+                System.out.println("Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy));
                 epoch++;
                 
                 
@@ -167,7 +167,11 @@ public class DNN {
                 else {
                     countBad++;
                     if (countBad >= badThreshold) {
+                        countBad = Integer.MIN_VALUE;
                         System.out.println("Boom countBad");
+                        if (error < 0.1) {
+                            Main.taLog.append("1. Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+                        }
                     }
                 }
                 if (classificationAccuracy >= oldClassificationAccuracy) {
@@ -176,17 +180,21 @@ public class DNN {
                 else {
                     countClassBad++;
                     if (countClassBad >= badThreshold) {
+                        countClassBad = Integer.MIN_VALUE;
                         System.out.println("Boom countClassBad");
+                        if (classificationAccuracy > 0.9) {
+                            Main.taLog.append("2. Class Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+                        }
                     }
                 }
                     
                 oldError = error;
                 oldClassificationAccuracy = classificationAccuracy;
                 
-        } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 500);
-//        } while (epoch <= 500);
+//        } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 1000);
+        } while (epoch <= 1000);
         
-        trainFolded.finishTraining();
+//        trainFolded.finishTraining();
         train.finishTraining();
         
 
@@ -199,13 +207,13 @@ public class DNN {
         }
     }
     
-    public static double calculateAccuracy(BasicNetwork network, MLDataSet dataset) {
+    public static double calculateAccuracy(BasicNetwork net, MLDataSet dataset) {
         try {
             // Manually test network.
             double accuracy = 0;
             long rightClass = 0;
             for(MLDataPair pair: dataset ) {
-                final MLData output = network.compute(pair.getInput());
+                final MLData output = net.compute(pair.getInput());
                 if ((output.getData(0) >= 0.5) && (pair.getIdeal().getData(0) == 1)) {
                     rightClass++;
                 }
