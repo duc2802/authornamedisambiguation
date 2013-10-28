@@ -161,19 +161,19 @@ public class DNN {
                 
                 
 
-                if (error <= oldError) {
-                    countBad = 0;
-                }
-                else {
-                    countBad++;
-                    if (countBad >= badThreshold) {
-                        countBad = Integer.MIN_VALUE;
-                        System.out.println("Boom countBad");
-                        if (error < 0.1) {
-                            Main.taLog.append("1. Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
-                        }
-                    }
-                }
+//                if (error <= oldError) {
+//                    countBad = 0;
+//                }
+//                else {
+//                    countBad++;
+//                    if (countBad >= badThreshold) {
+//                        countBad = Integer.MIN_VALUE;
+//                        System.out.println("Boom countBad");
+//                        if (error < 0.1) {
+//                            Main.taLog.append("1. Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+//                        }
+//                    }
+//                }
                 if (classificationAccuracy >= oldClassificationAccuracy) {
                     countClassBad = 0;
                 }
@@ -182,7 +182,7 @@ public class DNN {
                     if (countClassBad >= badThreshold) {
                         countClassBad = Integer.MIN_VALUE;
                         System.out.println("Boom countClassBad");
-                        if (classificationAccuracy > 0.9) {
+                        if (classificationAccuracy > 0.95) {
                             Main.taLog.append("2. Class Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
                         }
                     }
@@ -192,6 +192,7 @@ public class DNN {
                 oldClassificationAccuracy = classificationAccuracy;
                 
 //        } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 1000);
+//        } while (train.getError() > 0.02);
         } while (epoch <= 1000);
         
 //        trainFolded.finishTraining();
