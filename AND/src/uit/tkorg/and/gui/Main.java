@@ -660,6 +660,7 @@ public class Main extends javax.swing.JFrame {
                  */
                 if(name.equals("DNN"))
                 {
+                    // Encog DNN
                     if (AND_INPUT_Train == null) {
                         Main.taLog.append("Preparing Data for DNN ...\n");
 
@@ -690,8 +691,12 @@ public class Main extends javax.swing.JFrame {
                     dnn.train(trainingSet, testSet, numHiddenLayer, numHiddenUnit);
 
                     // test the neural network
-                    double testSetMSE = dnn.getNetwork().calculateError(testSet);
-                    System.out.println("Test set MSE Error: " + testSetMSE);
+                    double[] testSetMSE = new double[6];
+                    for (int k = 0; k < 5; k++) {
+                        testSetMSE[k] = dnn.getNetwork()[k].calculateError(testSet);
+                        testSetMSE[5] += testSetMSE[k];
+                        System.out.println("Test set MSE Error: " + testSetMSE[k]);
+                    }
                     
                     double classificationAccuracy = DNN.calculateAccuracy(dnn.getNetwork(), testSet);
                     System.out.println("Test set Classification Accuracy: " + classificationAccuracy);
@@ -699,7 +704,7 @@ public class Main extends javax.swing.JFrame {
                     
                     Main.taLog.append("Result : ");
                     Main.taLog.append("\n");
-                    Main.taLog.append("Test set MSE Error: " + testSetMSE);
+                    Main.taLog.append("Test set MSE Error: " + testSetMSE[5]/5);
                     Main.taLog.append("\n");
                     Main.taLog.append("Test set Classification Accuracy: " + classificationAccuracy);
                     Main.taLog.append("\n");
@@ -707,6 +712,7 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append("\n");
 
                 } else if (name.equals("WekaDNN")) {
+                    // Weka bi loi, chi dua vao de test, khong dung duoc.
                     Main.taLog.append("Building classifier ...");
                     Main.taLog.append("\n");
 
