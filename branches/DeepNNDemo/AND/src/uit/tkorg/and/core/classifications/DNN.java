@@ -199,8 +199,8 @@ public class DNN {
                         oldClassificationAccuracy = classificationAccuracy;
 
 //                } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 10000);
-//                } while (train.getError() > 0.02);
-                } while (epoch <= 10000);
+                } while (train.getError() > (2^(-6)));
+//                } while (epoch <= 10000);
 
 //                trainFolded.finishTraining();
                 train.finishTraining();
