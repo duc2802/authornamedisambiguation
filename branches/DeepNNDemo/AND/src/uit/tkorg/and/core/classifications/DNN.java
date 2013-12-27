@@ -4,6 +4,11 @@
  */
 package uit.tkorg.and.core.classifications;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationElliottSymmetric;
 import org.encog.engine.network.activation.ActivationLinear;
@@ -28,31 +33,31 @@ import uit.tkorg.and.gui.Main;
  * @author THNghiep
  */
 public class DNN {
-    private BasicNetwork network;
+    private BasicNetwork[] networks;
 
     public DNN() {
-        this.network = new BasicNetwork();
+        this.networks = new BasicNetwork[5];
     }
     
-    public DNN(BasicNetwork network) {
-        this.network = network;
+    public DNN(BasicNetwork[] network) {
+        this.networks = network;
     }
 
     /**
      * @return the network
      */
-    public BasicNetwork getNetwork() {
-        return network;
+    public BasicNetwork[] getNetwork() {
+        return networks;
     }
 
     /**
      * @param network the network to set
      */
-    public void setNetwork(BasicNetwork network) {
-        this.network = network;
+    public void setNetwork(BasicNetwork[] network) {
+        this.networks = network;
     }
     
-    public void train(MLDataSet trainingSet, MLDataSet testSet, int numHiddenLayer, int numHiddenUnit) {
+    public void train(MLDataSet trainingSets, MLDataSet testSet, int numHiddenLayer, int numHiddenUnit) {
         try {
 //// Test data:
 //double testArrayInput[][] = 
@@ -107,99 +112,103 @@ public class DNN {
 //        // Tune size of DNN
 //        int numHiddenLayer = 1;
 //        int numHiddenUnit = 100;
-        
-        
-        // Construct DNN
-        network = new BasicNetwork();
-        network.addLayer(new BasicLayer(null,true,trainingSet.getInputSize()));
-        // Add hidden layers
-        for (int i = 0; i < numHiddenLayer; i++)
-        {
-            // Softsign activation function
-            network.addLayer(new BasicLayer(new ActivationElliottSymmetric(),true,numHiddenUnit));
-//            // Design rectifier activation function
-//            network.addLayer(new BasicLayer(new ActivationRamp(Double.POSITIVE_INFINITY, 0, Double.POSITIVE_INFINITY, 0),true,numHiddenUnit));
-        }
-        network.addLayer(new BasicLayer(new ActivationSigmoid(),false,trainingSet.getIdealSize()));
-        // Finalize structure.
-        network.getStructure().finalizeStructure();
-        network.reset();
-        // NguyenWidrow default.
-        //(new NguyenWidrowRandomizer()).randomize(network);
+            BasicMLDataSet[] data = separateData(trainingSets);
+            for (int k = 0; k < 5; k++) {
+                // Construct DNN
+                BasicNetwork network = new BasicNetwork();
+                BasicMLDataSet trainingSet = getTrainingSet(data, k);
+                BasicMLDataSet cvSet = data[k];
+                network.addLayer(new BasicLayer(null,true,trainingSet.getInputSize()));
+                // Add hidden layers
+                for (int i = 0; i < numHiddenLayer; i++)
+                {
+                    // Softsign activation function
+                    network.addLayer(new BasicLayer(new ActivationElliottSymmetric(),true,numHiddenUnit));
+//                    // Design rectifier activation function
+//                    // network.addLayer(new BasicLayer(new ActivationRamp(Double.POSITIVE_INFINITY, 0, Double.POSITIVE_INFINITY, 0),true,numHiddenUnit));
+                }
+                network.addLayer(new BasicLayer(new ActivationSigmoid(),false,trainingSet.getIdealSize()));
+                // Finalize structure.
+                network.getStructure().finalizeStructure();
+                network.reset();
+                // NguyenWidrow default.
+                //(new NguyenWidrowRandomizer()).randomize(network);
 
-        
-        // Train DNN, rprop trainer will modify network.
-//        final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
-//        final ResilientPropagation train = new ResilientPropagation(network, folded);
-        final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-        // Set 0 for Auto set number of threads for multi-threading
-        train.setThreadCount(3);
-        // MSE cost.
-//        // Early stopping when validation set no longer improve.
-//        train.addStrategy(new EarlyStoppingStrategy(trainingSet, trainingSet));
 
-//        final CrossValidationKFold trainFolded = new CrossValidationKFold(train,10);
+                // Train DNN, rprop trainer will modify network.
+//                final FoldedDataSet folded = new FoldedDataSet(trainingSet); 
+//                final ResilientPropagation train = new ResilientPropagation(network, folded);
+                final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+                // Set 0 for Auto set number of threads for multi-threading
+                train.setThreadCount(0);
+                // MSE cost.
+                // Validation early stopping when validation set no longer improve.
+//                train.addStrategy(new EarlyStoppingStrategy(cvSet, testSet));
+                // Encog k-fold.
+//                final CrossValidationKFold trainFolded = new CrossValidationKFold(train,5);
 
-        int epoch = 1;
-        int countBad = 0;
-        int countClassBad = 0;
-        int badThreshold = 1;
-        double oldError = 1;
-        double oldClassificationAccuracy = 0;
-        
-        do {
-//                trainFolded.iteration();
-//                double error = trainFolded.getError();
+                int epoch = 1;
+                int countBad = 0;
+                int countClassBad = 0;
+                int badThreshold = 1;
+                double oldError = 1;
+                double oldClassificationAccuracy = 0;
 
-                train.iteration();
-                double error = train.getError();
-                double trainingClassificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), trainingSet);
-                double classificationAccuracy = DNN.calculateAccuracy(this.getNetwork(), testSet);
+                do {
+//                        trainFolded.iteration();
+//                        double error = trainFolded.getError();
 
-                System.out.println("Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy));
-                epoch++;
-                
-                
+                        train.iteration();
+                        double error = train.getError();
+                        double trainingClassificationAccuracy = DNN.singleAccuracy(network, cvSet);
+                        double classificationAccuracy = DNN.singleAccuracy(network, testSet);
 
-//                if (error <= oldError) {
-//                    countBad = 0;
-//                }
-//                else {
-//                    countBad++;
-//                    if (countBad >= badThreshold) {
-//                        countBad = Integer.MIN_VALUE;
-//                        System.out.println("Boom countBad");
-//                        if (error < 0.1) {
-//                            Main.taLog.append("1. Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+                        System.out.println("Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy));
+                        epoch++;
+
+
+
+//                        if (error <= oldError) {
+//                            countBad = 0;
 //                        }
-//                    }
-//                }
-                if (classificationAccuracy >= oldClassificationAccuracy) {
-                    countClassBad = 0;
-                }
-                else {
-                    countClassBad++;
-                    if (countClassBad >= badThreshold) {
-                        countClassBad = Integer.MIN_VALUE;
-                        System.out.println("Boom countClassBad");
-                        if (classificationAccuracy > 0.95) {
-                            Main.taLog.append("2. Class Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+//                        else {
+//                            countBad++;
+//                            if (countBad >= badThreshold) {
+//                                countBad = Integer.MIN_VALUE;
+//                                System.out.println("Boom countBad");
+//                                if (error < 0.1) {
+//                                    Main.taLog.append("1. Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+//                                }
+//                            }
+//                        }
+                        if (classificationAccuracy >= oldClassificationAccuracy) {
+                            countClassBad = 0;
                         }
-                    }
-                }
-                    
-                oldError = error;
-                oldClassificationAccuracy = classificationAccuracy;
-                
-//        } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 1000);
-//        } while (train.getError() > 0.02);
-        } while (epoch <= 1000);
-        
-//        trainFolded.finishTraining();
-        train.finishTraining();
-        
+                        else {
+                            countClassBad++;
+                            if (countClassBad >= badThreshold) {
+                                countClassBad = Integer.MIN_VALUE;
+                                System.out.println("Boom countClassBad");
+                                if (classificationAccuracy > 0.95) {
+                                    Main.taLog.append("2. Class Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+                                }
+                            }
+                        }
 
-        Encog.getInstance().shutdown();
+                        oldError = error;
+                        oldClassificationAccuracy = classificationAccuracy;
+
+//                } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 10000);
+//                } while (train.getError() > 0.02);
+                } while (epoch <= 10000);
+
+//                trainFolded.finishTraining();
+                train.finishTraining();
+
+                Encog.getInstance().shutdown();
+                
+                networks[k] = network;
+            }
         
         } catch (Exception ex) {
             Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
@@ -208,7 +217,40 @@ public class DNN {
         }
     }
     
-    public static double calculateAccuracy(BasicNetwork net, MLDataSet dataset) {
+    public static double calculateAccuracy(BasicNetwork[] net, MLDataSet dataset) {
+        try {
+            // Manually test network.
+            double accuracy = 0;
+            long rightClass = 0;
+            MLData output = null;
+            double prediction = 0;
+            for(MLDataPair pair: dataset ) {
+                // Bagging.
+                prediction = 0;
+                for (int k = 0; k < 5; k++) {
+                    output = net[k].compute(pair.getInput());
+                    prediction += output.getData(0);
+                }
+                prediction /= 5;
+
+                if ((prediction >= 0.5) && (pair.getIdeal().getData(0) == 1)) {
+                    rightClass++;
+                }
+                else if ((prediction < 0.5) && (pair.getIdeal().getData(0) == 0)) {
+                    rightClass++;
+                }
+            }
+            accuracy = (double) rightClass / dataset.getRecordCount();
+            return accuracy;
+         } catch (Exception ex) {
+            Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            Main.taLog.append("\n");
+            throw ex;
+        }
+
+    }
+    
+    public static double singleAccuracy(BasicNetwork net, MLDataSet dataset) {
         try {
             // Manually test network.
             double accuracy = 0;
@@ -228,10 +270,80 @@ public class DNN {
             Main.taLog.append(DNN.class.getName() + " -EXCEPTION: " + ex.getMessage());
             Main.taLog.append("\n");
             throw ex;
-        }         
+        }
 
     }
-    
+
+    private BasicMLDataSet[] separateData(MLDataSet trainingSets) {
+        // chia ra 5 fold bang nhau.
+        // moi fold chia ngau nhien.
+        // moi class co ti le cac fold nhu nhau.
+        // tach rieng class, tron ngau nhien, chia 5 fold, ket hop, tron ngau nhien.
+        
+        BasicMLDataSet[] foldingSets = new BasicMLDataSet[5];
+        BasicMLDataSet sameSet = new BasicMLDataSet();
+        BasicMLDataSet diffSet = new BasicMLDataSet();
+        BasicMLDataSet[] foldingSameSets = new BasicMLDataSet[5];
+        BasicMLDataSet[] foldingDiffSets = new BasicMLDataSet[5];
+        
+        long numItemTotal = trainingSets.getRecordCount();
+        for (int i = 0; i < numItemTotal; i++) {
+            if (trainingSets.get(i).getIdeal().getData(0) == 1) {
+                sameSet.add(trainingSets.get(i));
+            } else {
+                diffSet.add(trainingSets.get(i));
+            }
+        }
+
+        sameSet = permutation(sameSet);
+        diffSet = permutation(diffSet);
+        
+        foldingSameSets = divide(sameSet);
+        foldingDiffSets = divide(diffSet);
+        
+        List l = null;
+        for (int i = 0; i < 5; i++) {
+            l = foldingSameSets[i].getData();
+            l.addAll(foldingDiffSets[i].getData());
+            foldingSets[i].setData(l);
+            foldingSets[i] = permutation(foldingSets[i]);
+        }
+        
+        return foldingSets;
+    }
+
+    private BasicMLDataSet permutation(BasicMLDataSet set) {
+        List l = set.getData();
+        Collections.shuffle(l);
+        set.setData(l);
+        return set;
+    }
+
+    private BasicMLDataSet[] divide(BasicMLDataSet set) {
+        BasicMLDataSet[] s = new BasicMLDataSet[5];
+        List l = set.getData();
+        int size = (int) set.getRecordCount();
+        int foldSize = size / 5;
+        for (int i = 0; i < 4; i++) {
+            s[i].setData(l.subList(i * foldSize, (i + 1) * foldSize));
+        }
+        s[4].setData(l.subList(4 * foldSize, size - 1));
+        return s;
+    }
+
+    private BasicMLDataSet getTrainingSet(BasicMLDataSet[] data, int k) {
+        BasicMLDataSet d = new BasicMLDataSet();
+        List l = new ArrayList();
+        for (int i = 0; i < 5; i++) {
+            if (i != k) {
+                l.addAll(data[i].getData());
+            }
+        }
+        d.setData(l);
+        
+        return d;
+    }
+
     public static void main(String args[]) {
             DNN dnn = new DNN();
             dnn.train(null, null, 0, 0);
