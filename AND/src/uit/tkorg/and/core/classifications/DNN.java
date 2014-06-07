@@ -57,7 +57,7 @@ public class DNN {
         this.networks = network;
     }
     
-    public void train(MLDataSet trainingSets, MLDataSet testSet, int numHiddenLayer, int numHiddenUnit) {
+    public void train(MLDataSet trainingSets, MLDataSet testSet, int numHiddenLayer, int numHiddenUnit) throws Exception {
         try {
 //// Test data:
 //double testArrayInput[][] = 
@@ -116,8 +116,12 @@ public class DNN {
             for (int k = 0; k < 5; k++) {
                 // Construct DNN
                 BasicNetwork network = new BasicNetwork();
+
+                // Get k-th training set: 80% of data.
                 BasicMLDataSet trainingSet = getTrainingSet(data, k);
+                // Get k-th cv set: 20% of data.
                 BasicMLDataSet cvSet = data[k];
+                
                 network.addLayer(new BasicLayer(null,true,trainingSet.getInputSize()));
                 // Add hidden layers
                 for (int i = 0; i < numHiddenLayer; i++)
@@ -143,7 +147,9 @@ public class DNN {
                 train.setThreadCount(0);
                 // MSE cost.
                 // Validation early stopping when validation set no longer improve.
-//                train.addStrategy(new EarlyStoppingStrategy(cvSet, testSet));
+                // Train như vậy thì không cần phải loop bằng tay, nó sẽ chạy đến khi tự động dừng.
+                train.addStrategy(new EarlyStoppingStrategy(cvSet, testSet));
+                train.iteration();
                 // Encog k-fold.
 //                final CrossValidationKFold trainFolded = new CrossValidationKFold(train,5);
 
@@ -154,7 +160,7 @@ public class DNN {
                 double oldError = 1;
                 double oldClassificationAccuracy = 0;
 
-                do {
+                /*do {
 //                        trainFolded.iteration();
 //                        double error = trainFolded.getError();
 
@@ -181,26 +187,26 @@ public class DNN {
 //                                }
 //                            }
 //                        }
-                        if (classificationAccuracy >= oldClassificationAccuracy) {
-                            countClassBad = 0;
-                        }
-                        else {
-                            countClassBad++;
-                            if (countClassBad >= badThreshold) {
-                                countClassBad = Integer.MIN_VALUE;
-                                System.out.println("Boom countClassBad");
-                                if (classificationAccuracy > 0.95) {
-                                    Main.taLog.append("2. Class Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
-                                }
-                            }
-                        }
+//                        if (classificationAccuracy >= oldClassificationAccuracy) {
+//                            countClassBad = 0;
+//                        }
+//                        else {
+//                            countClassBad++;
+//                            if (countClassBad >= badThreshold) {
+//                                countClassBad = Integer.MIN_VALUE;
+//                                System.out.println("Boom countClassBad");
+//                                if (classificationAccuracy > 0.95) {
+//                                    Main.taLog.append("2. Class Bad. Epoch #" + epoch + " MSE Error: " + error + " Training error: " + (1 - trainingClassificationAccuracy) + " Classification error: " + (1 - classificationAccuracy) + "\n");
+//                                }
+//                            }
+//                        }
 
                         oldError = error;
                         oldClassificationAccuracy = classificationAccuracy;
 
 //                } while (countBad < badThreshold && countClassBad < badThreshold && epoch <= 10000);
                 } while (train.getError() > (2^(-6)));
-//                } while (epoch <= 10000);
+//                } while (epoch <= 10000);*/
 
 //                trainFolded.finishTraining();
                 train.finishTraining();
@@ -217,7 +223,7 @@ public class DNN {
         }
     }
     
-    public static double calculateAccuracy(BasicNetwork[] net, MLDataSet dataset) {
+    public static double calculateAccuracy(BasicNetwork[] net, MLDataSet dataset) throws Exception {
         try {
             // Manually test network.
             double accuracy = 0;
@@ -274,7 +280,7 @@ public class DNN {
 
     }
 
-    private BasicMLDataSet[] separateData(MLDataSet trainingSets) {
+    private BasicMLDataSet[] separateData(MLDataSet trainingSets) throws Exception {
         // chia ra 5 fold bang nhau.
         // moi fold chia ngau nhien.
         // moi class co ti le cac fold nhu nhau.
@@ -302,9 +308,14 @@ public class DNN {
         foldingDiffSets = divide(diffSet);
         
         List l = null;
+
+        // Note: sublist is backed by main list.
+        // add item to sublist will add item to main list.
+        // later access to sublist will raise co-modification exception.
         for (int i = 0; i < 5; i++) {
-            l = foldingSameSets[i].getData();
+            l = new ArrayList(foldingSameSets[i].getData());
             l.addAll(foldingDiffSets[i].getData());
+            foldingSets[i] = new BasicMLDataSet();
             foldingSets[i].setData(l);
             foldingSets[i] = permutation(foldingSets[i]);
         }
@@ -312,26 +323,29 @@ public class DNN {
         return foldingSets;
     }
 
-    private BasicMLDataSet permutation(BasicMLDataSet set) {
+    private BasicMLDataSet permutation(BasicMLDataSet set) throws Exception {
         List l = set.getData();
         Collections.shuffle(l);
         set.setData(l);
         return set;
     }
 
-    private BasicMLDataSet[] divide(BasicMLDataSet set) {
+    private BasicMLDataSet[] divide(BasicMLDataSet set) throws Exception {
         BasicMLDataSet[] s = new BasicMLDataSet[5];
+        for (int i = 0; i < 5; i++) {
+            s[i] = new BasicMLDataSet();
+        }
         List l = set.getData();
         int size = (int) set.getRecordCount();
         int foldSize = size / 5;
         for (int i = 0; i < 4; i++) {
             s[i].setData(l.subList(i * foldSize, (i + 1) * foldSize));
         }
-        s[4].setData(l.subList(4 * foldSize, size - 1));
+        s[4].setData(l.subList(4 * foldSize, size));
         return s;
     }
 
-    private BasicMLDataSet getTrainingSet(BasicMLDataSet[] data, int k) {
+    private BasicMLDataSet getTrainingSet(BasicMLDataSet[] data, int k) throws Exception {
         BasicMLDataSet d = new BasicMLDataSet();
         List l = new ArrayList();
         for (int i = 0; i < 5; i++) {
@@ -345,8 +359,8 @@ public class DNN {
     }
 
     public static void main(String args[]) {
-            DNN dnn = new DNN();
-            dnn.train(null, null, 0, 0);
-            Encog.getInstance().shutdown();
+//            DNN dnn = new DNN();
+//            dnn.train(null, null, 0, 0);
+//            Encog.getInstance().shutdown();
     }
 }

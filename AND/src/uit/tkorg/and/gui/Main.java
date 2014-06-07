@@ -642,9 +642,11 @@ public class Main extends javax.swing.JFrame {
                     Main.taLog.append("Preparing Data ...\n");
 
                     if (pathForTrain == null || pathForTrain.isEmpty())
-                        pathForTrain = "C:\\VANDData\\TrainData";
+//                        pathForTrain = "C:\\VANDData\\TrainData";
+                        pathForTrain = "E:\\ResE\\DNN\\Data\\TrainData";
                     if (pathForTest == null || pathForTest.isEmpty())
-                        pathForTest = "C:\\VANDData\\TestData";
+//                        pathForTest = "C:\\VANDData\\TestData";
+                        pathForTest = "E:\\ResE\\DNN\\Data\\TestData";
 
                     pairTest = Vector.buildVectorsFromFolderPairPublication(pathForTest);    
                     pairTrain = Vector.buildVectorsFromFolderPairPublication(pathForTrain);   
@@ -768,6 +770,7 @@ public class Main extends javax.swing.JFrame {
 //                pairTrain.clone();
          } catch (Exception ex) {
             taLog.append(Main.class.getName() + " -EXCEPTION: " + ex.getMessage());
+            ex.printStackTrace();
         }         
     }//GEN-LAST:event_btRunActionPerformed
 
